@@ -1,0 +1,446 @@
+.login-wrapper {
+    /* background-image: url(../images/login-bg.png); */
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    background-size: 100% auto;
+}
+
+.login-wrapper>.row {
+    margin: 0;
+}
+
+.login-form-box {
+    background: #fff;
+    padding: 20px;
+    border-radius: 6px;
+    margin-top: 10px
+}
+
+.login-form-box .form-group {
+    text-align: left;
+}
+
+.login-form-box label {
+    font-size: 1.1em;
+    font-weight: 500;
+    color: #74788D;
+}
+
+.login-form-box .form-control {
+    font-size: 1em;
+}
+
+.login-form-box .checkbox {
+    text-align: left;
+    padding: 15px 0 0;
+}
+
+.login-form-box .checkbox a {
+    color: #fd642a;
+}
+
+.copy-right {
+    font-size: 1.1em;
+}
+
+.sidebar-left .navbar-brand img {
+    max-height: 70%;
+    max-width: 40%;
+}
+
+nav.vertnav {
+    padding: 0px;
+}
+
+.sidebar-left {
+    background: #F1B44C;
+}
+
+.sidebar-logo {
+    background: #F8F8FB;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-left .navbar-brand img {
+    max-height: 70%;
+    max-width: 40%;
+}
+
+.sidebar-left .navbar-nav .nav-item {
+    margin: 0 0 10px 0;
+}
+
+.sidebar-left .navbar-nav .nav-link {
+    font-size: 1.1em;
+    padding: 10px 30px 10px 46px;
+    position: relative;
+    min-height: 43px;
+}
+
+.sidebar-left .navbar-nav .nav-link i {
+    position: absolute;
+    top: 13px;
+    left: 24px;
+}
+
+.navbar-light .navbar-toggler {
+    color: #555B6D;
+}
+
+.searchform .form-control {
+    background: #F3F3F9;
+    border-radius: 25px;
+    padding: 0 20px 0 35px;
+}
+
+.searchform:before {
+    left: 12px;
+}
+
+nav.topnav {
+    background: #fff;
+    padding: 12px 0;
+}
+
+.top-nav-right a {
+    color: #555;
+    font-size: 1.4em;
+    padding: 0 10px;
+}
+
+.top-nav-right .dropdown-menu a {
+    font-size: 1em;
+    padding: 5px 10px;
+}
+
+span.avatar {
+    font-size: .8em;
+}
+
+.navbar-light .navbar-nav .nav-link {
+    color: #fff;
+}
+
+.page-title {
+    color: #fd642a;
+}
+
+.db-cards .card {
+    border: none;
+    box-shadow: 0px 10px 20px #12263f08;
+}
+
+.db-cards h4 {
+    color: #01529c
+}
+
+.db-cards .card-body {
+    padding: 30px 20px;
+}
+
+.card-title {
+    color: #fd642a;
+}
+
+.db-cards .card-header {
+    border: none;
+}
+
+.timeline .timeline-item:before {
+    background-image: url(../images/bx-right-arrow-circle.svg);
+    height: 18px;
+    width: 18px;
+    left: 7px;
+    background-color: #fff !important;
+}
+
+.simplebar-content a {
+    color: #556EE6;
+}
+
+.days-sec {
+    margin: 0 0 15px;
+}
+
+.table thead th {
+    color: #000000;
+    font-weight: 700;
+}
+
+.db-table thead {
+    background: #F8F9FA;
+}
+
+.link {
+    color: #01529c;
+    font-weight: 600;
+}
+
+span.paid {
+    color: #34C38F;
+    background: #34C38F2E;
+    padding: 2px 10px;
+    border-radius: 25px;
+    font-size: .9em;
+}
+
+.db-table td {
+    border-bottom: 1px solid #efefef;
+}
+
+.table th,
+.table td {
+    padding: 18px 10px;
+}
+
+.table td {
+    color: #495057;
+}
+
+.table td .bttn {
+    background: #fd642a;
+    color: #fff;
+    border-radius: 5px;
+    font-size: .9em;
+    padding: 8px 10px;
+    border-radius: 25px;
+}
+
+.inner-copy-right {
+    padding-top: 15px;
+}
+
+.inner-copy-right p {
+    font-size: 1.1em;
+}
+
+.table tr td a+a {
+    margin-left: 12px;
+}
+
+.datatables tr th:before,
+.datatables tr th:after {
+    display: none !important;
+}
+
+.add-sec {
+    text-align: right;
+    align-items: center;
+}
+
+.add-sec .bttn {
+    border: none;
+    background: #fd642a;
+    color: #fff;
+    border-radius: 25px;
+    padding: 6px 20px;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+.db-calendar {
+    padding-bottom: 30px;
+}
+
+.heading-add {
+    align-items: center;
+    padding-bottom: 10px;
+}
+
+.db-calendar h2.page-title {
+    color: #fd642a;
+}
+
+.resp-table {
+    overflow-x: auto;
+    max-height: 736px;
+}
+
+.resp-table .table {
+    width: 2080px;
+}
+
+.temples-tb .table {
+    width: 2880px !important;
+}
+
+.comments-tb .table {
+    width: 1500px;
+}
+
+.ratings-tb .table {
+    width: 1560px;
+}
+
+.resp-table .table {
+    width: 1560px;
+}
+
+.certification-tb .table {
+    width: 1270px;
+}
+
+.priest-tb .table {
+    width: 2080px !important;
+}
+
+.modal-body form .form-control {
+    font-size: .9rem;
+}
+
+.modal-body form label {
+    font-weight: 600;
+}
+
+.actions img {
+    max-width: 15px;
+}
+
+textarea {
+    resize: none;
+}
+
+.table tr td.para p {
+    max-width: 500px;
+    margin: 0;
+}
+
+p.date-field {
+    display: inline;
+    margin: 0;
+}
+
+p.date-field input {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-left: 0;
+}
+
+.resp-table.db-tb .table {
+    width: 100%;
+}
+
+.or {
+    font-weight: 600;
+    margin: 0 0 15px;
+}
+
+.social-log a {
+    margin: 0 10px;
+}
+
+span.badge {
+    line-height: 15px;
+}
+
+.pagin-sec {
+    align-items: center;
+    padding-top: 20px;
+    border-top: 1px solid #e5e5e5;
+}
+
+.pagin-sec .pagination {
+    justify-content: flex-end;
+}
+
+@media(max-width: 1199px) {
+    .modal .modal-dialog {
+        max-width: 90%;
+    }
+
+    .resp-table.db-tb .table {
+        width: 870px;
+    }
+}
+
+@media(max-width: 991px) {
+
+    .resp-table .table,
+    .edu-tb .table {
+        width: 1100px;
+    }
+
+    .temples-tb .table {
+        width: 2830px;
+    }
+
+    .users-tb .table {
+        width: 1270px;
+    }
+
+    .comments-tb .table {
+        width: 1330px;
+    }
+
+    .ratings-tb .table {
+        width: 1200px;
+    }
+
+    .certification-tb .table {
+        width: 1090px;
+    }
+
+    .pooja-grocery-tb .table {
+        width: 1140px;
+    }
+
+    .notify-tb .table {
+        width: 1130px;
+    }
+
+    .priest-tb .table {
+        width: 1950px;
+    }
+}
+
+@media(max-width: 767px) {
+    .login-wrapper {
+        padding-top: 30px;
+    }
+
+    .pagin-sec {
+        text-align: center;
+    }
+
+    .pagin-sec .pagination {
+        justify-content: center;
+        padding-top: 20px;
+    }
+}
+
+span.avatar {
+    font-size: .8em;
+}
+
+.accordion-button {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 1rem 1.25rem;
+    font-size: 1rem;
+    border: 0;
+    border-radius: 0;
+    overflow-anchor: none;
+    text-align: left;
+}
+
+.accordion-header {
+    margin-bottom: 0;
+}
+
+.accordion-body {
+    padding: 1rem 1.25rem;
+}
+
+.accordion-button:not(.collapsed) {
+    color: white;
+    background-color: #fd642a;
+}
+
+.accordion-item {
+    color: #212529;
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+}
