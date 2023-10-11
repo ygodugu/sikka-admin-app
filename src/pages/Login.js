@@ -1,5 +1,5 @@
 import axios from "axios";
-import Logo from "../assets/images/Logo-removebg-preview.png";
+import Logo from "../assets/images/Cikka_Logo_Dashboard.png";
 import Lock from "../assets/images/lock.svg";
 import { useMutation } from "@tanstack/react-query";
 import { useFormik } from "formik";

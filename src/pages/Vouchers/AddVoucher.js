@@ -1,10 +1,10 @@
 import { useMutation } from "@tanstack/react-query";
 import Modal from "react-bootstrap/Modal";
 import { axiosInstance } from "../../axiosInstance";
-import {VoucherForm} from "./VoucherForm"
+import { VoucherForm } from "./VoucherForm"
 
 const addVoucher = (payload) => {
-  return axiosInstance.post(`/users`, payload);
+  return axiosInstance.post(`/vouchers`, payload);
 };
 
 export const AddVoucherModal = ({ handleSuccess, handleClose }) => {
@@ -12,46 +12,25 @@ export const AddVoucherModal = ({ handleSuccess, handleClose }) => {
     mutationFn: addVoucher,
   });
   const initialValues = {
-    email: "",
-    password: "",
-    alternativeMobile: "",
-    confirmPassword: "",
-    dateOfBirth: "",
-    lastName: "",
-    middleName: "",
-    primaryMobile: "",
-    roleId: 1,
-    userType: "",
+    voucherCode: "",
+    voucherValue: "",
+    name: "",
+    consumedCount: "",
+    maxUsageCount: "",
+    restrictUsageForUser: true,
+    description: "",
+    validityEndDate: "",
+    validityStartDate: "",
+    voucherValueType: ""
   };
 
   const saveVoucher = (values) => {
-    const roleId = 1;
-    const {
-      country,
-      city,
-      state,
-      cityId,
-      countryId,
-      stateId,
-      addressLine1,
-      addressLine2,
-      ...rest
-    } = values;
-    const address = [
-      {
-        addressLine1,
-        addressLine2,
-        cityId,
-        addressType: "Current",
-      },
-    ];
     addUserMutation.mutate(
       {
-        ...rest,
-        roleId,
-        password: "Test@123",
-        confirmPassword: "Test@123",
-        address,
+        ...values,
+        categoryId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        merchantId: "58bf45d9-de52-4fd9-b265-a2e33145c88a",
+        voucherAssetId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
       },
       {
         onSuccess: handleSuccess,
@@ -62,7 +41,7 @@ export const AddVoucherModal = ({ handleSuccess, handleClose }) => {
   return (
     <Modal show={true} onHide={handleClose} size="lg">
       <Modal.Header closeButton={false}>
-        <Modal.Title>New User</Modal.Title>
+        <Modal.Title>New Voucher</Modal.Title>
         <button
           type="button"
           className="close"

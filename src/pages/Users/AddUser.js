@@ -12,51 +12,27 @@ export const AddUserModal = ({ handleSuccess, handleClose }) => {
     mutationFn: addUser,
   });
   const initialValues = {
-    email: "",
-    password: "",
-    alternativeMobile: "",
-    confirmPassword: "",
-    dateOfBirth: "",
-    lastName: "",
-    middleName: "",
-    primaryMobile: "",
-    roleId: 1,
     userType: "",
+    email: "",
+    firstName: "",
+    middleName: "",
+    lastName: "",
+    gender: "",
+    mobileNumber: "",
+    alternativeNumber: "",
+    shortBio: "",
+    motherTongue: "",
+    bloodGroup: "",
+    dateOfBirth: "",
+    anniversaryDate: "",
+    religion: "",
   };
 
+
   const saveUser = (values) => {
-    const roleId = 1;
-    const {
-      country,
-      city,
-      state,
-      cityId,
-      countryId,
-      stateId,
-      addressLine1,
-      addressLine2,
-      ...rest
-    } = values;
-    const address = [
-      {
-        addressLine1,
-        addressLine2,
-        cityId,
-        addressType: "Current",
-      },
-    ];
-    addUserMutation.mutate(
-      {
-        ...rest,
-        roleId,
-        password: "Test@123",
-        confirmPassword: "Test@123",
-        address,
-      },
-      {
-        onSuccess: handleSuccess,
-      }
-    );
+    addUserMutation.mutate(values, {
+      onSuccess: handleSuccess,
+    });
   };
 
   return (

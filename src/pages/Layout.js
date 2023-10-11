@@ -15,6 +15,10 @@ const Vouchers = lazy(() =>
   import("./Vouchers/Vouchers").then((module) => ({ default: module.Vouchers }))
 );
 
+const Merchants = lazy(() =>
+  import("./Merchants/Merchants").then((module) => ({ default: module.Merchants }))
+);
+
 
 export const Layout = () => {
 
@@ -38,6 +42,7 @@ export const Layout = () => {
                   <Route path="/dashboard" element={<Dashboard />} />
                   <Route path="/users" element={<Users />} />
                   <Route path="/Vouchers" element={<Vouchers />} />
+                  <Route path="/Merchants" element={<Merchants />} />
                  
                   <Route
                     path="*"

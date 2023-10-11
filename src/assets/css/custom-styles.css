@@ -36,7 +36,7 @@
 }
 
 .login-form-box .checkbox a {
-    color: #fd642a;
+    color: #70300D;
 }
 
 .copy-right {
@@ -44,7 +44,6 @@
 }
 
 .sidebar-left .navbar-brand img {
-    max-height: 70%;
     max-width: 40%;
 }
 
@@ -53,17 +52,15 @@ nav.vertnav {
 }
 
 .sidebar-left {
-    background: #F1B44C;
+    background: #70300D;
 }
 
 .sidebar-logo {
     background: #F8F8FB;
     padding: 0;
-    margin: 0;
 }
 
 .sidebar-left .navbar-brand img {
-    max-height: 70%;
     max-width: 40%;
 }
 
@@ -123,7 +120,7 @@ span.avatar {
 }
 
 .page-title {
-    color: #fd642a;
+    color: #70300D;
 }
 
 .db-cards .card {
@@ -140,7 +137,7 @@ span.avatar {
 }
 
 .card-title {
-    color: #fd642a;
+    color: #70300D;
 }
 
 .db-cards .card-header {
@@ -199,7 +196,7 @@ span.paid {
 }
 
 .table td .bttn {
-    background: #fd642a;
+    background: #70300D;
     color: #fff;
     border-radius: 5px;
     font-size: .9em;
@@ -231,7 +228,7 @@ span.paid {
 
 .add-sec .bttn {
     border: none;
-    background: #fd642a;
+    background: #70300D;
     color: #fff;
     border-radius: 25px;
     padding: 6px 20px;
@@ -249,7 +246,7 @@ span.paid {
 }
 
 .db-calendar h2.page-title {
-    color: #fd642a;
+    color: #70300D;
 }
 
 .resp-table {
@@ -361,16 +358,16 @@ span.badge {
         width: 1100px;
     }
 
-    .temples-tb .table {
-        width: 2830px;
-    }
-
     .users-tb .table {
         width: 1270px;
     }
 
-    .comments-tb .table {
+    .vouchers-tb .table {
         width: 1330px;
+    }
+
+    .Merchants-tb .table {
+        width: 2830px;
     }
 
     .ratings-tb .table {
@@ -436,7 +433,7 @@ span.avatar {
 
 .accordion-button:not(.collapsed) {
     color: white;
-    background-color: #fd642a;
+    background-color: #70300D;
 }
 
 .accordion-item {

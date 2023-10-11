@@ -1,13 +1,12 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { EditIcon } from "../../components/EditIcon";
 import { axiosInstance } from "../../axiosInstance";
 import { CustomPagination } from "../../components/CustomPagination";
-import { DeleteIcon } from "../../components/DeleteIcon";
 import { Alert } from "react-bootstrap";
 import Spinner from "react-bootstrap/Spinner";
 import { AddVoucherModal } from "./AddVoucher";
-import {EditVoucherModal} from  "./EditVoucher"
+import { EditVoucherModal } from  "./EditVoucher"
 
 
 const fetchvouchers = (pageIndex = 0, pageSize = 20) => {
@@ -15,7 +14,6 @@ const fetchvouchers = (pageIndex = 0, pageSize = 20) => {
     .get(`/vouchers?pageIndex=${pageIndex}&pageSize=${pageSize}&sortBy=id&sortOrder=DESC"`)
     .then((res) => res.data);
 };
-const deleteUser = (id) => axiosInstance.delete(`/users/${id}`);
 
 export const Vouchers = () => {
   const queryClient = useQueryClient();
@@ -27,11 +25,6 @@ export const Vouchers = () => {
   const pageSize = 20;
   const [showError, setShowError] = useState(false);
 
-
-
-  const deleteMutation = useMutation({
-    mutationFn: deleteUser,
-  });
 
   const { isLoading, data, refetch } = useQuery({
     queryKey: ["vouchers", page],
@@ -53,18 +46,6 @@ export const Vouchers = () => {
   const handleEditClick = (id) => () => {
     setUserId(id);
     setShowEditModal(true);
-  };
-
-  const handleDelete = (id) => () => {
-    deleteMutation.mutate(id, {
-      onSuccess: refetch,
-      onError(error) {
-        setShowError(true);
-        setTimeout(() => {
-          setShowError(false);
-        }, 3000);
-      },
-    });
   };
 
   return (
@@ -92,29 +73,29 @@ export const Vouchers = () => {
             <div className="col-md-12">
               <div className="card shadow">
                 <div className="card-body">
-                  <div className="resp-table users-tb">
+                  <div className="resp-table vouchers-tb">
                     <table className="table">
                       <thead>
                         <tr>
-                          <th>voucherCode</th>
-                          <th>name</th>
-                          <th>description</th>
-                          <th>merchantId</th>
-                          <th>merchant</th>
-                          <th>categoryId</th>
-                          <th>voucherAssetId</th>
-                          <th>voucherValue</th>
-                          <th>voucherValueType</th>
-                          <th>validityStartDate</th>
-                          <th>validityEndDate</th>
-                          <th>restrictUsageForUser</th>
-                          <th>maxUsageCount</th>
-                          <th>consumedCount</th>
-                          <th>createdBy</th>
-                          <th>updatedBy</th>
-                          <th>createdAt</th>
-                          <th>updatedAt</th>
-                          <th>status</th>
+                          <th>VoucherCode</th>
+                          <th>Name</th>
+                          <th>Description</th>
+                          <th>MerchantId</th>
+                          <th>Merchant</th>
+                          <th>CategoryId</th>
+                          <th>VoucherAssetId</th>
+                          <th>VoucherValue</th>
+                          <th>VoucherValueType</th>
+                          <th>ValidityStartDate</th>
+                          <th>ValidityEndDate</th>
+                          <th>RestrictUsageForUser</th>
+                          <th>MaxUsageCount</th>
+                          <th>ConsumedCount</th>
+                          <th>CreatedBy</th>
+                          <th>UpdatedBy</th>
+                          <th>CreatedAt</th>
+                          <th>UpdatedAt</th>
+                          <th>Status</th>
                           <th>Actions</th>
                         </tr>
                       </thead>
@@ -153,7 +134,6 @@ export const Vouchers = () => {
 
                               <td className="actions">
                                 <EditIcon onClick={handleEditClick(u.id)} />
-                                <DeleteIcon onClick={handleDelete(u.id)} />
                               </td>
                             </tr>
                           ))

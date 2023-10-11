@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import Logo from "../assets/images/Logo.png";
+import Logo from "../assets/images/Cikka_Logo_Dashboard.png";
 
 export const Sidebar = () => {
   return (
@@ -48,17 +48,28 @@ export const Sidebar = () => {
               <i className="fe fe-user fe-16"></i>
               <span className="ml-1 item-text">Users</span>
             </NavLink>
-            <li className="nav-item">
+          </li>
+          <li className="nav-item">
             <NavLink
               to="/Vouchers"
               className={({ isActive }) =>
                 isActive ? "nav-link active" : "nav-link"
               }
             >
-              <i className="fe fe-user fe-16"></i>
+              <i className="fe fe-gift fe-16"></i>
               <span className="ml-1 item-text">Vouchers</span>
             </NavLink>
           </li>
+          <li className="nav-item">
+            <NavLink
+              to="/Merchants"
+              className={({ isActive }) =>
+                isActive ? "nav-link active" : "nav-link"
+              }
+            >
+              <i className="fe fe-users fe-16"></i>
+              <span className="ml-1 item-text">Merchants</span>
+            </NavLink>
           </li>
         </ul>
       </nav>

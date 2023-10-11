@@ -26,14 +26,6 @@ export const Dashboard = () => {
                     <div className="col-md-12 col-lg-4">
                         <div className="card eq-card mb-4">
                             <div className="card-body">
-                                <p className="mb-1"><strong>Priest</strong></p>
-                                <h4 className="mb-0">priestCount</h4>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-md-12 col-lg-4">
-                        <div className="card eq-card mb-4">
-                            <div className="card-body">
                                 <p className="mb-1"><strong>Users</strong></p>
                                 <h4 className="mb-0">userCount</h4>
                             </div>
@@ -42,8 +34,8 @@ export const Dashboard = () => {
                     <div className="col-md-12 col-lg-4">
                         <div className="card eq-card mb-4">
                             <div className="card-body">
-                                <p className="mb-1"><strong>Temples</strong></p>
-                                <h4 className="mb-0">templeCount</h4>
+                                <p className="mb-1"><strong>Vouchers</strong></p>
+                                <h4 className="mb-0">VouchersCount</h4>
                             </div>
                         </div>
                     </div>

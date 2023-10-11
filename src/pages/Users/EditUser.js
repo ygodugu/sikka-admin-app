@@ -15,57 +15,144 @@ export const EditUserModal = ({ handleSuccess, handleClose, id }) => {
   const { data: userDetails } = useQuery({
     queryKey: ["user-details", id],
     queryFn: () => getUserDetails(id),
-    select: (data) => {
-      const { address, ...rest } = data;
-
-      const addressType = address[0].addressType;
-      const addressLine2 = address[0].addressLine2;
-      const addressLine1 = address[0].addressLine1;
-      const cityId = address[0].cityId;
-      return {
-        ...rest,
-        addressType,
-        addressLine1,
-        addressLine2,
-        cityId,
-        addressId: address[0]?.id,
-      };
-    },
   });
 
   const updateUserMutation = useMutation({
     mutationFn: updateUser,
   });
 
+
+  // const handleUpdateUser = (values) => {
+  //   // Get the original user details from the useQuery hook
+  //   const originalUserDetails = userDetails;
+
+  //   // Create an object to store the changed values
+  //   const changedValues = {};
+
+  //   // Compare each field with the original data
+  //   if (values.userType !== originalUserDetails.userType) {
+  //     changedValues.userType = values.userType;
+  //   }
+
+  //   if (values.email !== originalUserDetails.email) {
+  //     changedValues.email = values.email;
+  //   }
+
+  //   if (values.firstName !== originalUserDetails.firstName) {
+  //     changedValues.firstName = values.firstName;
+  //   }
+
+  //   if (values.middleName !== originalUserDetails.middleName) {
+  //     changedValues.middleName = values.middleName;
+  //   }
+
+  //   if (values.lastName !== originalUserDetails.lastName) {
+  //     changedValues.lastName = values.lastName;
+  //   }
+
+  //   if (values.gender !== originalUserDetails.gender) {
+  //     changedValues.email = values.email;
+  //   }
+
+  //   if (values.mobileNumber !== originalUserDetails.mobileNumber) {
+  //     changedValues.mobileNumber = values.mobileNumber;
+  //   }
+
+  //   if (values.alternativeNumber !== originalUserDetails.alternativeNumber) {
+  //     changedValues.alternativeNumber = values.alternativeNumber;
+  //   }
+
+  //   if (values.shortBio !== originalUserDetails.shortBio) {
+  //     changedValues.shortBio = values.shortBio;
+  //   }
+
+  //   if (values.motherTongue !== originalUserDetails.motherTongue) {
+  //     changedValues.motherTongue = values.motherTongue;
+  //   }
+
+  //   if (values.bloodGroup !== originalUserDetails.bloodGroup) {
+  //     changedValues.bloodGroup = values.bloodGroup;
+  //   }
+
+  //   if (values.dateOfBirth !== originalUserDetails.dateOfBirth) {
+  //     changedValues.dateOfBirth = values.dateOfBirth;
+  //   }
+
+  //   if (values.anniversaryDate !== originalUserDetails.anniversaryDate) {
+  //     changedValues.anniversaryDate = values.anniversaryDate;
+  //   }
+
+  //   if (values.religion !== originalUserDetails.religion) {
+  //     changedValues.religion = values.religion;
+  //   }
+
+  //   // Add other fields as needed
+
+  //   // Check if any values have changed
+  //   if (Object.keys(changedValues).length === 0) {
+  //     // No changes, you may want to handle this case or show a message
+  //     console.log("No changes were made.");
+  //   } else {
+  //     // Changes detected, update the user with the changed values
+  //     updateUserMutation.mutate(
+  //       { ...changedValues, id }, // Send only the changed values
+  //       {
+  //         onSuccess: handleSuccess,
+  //       }
+  //     );
+  //   }
+  // };
+
+  // const handleUpdateUser = (values) => {
+  //   updateUserMutation.mutate(
+  //     { ...values, id },
+  //     {
+  //       onSuccess: handleSuccess,
+  //     }
+  //   );
+  // };
+
   const handleUpdateUser = (values) => {
-    const roleId = 1;
-    const {
-      country,
-      city,
-      state,
-      cityId,
-      countryId,
-      stateId,
-      addressLine1,
-      addressLine2,
-      ...rest
-    } = values;
-    const address = [
-      {
-        addressLine1,
-        addressLine2,
-        cityId,
-        id: userDetails.addressId,
-        addressType: "Current",
-      },
+    
+    const originalUserDetails = userDetails;
+  
+    const changedValues = {};
+  
+    const fieldsToCompare = [
+      "userType",
+      "email",
+      "firstName",
+      "middleName",
+      "lastName",
+      "gender",
+      "mobileNumber",
+      "alternativeNumber",
+      "shortBio",
+      "motherTongue",
+      "bloodGroup",
+      "dateOfBirth",
+      "anniversaryDate",
+      "religion",
     ];
-    updateUserMutation.mutate(
-      { ...rest, id, address },
-      {
-        onSuccess: handleSuccess,
+  
+    for (const fieldName of fieldsToCompare) {
+      if (values[fieldName] !== originalUserDetails[fieldName]) {
+        changedValues[fieldName] = values[fieldName];
       }
-    );
+    }
+  
+    if (Object.keys(changedValues).length === 0) {
+      console.log("No changes were made.");
+    } else {
+      updateUserMutation.mutate(
+        { ...changedValues, id },
+        {
+          onSuccess: handleSuccess,
+        }
+      );
+    }
   };
+  
 
   return (
     <>
@@ -85,7 +172,7 @@ export const EditUserModal = ({ handleSuccess, handleClose, id }) => {
           </Modal.Header>
           <Modal.Body>
             <UserForm
-              initialValues={{ ...userDetails, city: [] }}
+              initialValues={userDetails}
               handleSubmit={handleUpdateUser}
             />
           </Modal.Body>
