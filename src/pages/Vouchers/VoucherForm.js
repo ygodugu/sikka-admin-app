@@ -1,5 +1,8 @@
+import React, { useState } from 'react'
 import { useFormik } from "formik";
 import { object, string } from "yup";
+import "react-datepicker/dist/react-datepicker.css";
+import DatePicker from "react-datepicker";
 
 
 let voucherSchema = object({
@@ -7,7 +10,28 @@ let voucherSchema = object({
   name: string().required("Last Name is required")
 });
 
-export const VoucherForm = ({ initialValues, handleSubmit }) => {
+export const VoucherForm = ({ initialValues, onSubmit, isEdit = false, }) => {
+
+  const [file, setFile] = useState();
+
+  const handleSubmit = (values, { validateForm }) => {
+    validateForm(values).then(res => {
+      onSubmit({ ...values, file, });
+    });
+  }
+
+
+
+  // const handleSubmit = (values,{ validateForm }) => {
+  //   validateForm(values).then(res => {
+  //     onSubmit({ ...values, file})
+  //   })
+  // }
+
+  const handleFileSelect = (event) => {
+    setFile(event.target.files[0])
+  }
+
   const formik = useFormik({
     initialValues,
     onSubmit: handleSubmit,
@@ -118,6 +142,43 @@ export const VoucherForm = ({ initialValues, handleSubmit }) => {
             />
           </div>
         </aside>
+
+        <aside className="col-md-4">
+          <div className="form-group">
+            <label htmlFor="validityStartDate">validityStartDate</label>
+            <DatePicker
+              selected={
+                formik.values.validityStartDate
+                  ? new Date(formik.values.validityStartDate)
+                  : null
+              }
+              onChange={(e) => {
+                formik.setFieldValue("validityStartDate", e);
+                formik.setFieldTouched("validityStartDate");
+              }}
+              className="form-control"
+            />
+          </div>
+        </aside>
+
+        <aside className="col-md-4">
+          <div className="form-group">
+            <label htmlFor="validityEndDate">ValidityEndDate</label>
+            <DatePicker
+              selected={
+                formik.values.validityEndDate
+                  ? new Date(formik.values.validityEndDate)
+                  : null
+              }
+              onChange={(e) => {
+                formik.setFieldValue("validityEndDate", e);
+                formik.setFieldTouched("validityEndDate");
+              }}
+              className="form-control"
+            />
+          </div>
+        </aside>
+
         <aside className="col-md-4">
           <div className="form-group">
             <label htmlFor="voucherValueType">voucherValueType</label>
@@ -134,6 +195,14 @@ export const VoucherForm = ({ initialValues, handleSubmit }) => {
             </select>
           </div>
         </aside>
+
+        {!isEdit ? 
+        <aside className="col-md-4">
+          <div className="form-group">
+            <label htmlFor="uploadImage">UploadImage</label>
+            <input type="file" id="uploadImage" name="uploadImage" onChange={handleFileSelect} className="form-control form-control-lg" />
+          </div>
+        </aside> : null}
       </div>
       <div className="modal-footer d-flex justify-content-end">
         <button type="submit" className="btn mb-2 btn-primary">
