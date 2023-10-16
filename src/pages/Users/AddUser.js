@@ -29,11 +29,58 @@ export const AddUserModal = ({ handleSuccess, handleClose }) => {
   };
 
 
+
   const saveUser = (values) => {
-    addUserMutation.mutate(values, {
-      onSuccess: handleSuccess,
-    });
+    const {
+      addressType,
+      area,
+      block,
+      cityId,
+      description,
+      googleId,
+      latitude,
+      longitude,
+      physicalAddress,
+      pin,
+      status,
+      street,
+      userId,
+      ...rest
+    } = values;
+    const addresses = [
+      {
+        addressType,
+        area,
+        block,
+        cityId,
+        description,
+        googleId,
+        latitude,
+        longitude,
+        physicalAddress,
+        pin,
+        status,
+        street,
+        userId
+      },
+    ];
+    addUserMutation.mutate(
+      {
+        ...rest,
+        addresses,
+      },
+      {
+        onSuccess: handleSuccess,
+      }
+    );
   };
+
+
+  // const saveUser = (values) => {
+  //   addUserMutation.mutate(values, {
+  //     onSuccess: handleSuccess,
+  //   });
+  // };
 
   return (
     <Modal show={true} onHide={handleClose} size="lg">

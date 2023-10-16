@@ -89,6 +89,7 @@ export const AddVoucherModal = ({ handleSuccess, handleClose }) => {
             saveVoucher(updatedValues);
           } else {
             console.log("No ID was received");
+            saveVoucher(values);
           }
         } else {
           console.log("No result from FileUpload");

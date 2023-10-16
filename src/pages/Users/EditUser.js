@@ -15,11 +15,63 @@ export const EditUserModal = ({ handleSuccess, handleClose, id }) => {
   const { data: userDetails } = useQuery({
     queryKey: ["user-details", id],
     queryFn: () => getUserDetails(id),
+    // select: (data) => {
+    //   const { address, ...rest } = data;
+
+    //   const cityId = address[0].cityId;
+    //   return {
+    //     ...rest,
+    //     cityId,
+    //   };
+    // },
   });
 
   const updateUserMutation = useMutation({
     mutationFn: updateUser,
   });
+
+
+  const handleUpdateUser = (values) => {
+    const {
+      addressType,
+      area,
+      block,
+      cityId,
+      description,
+      googleId,
+      latitude,
+      longitude,
+      physicalAddress,
+      pin,
+      status,
+      street,
+      userId,
+      ...rest
+    } = values;
+    const addresses = [
+      {
+        addressType,
+        area,
+        block,
+        cityId,
+        description,
+        googleId,
+        latitude,
+        longitude,
+        physicalAddress,
+        pin,
+        status,
+        street,
+        userId : id,
+      },
+    ];
+    updateUserMutation.mutate(
+      { ...rest, id, addresses },
+      {
+        onSuccess: handleSuccess,
+      }
+    );
+  };
 
 
   // const handleUpdateUser = (values) => {
@@ -112,47 +164,47 @@ export const EditUserModal = ({ handleSuccess, handleClose, id }) => {
   //   );
   // };
 
-  const handleUpdateUser = (values) => {
-    
-    const originalUserDetails = userDetails;
-  
-    const changedValues = {};
-  
-    const fieldsToCompare = [
-      "userType",
-      "email",
-      "firstName",
-      "middleName",
-      "lastName",
-      "gender",
-      "mobileNumber",
-      "alternativeNumber",
-      "shortBio",
-      "motherTongue",
-      "bloodGroup",
-      "dateOfBirth",
-      "anniversaryDate",
-      "religion",
-    ];
-  
-    for (const fieldName of fieldsToCompare) {
-      if (values[fieldName] !== originalUserDetails[fieldName]) {
-        changedValues[fieldName] = values[fieldName];
-      }
-    }
-  
-    if (Object.keys(changedValues).length === 0) {
-      console.log("No changes were made.");
-    } else {
-      updateUserMutation.mutate(
-        { ...changedValues, id },
-        {
-          onSuccess: handleSuccess,
-        }
-      );
-    }
-  };
-  
+  // const handleUpdateUser = (values) => {
+
+  //   const originalUserDetails = userDetails;
+
+  //   const changedValues = {};
+
+  //   const fieldsToCompare = [
+  //     "userType",
+  //     "email",
+  //     "firstName",
+  //     "middleName",
+  //     "lastName",
+  //     "gender",
+  //     "mobileNumber",
+  //     "alternativeNumber",
+  //     "shortBio",
+  //     "motherTongue",
+  //     "bloodGroup",
+  //     "dateOfBirth",
+  //     "anniversaryDate",
+  //     "religion",
+  //   ];
+
+  //   for (const fieldName of fieldsToCompare) {
+  //     if (values[fieldName] !== originalUserDetails[fieldName]) {
+  //       changedValues[fieldName] = values[fieldName];
+  //     }
+  //   }
+
+  //   if (Object.keys(changedValues).length === 0) {
+  //     console.log("No changes were made.");
+  //   } else {
+  //     updateUserMutation.mutate(
+  //       { ...changedValues, id },
+  //       {
+  //         onSuccess: handleSuccess,
+  //       }
+  //     );
+  //   }
+  // };
+
 
   return (
     <>
@@ -172,7 +224,7 @@ export const EditUserModal = ({ handleSuccess, handleClose, id }) => {
           </Modal.Header>
           <Modal.Body>
             <UserForm
-              initialValues={userDetails}
+              initialValues={{ ...userDetails, addresses: [] }}
               handleSubmit={handleUpdateUser}
             />
           </Modal.Body>

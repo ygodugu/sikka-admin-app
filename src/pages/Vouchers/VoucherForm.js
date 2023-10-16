@@ -10,13 +10,13 @@ let voucherSchema = object({
   name: string().required("Last Name is required")
 });
 
-export const VoucherForm = ({ initialValues, onSubmit, isEdit = false, }) => {
+export const VoucherForm = ({ initialValues, onSubmit, isEdit = false }) => {
 
   const [file, setFile] = useState();
 
   const handleSubmit = (values, { validateForm }) => {
     validateForm(values).then(res => {
-      onSubmit({ ...values, file, });
+      onSubmit({ ...values, file});
     });
   }
 

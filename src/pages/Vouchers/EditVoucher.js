@@ -52,7 +52,8 @@ export const EditVoucherModal = ({ handleSuccess, handleClose, id }) => {
           <Modal.Body>
             <VoucherForm
               initialValues={voucherDetails}
-              handleSubmit={handleUpdateVoucher}
+              onSubmit={handleUpdateVoucher}
+              isEdit={true}
             />
           </Modal.Body>
         </Modal>

@@ -39,6 +39,14 @@ export const Dashboard = () => {
                             </div>
                         </div>
                     </div>
+                    <div className="col-md-12 col-lg-4">
+                        <div className="card eq-card mb-4">
+                            <div className="card-body">
+                                <p className="mb-1"><strong>Merchants</strong></p>
+                                <h4 className="mb-0">MerchantsCount</h4>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
