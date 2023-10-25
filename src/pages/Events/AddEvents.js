@@ -1,18 +1,16 @@
-import React from 'react';
 import { useMutation } from "@tanstack/react-query";
 import Modal from "react-bootstrap/Modal";
 import { axiosInstance } from "../../axiosInstance";
-import { VoucherForm } from "./VoucherForm"
+import { EventsForm } from "./EventsForm";
 
-
-const addVoucher = (payload) => {
-  return axiosInstance.post(`/vouchers`, payload);
+const addEvents = (payload) => {
+  return axiosInstance.post(`/events`, payload);
 };
 
 const uploadAssetsImage = (file) => {
   const formData = new FormData();
   formData.append('file', file)
-  formData.append('folderName', 'merchant_offer')
+  formData.append('folderName', 'event')
   return axiosInstance.post(`/files/file-upload`, formData, {
     headers: {
       'Content-Type': 'multipart/form-data'
@@ -20,10 +18,10 @@ const uploadAssetsImage = (file) => {
   })
     .then(response => {
       const dataToSend = {
-        documentId: "b1ed4fc9-ec83-491d-b669-07806177eae7",
+        documentId: "4c4cfe59-d390-479e-ad9b-1917ea2b5b2e",
         fileName: response.data.fileName,
         filePath: response.data.url,
-        folderName: "merchant_offer"
+        folderName: "event"
       };
       return FileUpload(dataToSend);
     })
@@ -43,33 +41,29 @@ const FileUpload = (dataToSend) => {
     });
 };
 
-export const AddVoucherModal = ({ handleSuccess, handleClose }) => {
 
-  const addUserMutation = useMutation({
-    mutationFn: addVoucher,
+export const AddEventsModal = ({ handleSuccess, handleClose }) => {
+  
+  const addEventsMutation = useMutation({
+    mutationFn: addEvents,
   });
 
   const initialValues = {
-    voucherCode: "",
-    voucherValue: "",
     name: "",
-    consumedCount: "",
-    maxUsageCount: "",
-    restrictUsageForUser: true,
-    description: "",
-    validityEndDate: "",
-    validityStartDate: "",
-    voucherValueType: "",
-    status : ""
+    eventDate: "",
+    merchantId: "",
+    totalPasses: "",
+    utilizedPasses: "",
+    url: "",
+    description: "", 
+    status: ""
   };
 
-  const saveVoucher = (values) => {
-    addUserMutation.mutate(
-      {
-        ...values,
-        categoryId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-        merchantId: "ac875cbe-c8bd-4bf0-8561-6bb2db23372c",
-      },
+  const saveEvents = (values) => {
+    addEventsMutation.mutate({
+      ...values,
+      merchantId: "ac875cbe-c8bd-4bf0-8561-6bb2db23372c",
+    },
       {
         onSuccess: handleSuccess,
       }
@@ -86,11 +80,11 @@ export const AddVoucherModal = ({ handleSuccess, handleClose }) => {
           const id = result.id;
           if (id) {
             console.log("Received ID:", id);
-            const updatedValues = { ...values, voucherAssetId: id };
-            saveVoucher(updatedValues);
+            const updatedValues = { ...values, fileUploadId: id };
+            saveEvents(updatedValues);
           } else {
             console.log("No ID was received");
-            saveVoucher(values);
+            saveEvents(values);
           }
         } else {
           console.log("No result from FileUpload");
@@ -104,7 +98,7 @@ export const AddVoucherModal = ({ handleSuccess, handleClose }) => {
   return (
     <Modal show={true} onHide={handleClose} size="lg">
       <Modal.Header closeButton={false}>
-        <Modal.Title>New Voucher</Modal.Title>
+        <Modal.Title>New Event</Modal.Title>
         <button
           type="button"
           className="close"
@@ -116,7 +110,7 @@ export const AddVoucherModal = ({ handleSuccess, handleClose }) => {
         </button>
       </Modal.Header>
       <Modal.Body>
-        <VoucherForm
+        <EventsForm
           initialValues={initialValues}
           onSubmit={handleSubmit}
           isAdd={true}

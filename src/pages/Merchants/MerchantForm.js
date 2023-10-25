@@ -8,7 +8,7 @@ let MerchantSchema = object({
   tradeName: string().required("tradeName is required"),
 });
 
-export const MerchantForm = ({ initialValues, handleSubmit }) => {
+export const MerchantForm = ({ initialValues, handleSubmit, isAdd = false  }) => {
   const formik = useFormik({
     initialValues,
     onSubmit: handleSubmit,
@@ -372,6 +372,21 @@ export const MerchantForm = ({ initialValues, handleSubmit }) => {
             />
           </div>
         </aside>
+        {!isAdd ?
+          <aside className="col-md-4">
+            <div className="form-group">
+              <label htmlFor="status">status</label>
+              <input
+                type="number"
+                id="status"
+                name="status"
+                value={formik.values.status}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                className="form-control form-control-lg"
+              />
+            </div>
+          </aside> : null}
       </div>
       <div className="modal-footer d-flex justify-content-end">
         <button type="submit" className="btn mb-2 btn-primary">

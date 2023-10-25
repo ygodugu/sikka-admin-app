@@ -26,6 +26,7 @@ export const AddUserModal = ({ handleSuccess, handleClose }) => {
     dateOfBirth: "",
     anniversaryDate: "",
     religion: "",
+    status : ""
   };
 
 
@@ -97,7 +98,7 @@ export const AddUserModal = ({ handleSuccess, handleClose }) => {
         </button>
       </Modal.Header>
       <Modal.Body>
-        <UserForm initialValues={initialValues} handleSubmit={saveUser} />
+        <UserForm initialValues={initialValues} isAdd={true} handleSubmit={saveUser} />
       </Modal.Body>
     </Modal>
   );

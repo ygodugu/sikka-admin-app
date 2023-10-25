@@ -10,13 +10,13 @@ let voucherSchema = object({
   name: string().required("Last Name is required")
 });
 
-export const VoucherForm = ({ initialValues, onSubmit, isEdit = false }) => {
+export const VoucherForm = ({ initialValues, onSubmit, isEdit = false, isAdd = false }) => {
 
   const [file, setFile] = useState();
 
   const handleSubmit = (values, { validateForm }) => {
     validateForm(values).then(res => {
-      onSubmit({ ...values, file});
+      onSubmit({ ...values, file });
     });
   }
 
@@ -195,14 +195,28 @@ export const VoucherForm = ({ initialValues, onSubmit, isEdit = false }) => {
             </select>
           </div>
         </aside>
-
-        {!isEdit ? 
-        <aside className="col-md-4">
-          <div className="form-group">
-            <label htmlFor="uploadImage">UploadImage</label>
-            <input type="file" id="uploadImage" name="uploadImage" onChange={handleFileSelect} className="form-control form-control-lg" />
-          </div>
-        </aside> : null}
+        {!isAdd ?
+          <aside className="col-md-4">
+            <div className="form-group">
+              <label htmlFor="status">status</label>
+              <input
+                type="number"
+                id="status"
+                name="status"
+                value={formik.values.status}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                className="form-control form-control-lg"
+              />
+            </div>
+          </aside> : null}
+        {!isEdit ?
+          <aside className="col-md-4">
+            <div className="form-group">
+              <label htmlFor="uploadImage">UploadImage</label>
+              <input type="file" id="uploadImage" name="uploadImage" onChange={handleFileSelect} className="form-control form-control-lg" />
+            </div>
+          </aside> : null}
       </div>
       <div className="modal-footer d-flex justify-content-end">
         <button type="submit" className="btn mb-2 btn-primary">

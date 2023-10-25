@@ -1,17 +1,17 @@
 import { NavLink } from "react-router-dom";
 import Logo from "../assets/images/Cikka_Logo_Dashboard.png";
 
-export const Sidebar = () => {
+export const Sidebar = ({ isCollapsed, closeSidebar }) => {
   return (
     <aside
-      className="sidebar-left border-right shadow"
+      className={`sidebar-left border-right shadow ${isCollapsed ? 'collapsed' : ''}`}
       id="leftSidebar"
       data-simplebar
     >
       <a
-        href="#"
         className="btn collapseSidebar toggle-btn d-lg-none  ml-2 mt-3"
         data-toggle="toggle"
+        onClick={closeSidebar}
       >
         <i className="fe fe-x">
           <span className="sr-only"></span>
@@ -69,6 +69,116 @@ export const Sidebar = () => {
             >
               <i className="fe fe-users fe-16"></i>
               <span className="ml-1 item-text">Merchants</span>
+            </NavLink>
+          </li>
+          <li className="nav-item">
+            <NavLink
+              to="/Purchases"
+              className={({ isActive }) =>
+                isActive ? "nav-link active" : "nav-link"
+              }
+            >
+              <i className="fe fe-shopping-cart fe-16"></i>
+              <span className="ml-1 item-text">Purchases</span>
+            </NavLink>
+          </li>
+          <li className="nav-item">
+            <NavLink
+              to="/Transactions"
+              className={({ isActive }) =>
+                isActive ? "nav-link active" : "nav-link"
+              }
+            >
+              <i className="fe fe-dollar-sign fe-16"></i>
+              <span className="ml-1 item-text">Transactions</span>
+            </NavLink>
+          </li>
+          <li className="nav-item">
+            <NavLink
+              to="/BusinessCategories"
+              className={({ isActive }) =>
+                isActive ? "nav-link active" : "nav-link"
+              }
+            >
+              <i className="fe fe-briefcase fe-16"></i>
+              <span className="ml-1 item-text">Business Categories</span>
+            </NavLink>
+          </li>
+          <li className="nav-item">
+            <NavLink
+              to="/Categories"
+              className={({ isActive }) =>
+                isActive ? "nav-link active" : "nav-link"
+              }
+            >
+              <i className="fe fe-shopping-bag fe-16"></i>
+              <span className="ml-1 item-text">Categories</span>
+            </NavLink>
+          </li>
+          <li className="nav-item">
+            <NavLink
+              to="/Industries"
+              className={({ isActive }) =>
+                isActive ? "nav-link active" : "nav-link"
+              }
+            >
+              <i className="fe fe-trello fe-16"></i>
+              <span className="ml-1 item-text">Industries</span>
+            </NavLink>
+          </li>
+          <li className="nav-item">
+            <NavLink
+              to="/Countries"
+              className={({ isActive }) =>
+                isActive ? "nav-link active" : "nav-link"
+              }
+            >
+              <i className="fe fe-globe fe-16"></i>
+              <span className="ml-1 item-text">Countries</span>
+            </NavLink>
+          </li>
+          <li className="nav-item">
+            <NavLink
+              to="/States"
+              className={({ isActive }) =>
+                isActive ? "nav-link active" : "nav-link"
+              }
+            >
+              <i className="fe fe-map fe-16"></i>
+              <span className="ml-1 item-text">States</span>
+            </NavLink>
+          </li>
+          <li className="nav-item">
+            <NavLink
+              to="/Cities"
+              className={({ isActive }) =>
+                isActive ? "nav-link active" : "nav-link"
+              }
+            >
+              <i className="fe fe-map-pin fe-16"></i>
+              <span className="ml-1 item-text">Cities</span>
+            </NavLink>
+          </li>
+          <li className="nav-item">
+            <NavLink
+              to="/Documents"
+              className={({ isActive }) =>
+                isActive ? "nav-link active" : "nav-link"
+              }
+            >
+              <i className="fe fe-file fe-16"></i>
+              <span className="ml-1 item-text">Documents</span>
+            </NavLink>
+          </li>
+          <li className="nav-item">
+            <NavLink
+              to="/Events"
+              className={({ isActive }) =>
+                isActive ? "nav-link active" : "nav-link"
+              }
+            >
+              <i className="fe fe-calendar fe-16"></i>
+              <span className="ml-1 item-text">Events</span>
             </NavLink>
           </li>
         </ul>

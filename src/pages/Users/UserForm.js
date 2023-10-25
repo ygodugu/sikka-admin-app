@@ -11,7 +11,7 @@ let userSchema = object({
   physicalAddress: string().required("Email is physicalAddress"),
 });
 
-export const UserForm = ({ initialValues, handleSubmit }) => {
+export const UserForm = ({ initialValues, handleSubmit, isAdd = false }) => {
   const formik = useFormik({
     initialValues,
     onSubmit: handleSubmit,
@@ -412,7 +412,22 @@ export const UserForm = ({ initialValues, handleSubmit }) => {
             </select>
           </div>
         </aside>
-        <aside className="col-md-12">
+        {!isAdd ?
+          <aside className="col-md-4">
+            <div className="form-group">
+              <label htmlFor="status">status</label>
+              <input
+                type="number"
+                id="status"
+                name="status"
+                value={formik.values.status}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                className="form-control form-control-lg"
+              />
+            </div>
+          </aside> : null}
+        <aside className="col-md-8">
           <div className="form-group">
             <label for="shortBio">shortBio</label>
             <input

@@ -33,10 +33,10 @@ export const AddMerchantModal = ({ handleSuccess, handleClose }) => {
     representativeEmail: "",
     representativeMobile: "",
     representativeName: "",
-    status: 0,
     taxFileNumber: "",
     tradeName: "",
-    website: ""
+    website: "",
+    status : ""
   };
 
   const saveUser = (values) => {
@@ -69,7 +69,7 @@ export const AddMerchantModal = ({ handleSuccess, handleClose }) => {
         </button>
       </Modal.Header>
       <Modal.Body>
-        <MerchantForm initialValues={initialValues} handleSubmit={saveUser} />
+        <MerchantForm initialValues={initialValues} isAdd={true} handleSubmit={saveUser} />
       </Modal.Body>
     </Modal>
   );

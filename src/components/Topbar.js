@@ -1,7 +1,7 @@
 import { NavDropdown } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
-export const Topbar = () => {
+export const Topbar = ({ toggleSidebar }) => {
   const user = JSON.parse(localStorage.getItem("user"));
   const navigate = useNavigate();
   if (!user) return null;
@@ -14,9 +14,12 @@ export const Topbar = () => {
     <nav className="topnav navbar navbar-light">
       <button
         type="button"
-        className="navbar-toggler mt-2 p-0 mr-3 collapseSidebar"
+        className={`navbar-toggler mt-2 p-0 mr-3 collapseSidebar ${
+          window.innerWidth > 992 ? 'disable-button' : ''
+        }`}
+        onClick={toggleSidebar}
       >
-        {/* <i className="fe fe-menu navbar-toggler-icon"></i> */}
+        <i className="fe fe-menu navbar-toggler-icon"></i>
       </button>
       {/* <form className="form-inline mr-auto searchform">
         <input

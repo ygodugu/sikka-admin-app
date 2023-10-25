@@ -81,6 +81,12 @@ nav.vertnav {
     left: 24px;
 }
 
+.disable-button {
+    pointer-events: none;
+    opacity: 0.0;
+    cursor: not-allowed; 
+  }
+
 .navbar-light .navbar-toggler {
     color: #555B6D;
 }
@@ -341,6 +347,12 @@ span.badge {
     justify-content: flex-end;
 }
 
+.chart-container {
+    width: 100%;
+    height: 10px;
+    margin: 10px auto;
+}
+
 @media(max-width: 1199px) {
     .modal .modal-dialog {
         max-width: 90%;
@@ -352,6 +364,10 @@ span.badge {
 }
 
 @media(max-width: 991px) {
+
+    .sidebar-left.collapsed {
+        width: 40%;
+      }
 
     .resp-table .table,
     .edu-tb .table {

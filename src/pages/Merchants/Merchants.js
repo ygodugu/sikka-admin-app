@@ -8,9 +8,9 @@ import { EditMerchantModal } from "./EditMerchant";
 import { Alert } from "react-bootstrap";
 import Spinner from "react-bootstrap/Spinner";
 
-const fetchMerchants = (pageIndex = 0, pageSize = 20) => {
+const fetchMerchants = (selectValue, pageIndex = 0, pageSize = 20, search, selectValueID, selectValueOrder, selectValueStatus) => {
   return axiosInstance
-    .get(`merchants?merchantTypes=MERCHANT_PARTNER&pageIndex=${pageIndex}&pageSize=${pageSize}&sortBy=id&sortOrder=DESC`)
+    .get(`merchants?merchantTypes=${selectValue || "MERCHANT_PARTNER"}&pageIndex=${pageIndex}&pageSize=${pageSize}&search=${search}&sortBy=${selectValueID}&sortOrder=${selectValueOrder}&status=${selectValueStatus}`)
     .then((res) => res.data);
 };
 
@@ -20,14 +20,19 @@ export const Merchants = () => {
   const [page, setPage] = useState(0);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [selectValue, setSelectValue] = useState("");
   const [userId, setUserId] = useState();
+  const [search, setSearch] = useState("");
+  const [selectValueID, setSelectValueID] = useState("");
+  const [selectValueOrder, setSelectValueOrder] = useState("");
+  const [selectValueStatus, setSelectValueStatus] = useState("");
   const pageSize = 20;
   const [showError, setShowError] = useState(false);
 
 
   const { isLoading, data, refetch } = useQuery({
-    queryKey: ["merchants", page],
-    queryFn: () => fetchMerchants(page, pageSize),
+    queryKey: ["merchants", page, selectValue, search, selectValueID, selectValueOrder, selectValueStatus],
+    queryFn: () => fetchMerchants(selectValue, page, pageSize, search, selectValueID, selectValueOrder, selectValueStatus),
     keepPreviousData: true,
   });
 
@@ -47,7 +52,39 @@ export const Merchants = () => {
     setShowEditModal(true);
   };
 
+  const handleSearchChange = (event) => {
+    const newSearch = event.target.value;
+    setSearch(newSearch);
+    refetch();
+  };
 
+  const handleSelectChange = (event) => {
+    const newSelect = event.target.value;
+    setSelectValue(newSelect);
+    console.log(newSelect);
+    refetch();
+  };
+
+  const handleSelectIDChange = (event) => {
+    const newSelectID = event.target.value;
+    setSelectValueID(newSelectID);
+    console.log(newSelectID);
+    refetch();
+  };
+
+  const handleSelectOrderChange = (event) => {
+    const newSelectOrder = event.target.value;
+    setSelectValueOrder(newSelectOrder);
+    console.log(newSelectOrder);
+    refetch();
+  };
+
+  const handleSelectStatusChange = (event) => {
+    const newSelectStatus = event.target.value;
+    setSelectValueStatus(newSelectStatus);
+    console.log(newSelectStatus);
+    refetch();
+  };
 
   return (
     <>
@@ -61,14 +98,53 @@ export const Merchants = () => {
       <div className="row justify-content-center">
         <div className="col-12">
           <div className="row heading-add">
-            <aside className="col-sm-10">
-              <h2 className="mb-0 page-title">Merchants</h2>
+            <aside className="ml-2 mr-2">
+              <h2 className="mb-0 page-title" style={{ display: "inline" }}>
+                Merchants
+              </h2>
             </aside>
-            <aside className="col-sm-2 add-sec">
-              <button className="bttn" onClick={() => setShowAddModal(true)}>
-                Add
-              </button>
-            </aside>
+            <form className="form-inline mr-auto searchform">
+              <input
+                className="form-control mr-sm-2 border-0"
+                onChange={handleSearchChange}
+                type="text"
+                style={{ background: "white" }}
+                placeholder="Search"
+                aria-label="Search"
+              />
+            </form>
+            <div className="d-flex">
+
+              <select className="form-control mr-sm-2" onChange={handleSelectChange} style={{ background: "white" }} aria-label="select">
+                <option value="">MerchantType</option>
+                <option value="COMMUNITY">COMMUNITY</option>
+                <option value="LISTED_BUSINESS">LISTED_BUSINESS</option>
+                <option value="MERCHANT_PARTNER">MERCHANT_PARTNER</option>
+              </select>
+
+              <select className="form-control mr-sm-2" onChange={handleSelectIDChange} style={{ background: "white" }} aria-label="select">
+                <option value="">sortBy</option>
+                <option value="id">ID</option>
+              </select>
+
+              <select className="form-control mr-sm-2" onChange={handleSelectOrderChange} style={{ background: "white" }} aria-label="select">
+                <option value="">sortOrder</option>
+                <option value="ASC">ASC</option>
+                <option value="DESC">DESC</option>
+              </select>
+
+              <select className="form-control mr-sm-2" onChange={handleSelectStatusChange} style={{ background: "white" }} aria-label="select">
+                <option value="">STATUS</option>
+                <option value="0">0</option>
+                <option value="1">1</option>
+              </select>
+
+              <aside className="col-sm-2 add-sec">
+                <button className="bttn" onClick={() => setShowAddModal(true)}>
+                  Add
+                </button>
+              </aside>
+            </div>
           </div>
           <div className="row my-2">
             <div className="col-md-12">
