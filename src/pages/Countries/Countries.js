@@ -28,10 +28,10 @@ export const Countries = () => {
   const pageSize = 20;
   const [showError, setShowError] = useState(false);
 
-  
+
   const { isLoading, data, refetch } = useQuery({
     queryKey: ["users", page, search, selectValueID, selectValueOrder, selectValueStatus],
-    queryFn: () => fetchCountries(page, pageSize, search, selectValueID, selectValueOrder, selectValueStatus ),
+    queryFn: () => fetchCountries(page, pageSize, search, selectValueID, selectValueOrder, selectValueStatus),
     keepPreviousData: true,
   });
 
@@ -127,16 +127,18 @@ export const Countries = () => {
                 </button>
               </aside>
             </div>
-            
+
           </div>
           <div className="row my-2">
             <div className="col-md-12">
               <div className="card shadow">
                 <div className="card-body">
-                  <div className="resp-table users-tb">
+                  <div className="resp-table countries-tb">
                     <table className="table">
                       <thead>
                         <tr>
+                          <th>Actions</th>
+                          <th>Status</th>
                           <th>ID</th>
                           <th>Name</th>
                           <th>CountryCode</th>
@@ -145,8 +147,6 @@ export const Countries = () => {
                           <th>UpdatedBy</th>
                           <th>CreatedAt</th>
                           <th>UpdatedAt</th>
-                          <th>Status</th>
-                          <th>Actions</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -161,6 +161,10 @@ export const Countries = () => {
                         ) : (
                           data?.data?.map((u) => (
                             <tr key={u.id}>
+                              <td className="actions">
+                                <EditIcon onClick={handleEditClick(u.id)} />
+                              </td>
+                              <td>{u.status}</td>
                               <td>{u.id || 'N/A'}</td>
                               <td>{u.name || 'N/A'}</td>
                               <td> {u.countryCode || 'N/A'}</td>
@@ -169,10 +173,6 @@ export const Countries = () => {
                               <td>{u.updatedBy || 'N/A'}</td>
                               <td>{u.createdAt || 'N/A'}</td>
                               <td>{u.updatedAt || 'N/A'}</td>
-                              <td>{u.status || 'N/A'}</td>
-                              <td className="actions">
-                                <EditIcon onClick={handleEditClick(u.id)} />
-                              </td>
                             </tr>
                           ))
                         )}

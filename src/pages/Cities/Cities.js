@@ -78,7 +78,7 @@ export const Cities = () => {
     refetch();
   };
 
-  
+
   return (
     <>
       {showError ? (
@@ -128,16 +128,18 @@ export const Cities = () => {
                 </button>
               </aside>
             </div>
-            
+
           </div>
           <div className="row my-2">
             <div className="col-md-12">
               <div className="card shadow">
                 <div className="card-body">
-                  <div className="resp-table users-tb">
+                  <div className="resp-table cities-tb">
                     <table className="table">
                       <thead>
                         <tr>
+                          <th>Actions</th>
+                          <th>Status</th>
                           <th>ID</th>
                           <th>StateId</th>
                           <th>Name</th>
@@ -146,8 +148,6 @@ export const Cities = () => {
                           <th>UpdatedBy</th>
                           <th>CreatedAt</th>
                           <th>UpdatedAt</th>
-                          <th>Status</th>
-                          <th>Actions</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -162,6 +162,10 @@ export const Cities = () => {
                         ) : (
                           data?.data?.map((u) => (
                             <tr key={u.id}>
+                              <td className="actions">
+                                <EditIcon onClick={handleEditClick(u.id)} />
+                              </td>
+                              <td>{u.status}</td>
                               <td>{u.id || 'N/A'}</td>
                               <td> {u.stateId || 'N/A'}</td>
                               <td>{u.name || 'N/A'}</td>
@@ -170,10 +174,6 @@ export const Cities = () => {
                               <td>{u.updatedBy || 'N/A'}</td>
                               <td>{u.createdAt || 'N/A'}</td>
                               <td>{u.updatedAt || 'N/A'}</td>
-                              <td>{u.status || 'N/A'}</td>
-                              <td className="actions">
-                                <EditIcon onClick={handleEditClick(u.id)} />
-                              </td>
                             </tr>
                           ))
                         )}

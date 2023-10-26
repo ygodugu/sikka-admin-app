@@ -150,10 +150,12 @@ export const Merchants = () => {
             <div className="col-md-12">
               <div className="card shadow">
                 <div className="card-body">
-                  <div className="resp-table Merchants-tb">
+                  <div className="resp-table merchants-tb">
                     <table className="table">
                       <thead>
                         <tr>
+                          <th>Actions</th>
+                          <th>Status</th>
                           <th>MerchantType</th>
                           <th>User</th>
                           <th>Industry</th>
@@ -185,8 +187,6 @@ export const Merchants = () => {
                           <th>UpdatedBy</th>
                           <th>CreatedAt</th>
                           <th>UpdatedAt</th>
-                          <th>Status</th>
-                          <th>Actions</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -199,9 +199,12 @@ export const Merchants = () => {
                             </td>
                           </tr>
                         ) : (
-                          console.log(data),
                           data?.data?.map((u) => (
                             <tr key={u.id}>
+                              <td className="actions">
+                                <EditIcon onClick={handleEditClick(u.id)} />
+                              </td>
+                              <td>{u.status || 'N/A'}</td>
                               <td>{u.merchantType || 'N/A'}</td>
                               <td>{u.user || 'N/A'}</td>
                               <td> {u.industry || 'N/A'}</td>
@@ -233,10 +236,6 @@ export const Merchants = () => {
                               <td>{u.updatedBy || 'N/A'}</td>
                               <td>{u.createdAt || 'N/A'}</td>
                               <td>{u.updatedAt || 'N/A'}</td>
-                              <td>{u.status || 'N/A'}</td>
-                              <td className="actions">
-                                <EditIcon onClick={handleEditClick(u.id)} />
-                              </td>
                             </tr>
                           ))
                         )}

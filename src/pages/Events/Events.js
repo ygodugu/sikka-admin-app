@@ -126,16 +126,18 @@ export const Events = () => {
                 </button>
               </aside>
             </div>
-            
+
           </div>
           <div className="row my-2">
             <div className="col-md-12">
               <div className="card shadow">
                 <div className="card-body">
-                  <div className="resp-table users-tb">
+                  <div className="resp-table events-tb">
                     <table className="table">
                       <thead>
                         <tr>
+                          <th>Actions</th>
+                          <th>Status</th>
                           <th>ID</th>
                           <th>Name</th>
                           <th>EventDate</th>
@@ -147,8 +149,6 @@ export const Events = () => {
                           <th>UpdatedBy</th>
                           <th>CreatedAt</th>
                           <th>UpdatedAt</th>
-                          <th>Status</th>
-                          <th>Actions</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -163,6 +163,10 @@ export const Events = () => {
                         ) : (
                           data?.data?.map((u) => (
                             <tr key={u.id}>
+                              <td className="actions">
+                                <EditIcon onClick={handleEditClick(u.id)} />
+                              </td>
+                              <td>{u.status}</td>
                               <td>{u.id || 'N/A'}</td>
                               <td>{u.name || 'N/A'}</td>
                               <td>{u.eventDate || 'N/A'}</td>
@@ -174,10 +178,6 @@ export const Events = () => {
                               <td>{u.updatedBy || 'N/A'}</td>
                               <td>{u.createdAt || 'N/A'}</td>
                               <td>{u.updatedAt || 'N/A'}</td>
-                              <td>{u.status || 'N/A'}</td>
-                              <td className="actions">
-                                <EditIcon onClick={handleEditClick(u.id)} />
-                              </td>
                             </tr>
                           ))
                         )}

@@ -127,6 +127,8 @@ export const Users = () => {
                     <table className="table">
                       <thead>
                         <tr>
+                          <th>Actions</th>
+                          <th>Status</th>
                           <th>CategoryId</th>
                           <th>UserReferralNumber</th>
                           <th>Email</th>
@@ -154,8 +156,6 @@ export const Users = () => {
                           <th>UpdatedBy</th>
                           <th>CreatedAt</th>
                           <th>UpdatedAt</th>
-                          <th>Status</th>
-                          <th>Actions</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -171,6 +171,10 @@ export const Users = () => {
                           console.log(data),
                           data?.data?.map((u) => (
                             <tr key={u.id}>
+                              <td className="actions">
+                                <EditIcon onClick={handleEditClick(u.id)} />
+                              </td>
+                              <td>{u.status || 'N/A'}</td>
                               <td>{u.categoryId || 'N/A'}</td>
                               <td>{u.userReferralNumber || 'N/A'}</td>
                               <td>{u.email || 'N/A'}</td>
@@ -198,10 +202,6 @@ export const Users = () => {
                               <td>{u.updatedBy || 'N/A'}</td>
                               <td>{u.createdAt || 'N/A'}</td>
                               <td>{u.updatedAt || 'N/A'}</td>
-                              <td>{u.status || 'N/A'}</td>
-                              <td className="actions">
-                                <EditIcon onClick={handleEditClick(u.id)} />
-                              </td>
                             </tr>
                           ))
                         )}

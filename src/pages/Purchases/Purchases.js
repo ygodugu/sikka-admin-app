@@ -5,9 +5,9 @@ import { axiosInstance } from "../../axiosInstance";
 import { CustomPagination } from "../../components/CustomPagination";
 
 
-const fetchPurchases = (pageIndex = 0, pageSize = 20, selectValue) => {
+const fetchPurchases = (pageIndex = 0, pageSize = 20, selectValue, searchSearchPurchaseValue,  selectValueID, selectValueOrder, selectValueStatus) => {
   return axiosInstance
-    .get(`/cikka-purchases?pageIndex=${pageIndex}&pageSize=${pageSize}&purchaseStatus=${selectValue}&sortBy=id&sortOrder=DESC`)
+    .get(`/cikka-purchases?pageIndex=${pageIndex}&pageSize=${pageSize}&purchaseStatus=${selectValue}&purchaseValue=${searchSearchPurchaseValue}&sortBy=id&sortOrder=DESC`)
     .then((res) => res.data);
 };
 
@@ -16,14 +16,24 @@ export const Purchases = () => {
   const queryClient = useQueryClient();
 
   const [page, setPage] = useState(0);
+  const [selectValueID, setSelectValueID] = useState("");
+  const [selectValueOrder, setSelectValueOrder] = useState("");
+  const [selectValueStatus, setSelectValueStatus] = useState("");
+  const [searchSearchPurchaseValue, setSearchSearchPurchaseValue] = useState("");
   const [selectValue, setSelectValue] = useState("");
   const [showError, setShowError] = useState(false);
   const pageSize = 20;
   const { data, refetch, isLoading } = useQuery({
-    queryKey: ["Purchases", page, selectValue],
-    queryFn: () => fetchPurchases(page, pageSize, selectValue),
+    queryKey: ["Purchases", page, selectValue, searchSearchPurchaseValue,  selectValueID, selectValueOrder, selectValueStatus],
+    queryFn: () => fetchPurchases(page, pageSize, selectValue, searchSearchPurchaseValue,  selectValueID, selectValueOrder, selectValueStatus),
     keepPreviousData: true,
   });
+
+  const handleSearchPurchaseValueChange = (event) => {
+    const newSearchPurchaseValue = event.target.value;
+    setSearchSearchPurchaseValue(newSearchPurchaseValue);
+    refetch();
+  };
 
   const handleSelectChange = (event) => {
     const newSelect = event.target.value;
@@ -32,28 +42,78 @@ export const Purchases = () => {
     refetch();
   };
 
+  const handleSelectIDChange = (event) => {
+    const newSelectID = event.target.value;
+    setSelectValueID(newSelectID);
+    console.log(newSelectID);
+    refetch();
+  };
+
+  const handleSelectOrderChange = (event) => {
+    const newSelectOrder = event.target.value;
+    setSelectValueOrder(newSelectOrder);
+    console.log(newSelectOrder);
+    refetch();
+  };
+
+  const handleSelectStatusChange = (event) => {
+    const newSelectStatus = event.target.value;
+    setSelectValueStatus(newSelectStatus);
+    console.log(newSelectStatus);
+    refetch();
+  };
+
   return (
     <>
       <div className="row justify-content-center">
         <div className="col-12">
           <div className="row heading-add">
-            <aside className="col-sm-8">
+            <aside className="ml-2">
               <h2 className="mb-0 page-title">Cikka Purchases</h2>
             </aside>
-            <aside className="col-sm-3">
-              <select className="form-control" onChange={handleSelectChange} style={{ background: "white" }} aria-label="select">
+            <form className="form-inline  mr-auto searchform">
+              <input
+                className="form-control mr-sm-2 border-0"
+                onChange={handleSearchPurchaseValueChange}
+                type="number"
+                style={{ background: "white" }}
+                placeholder="Search Purchase Value"
+                aria-label="Search"
+              />
+            </form>
+            <div className="d-flex">
+              <select className="form-control mr-sm-2" onChange={handleSelectChange} style={{ background: "white" }} aria-label="select">
                 <option value="">PurchaseStatus</option>
                 <option value="CANCELLED">CANCELLED</option>
                 <option value="INITIATED">INITIATED</option>
                 <option value="PURCHASED">PURCHASED</option>
               </select>
-            </aside>
+
+              <select className="form-control  mr-sm-2" onChange={handleSelectIDChange} style={{ background: "white" }} aria-label="select">
+                <option value="">sortBy</option>
+                <option value="id">ID</option>
+              </select>
+
+              <select className="form-control  mr-sm-2" onChange={handleSelectOrderChange} style={{ background: "white" }} aria-label="select">
+                <option value="">sortOrder</option>
+                <option value="ASC">ASC</option>
+                <option value="DESC">DESC</option>
+              </select>
+
+              <select className="form-control  mr-sm-2" onChange={handleSelectStatusChange} style={{ background: "white" }} aria-label="select">
+                <option value="">STATUS</option>
+                <option value="0">0</option>
+                <option value="1">1</option>
+              </select>
+
+            </div>
+
           </div>
           <div className="row my-2">
             <div className="col-md-12">
               <div className="card shadow">
                 <div className="card-body">
-                  <div className="resp-table priest-tb">
+                  <div className="resp-table purchases-tb">
                     <table className="table">
                       <thead>
                         <tr>

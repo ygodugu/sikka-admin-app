@@ -1,3 +1,4 @@
+import React, { useEffect } from 'react'
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { Spinner } from "react-bootstrap";
@@ -5,9 +6,9 @@ import { axiosInstance } from "../../axiosInstance";
 import { CustomPagination } from "../../components/CustomPagination";
 
 
-const fetchTransactions = (pageIndex = 0, pageSize = 20, search,  selectValueID, selectValueOrder, selectValueStatus) => {
+const fetchTransactions = (pageIndex = 0, pageSize = 20, search, selectValueID, selectValueOrder, selectValueStatus, selectedValue) => {
   return axiosInstance
-    .get(`/cikka-transactions?pageIndex=${pageIndex}&pageSize=${pageSize}&search=${search}&sortBy=${selectValueID}&sortOrder=${selectValueOrder}&status=${selectValueStatus}`)
+    .get(`/cikka-transactions?pageIndex=${pageIndex}&pageSize=${pageSize}&search=${search}&sortBy=${selectValueID}&sortOrder=${selectValueOrder}&status=${selectValueStatus}&receivedId=${selectedValue}`)
     .then((res) => res.data);
 };
 
@@ -20,17 +21,40 @@ export const Transactions = () => {
   const [selectValueID, setSelectValueID] = useState("");
   const [selectValueOrder, setSelectValueOrder] = useState("");
   const [selectValueStatus, setSelectValueStatus] = useState("");
+
+  const [selectValueReceivedID, setSelectValueReceivedID] = useState([]);
+
+  const [selectedValue, setSelectedValue] = useState("");
+
   const pageSize = 20;
 
   const { data, refetch, isLoading } = useQuery({
-    queryKey: ["transactions", page, search,  selectValueID, selectValueOrder, selectValueStatus],
-    queryFn: () => fetchTransactions(page, pageSize, search,  selectValueID, selectValueOrder, selectValueStatus),
+    queryKey: ["transactions", page, search, selectValueID, selectValueOrder, selectValueStatus, selectedValue],
+    queryFn: () => fetchTransactions(page, pageSize, search, selectValueID, selectValueOrder, selectValueStatus, selectedValue),
     keepPreviousData: true,
   });
 
   const handleSearchChange = (event) => {
     const newSearch = event.target.value;
     setSearch(newSearch);
+    refetch();
+  };
+
+  useEffect(() => {
+    axiosInstance
+      .get("/cikka-transactions")
+      .then((res) => res.data)
+      .then((data) => {
+        setSelectValueReceivedID(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching categories:", error);
+      });
+  }, []);
+
+  const handleTypeaheadChange = (e) => {
+    const optionValue = e.target.value;
+    setSelectedValue(optionValue);
     refetch();
   };
 
@@ -64,7 +88,7 @@ export const Transactions = () => {
             <aside className="ml-2 mr-2">
               <h2 className="mb-0 page-title">Cikka Transaction</h2>
             </aside>
-            <form className="form-inline  mr-auto searchform">
+            <form className="form-inline searchform">
               <input
                 className="form-control mr-sm-2 border-0"
                 onChange={handleSearchChange}
@@ -74,10 +98,26 @@ export const Transactions = () => {
                 aria-label="Search"
               />
             </form>
-            <aside className="col-sm-2 add-sec">
+            <aside className='col-sm-2 add-sec'>
+              <select
+                id="receivedId"
+                className="form-control"
+                value={selectedValue}
+                onChange={handleTypeaheadChange}
+              >
+                <option value="">Choose a receiver</option>
+                {selectValueReceivedID?.data?.map((option) => (
+                  <option key={option.receiverId} value={option.receiverId}>
+                    {option.receiver.email}
+                  </option>
+                ))}
+              </select>
+            </aside>
+            <aside className="col-sm-1 add-sec">
               <select className="form-control" onChange={handleSelectIDChange} style={{ background: "white" }} aria-label="select">
                 <option value="">sortBy</option>
                 <option value="id">ID</option>
+                <option value="createdAt">TIME</option>
               </select>
             </aside>
             <aside className="col-sm-2 add-sec">
@@ -99,7 +139,7 @@ export const Transactions = () => {
             <div className="col-md-12">
               <div className="card shadow">
                 <div className="card-body">
-                  <div className="resp-table priest-tb">
+                  <div className="resp-table transaction-tb">
                     <table className="table">
                       <thead>
                         <tr>

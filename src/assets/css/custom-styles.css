@@ -382,28 +382,48 @@ span.badge {
         width: 1330px;
     }
 
-    .Merchants-tb .table {
-        width: 2830px;
+    .merchants-tb .table {
+        width: 1830px;
     }
 
-    .ratings-tb .table {
+    .purchases-tb .table {
         width: 1200px;
     }
 
-    .certification-tb .table {
+    .transaction-tb .table {
         width: 1090px;
     }
 
-    .pooja-grocery-tb .table {
+    .business-categories-tb .table {
         width: 1140px;
     }
 
-    .notify-tb .table {
-        width: 1130px;
+    .categories-tb .table {
+        width: 1140px;
     }
 
-    .priest-tb .table {
-        width: 1950px;
+    .industries-tb .table {
+        width: 1080px;
+    }
+
+    .countries-tb .table {
+        width: 980px;
+    }
+
+    .states-tb .table {
+        width: 1080px;
+    }
+
+    .cities-tb .table {
+        width: 1080px;
+    }
+
+    .documents-tb .table {
+        width: 1030px;
+    }
+
+    .events-tb .table {
+        width: 1010px;
     }
 }
 

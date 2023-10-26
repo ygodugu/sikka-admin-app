@@ -122,16 +122,18 @@ export const Industries = () => {
                 </button>
               </aside>
             </div>
-            
+
           </div>
           <div className="row my-2">
             <div className="col-md-12">
               <div className="card shadow">
                 <div className="card-body">
-                  <div className="resp-table priest-tb">
+                  <div className="resp-table industries-tb">
                     <table className="table">
                       <thead>
                         <tr>
+                          <th>Actions</th>
+                          <th>Status</th>
                           <th>ID</th>
                           <th>Name</th>
                           <th>Description</th>
@@ -139,8 +141,6 @@ export const Industries = () => {
                           <th>UpdatedBy</th>
                           <th>CreatedAt</th>
                           <th>UpdatedAt</th>
-                          <th>Status</th>
-                          <th>Actions</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -155,17 +155,17 @@ export const Industries = () => {
                         ) : (
                           data.data.map((p) => (
                             <tr key={p.id}>
+                              <td className="actions">
+                                <EditIcon onClick={handleEditClick(p.id)} />
+                              </td>
+                              <td>{p.status}</td>
                               <td>{p.id}</td>
                               <td>{p.name}</td>
-                              <td> {p.description}</td>
+                              <td>{p.description}</td>
                               <td>{p.createdBy}</td>
                               <td>{p.updatedBy}</td>
                               <td>{p.createdAt}</td>
                               <td>{p.updatedAt}</td>
-                              <td>{p.status}</td>
-                              <td className="actions">
-                                <EditIcon onClick={handleEditClick(p.id)} />
-                              </td>
                             </tr>
                           ))
                         )}

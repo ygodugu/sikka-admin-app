@@ -130,16 +130,18 @@ export const States = () => {
                 </button>
               </aside>
             </div>
-            
+
           </div>
           <div className="row my-2">
             <div className="col-md-12">
               <div className="card shadow">
                 <div className="card-body">
-                  <div className="resp-table users-tb">
+                  <div className="resp-table states-tb">
                     <table className="table">
                       <thead>
                         <tr>
+                          <th>Actions</th>
+                          <th>Status</th>
                           <th>ID</th>
                           <th>CountryId</th>
                           <th>Name</th>
@@ -148,8 +150,6 @@ export const States = () => {
                           <th>UpdatedBy</th>
                           <th>CreatedAt</th>
                           <th>UpdatedAt</th>
-                          <th>Status</th>
-                          <th>Actions</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -164,6 +164,10 @@ export const States = () => {
                         ) : (
                           data?.data?.map((u) => (
                             <tr key={u.id}>
+                              <td className="actions">
+                                <EditIcon onClick={handleEditClick(u.id)} />
+                              </td>
+                              <td>{u.status}</td>
                               <td>{u.id || 'N/A'}</td>
                               <td> {u.countryId || 'N/A'}</td>
                               <td>{u.name || 'N/A'}</td>
@@ -172,10 +176,6 @@ export const States = () => {
                               <td>{u.updatedBy || 'N/A'}</td>
                               <td>{u.createdAt || 'N/A'}</td>
                               <td>{u.updatedAt || 'N/A'}</td>
-                              <td>{u.status || 'N/A'}</td>
-                              <td className="actions">
-                                <EditIcon onClick={handleEditClick(u.id)} />
-                              </td>
                             </tr>
                           ))
                         )}

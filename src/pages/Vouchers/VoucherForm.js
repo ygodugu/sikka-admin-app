@@ -1,8 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useFormik } from "formik";
 import { object, string } from "yup";
+import { axiosInstance } from "../../axiosInstance";
 import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from "react-datepicker";
+import { Typeahead } from "react-bootstrap-typeahead";
 
 
 let voucherSchema = object({
@@ -20,8 +22,6 @@ export const VoucherForm = ({ initialValues, onSubmit, isEdit = false, isAdd = f
     });
   }
 
-
-
   // const handleSubmit = (values,{ validateForm }) => {
   //   validateForm(values).then(res => {
   //     onSubmit({ ...values, file})
@@ -38,9 +38,54 @@ export const VoucherForm = ({ initialValues, onSubmit, isEdit = false, isAdd = f
     validationSchema: voucherSchema,
   });
 
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    axiosInstance
+      .get("/categories")
+      .then((res) =>
+        res.data?.data?.map((p) => ({
+          id: p.id,
+          label: `${p.name}`,
+        }))
+      )
+      .then((data) => {
+        setCategories(data);
+        if (initialValues.categoryId) {
+          if (initialValues.categoryId) {
+            formik.setFieldValue(
+              "categorie",
+              data.filter((x) => x.id === initialValues.categoryId)
+            );
+          }
+        }
+      });
+  }, []);
+
+
   return (
     <form onSubmit={formik.handleSubmit}>
       <div className="row">
+        <aside className="col-md-4">
+          <div className="form-group">
+            <label for="categoryId">categoryId *</label>
+            <Typeahead
+              selected={formik.values.categorie}
+              id="categoryId"
+              options={categories}
+              onChange={(value) => {
+                if (value && value.length > 0) {
+                  formik.setFieldValue("categoryId", value[0].id);
+                  formik.setFieldValue("categorie", value);
+                } else {
+                  formik.setFieldValue("categoryId", "");
+                  formik.setFieldValue("categorie", []);
+                }
+              }}
+              placeholder="Choose a category"
+            />
+          </div>
+        </aside>
         <aside className="col-md-4">
           <div className="form-group">
             <label for="voucherValue">VoucherCode</label>

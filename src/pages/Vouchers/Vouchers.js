@@ -1,3 +1,4 @@
+import React, { useEffect } from 'react'
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { EditIcon } from "../../components/EditIcon";
@@ -9,9 +10,9 @@ import { AddVoucherModal } from "./AddVoucher";
 import { EditVoucherModal } from "./EditVoucher"
 
 
-const fetchvouchers = (pageIndex = 0, pageSize = 20, search, selectValueID, selectValueOrder, selectValueStatus) => {
+const fetchvouchers = (pageIndex = 0, pageSize = 20, search, selectValueID, selectValueOrder, selectValueStatus, selectedValue) => {
   return axiosInstance
-    .get(`/vouchers?pageIndex=${pageIndex}&pageSize=${pageSize}&search=${search}&sortBy=${selectValueID}&sortOrder=${selectValueOrder}&status=${selectValueStatus}`)
+    .get(`/vouchers?pageIndex=${pageIndex}&pageSize=${pageSize}&search=${search}&sortBy=${selectValueID}&sortOrder=${selectValueOrder}&status=${selectValueStatus}&categoryId=${selectedValue}`)
     .then((res) => res.data);
 };
 
@@ -26,13 +27,18 @@ export const Vouchers = () => {
   const [selectValueID, setSelectValueID] = useState("");
   const [selectValueOrder, setSelectValueOrder] = useState("");
   const [selectValueStatus, setSelectValueStatus] = useState("");
+
+  const [selectValueCategoryID, setSelectValueCategoryID] = useState([]);
+
+  const [selectedValue, setSelectedValue] = useState("");
+
   const pageSize = 20;
   const [showError, setShowError] = useState(false);
 
 
   const { isLoading, data, refetch } = useQuery({
-    queryKey: ["vouchers", page, search, selectValueID, selectValueOrder, selectValueStatus],
-    queryFn: () => fetchvouchers(page, pageSize, search, selectValueID, selectValueOrder, selectValueStatus),
+    queryKey: ["vouchers", page, search, selectValueID, selectValueOrder, selectValueStatus, selectedValue],
+    queryFn: () => fetchvouchers(page, pageSize, search, selectValueID, selectValueOrder, selectValueStatus, selectedValue),
     keepPreviousData: true,
   });
 
@@ -55,6 +61,40 @@ export const Vouchers = () => {
   const handleSearchChange = (event) => {
     const newSearch = event.target.value;
     setSearch(newSearch);
+    refetch();
+  };
+
+  useEffect(() => {
+    axiosInstance
+      .get("/categories")
+      .then((res) => res.data)
+      .then((data) => {
+        setSelectValueCategoryID(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching categories:", error);
+      });
+  }, []);
+
+
+  const [categoryData, setCategoryData] = useState([]);
+
+  useEffect(() => {
+    axiosInstance
+      .get("/categories")
+      .then((res) => res.data)
+      .then((data) => {
+        setCategoryData(data);
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching categories:", error);
+      });
+  }, []);
+
+  const handleTypeaheadChange = (e) => {
+    const optionValue = e.target.value;
+    setSelectedValue(optionValue);
     refetch();
   };
 
@@ -107,6 +147,22 @@ export const Vouchers = () => {
             </form>
 
             <div className="d-flex">
+
+              <div className='col-sm-4 mr-sm-2'>
+                <select
+                  id="categoryId"
+                  className="form-control"
+                  value={selectedValue}
+                  onChange={handleTypeaheadChange}
+                >
+                  <option value="">Choose a category</option>
+                  {selectValueCategoryID?.data?.map((option) => (
+                    <option key={option.id} value={option.id}>
+                      {option.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
               <select className="form-control  mr-sm-2" onChange={handleSelectIDChange} style={{ background: "white" }} aria-label="select">
                 <option value="">sortBy</option>
                 <option value="id">ID</option>
@@ -117,13 +173,12 @@ export const Vouchers = () => {
                 <option value="ASC">ASC</option>
                 <option value="DESC">DESC</option>
               </select>
-              
+
               <select className="form-control  mr-sm-2" onChange={handleSelectStatusChange} style={{ background: "white" }} aria-label="select">
                 <option value="">STATUS</option>
                 <option value="0">0</option>
                 <option value="1">1</option>
               </select>
-              
               <aside className="col-sm-2 add-sec">
                 <button className="bttn" onClick={() => setShowAddModal(true)}>
                   Add
@@ -140,6 +195,8 @@ export const Vouchers = () => {
                     <table className="table">
                       <thead>
                         <tr>
+                          <th>Actions</th>
+                          <th>Status</th>
                           <th>VoucherCode</th>
                           <th>Name</th>
                           <th>Description</th>
@@ -158,8 +215,6 @@ export const Vouchers = () => {
                           <th>UpdatedBy</th>
                           <th>CreatedAt</th>
                           <th>UpdatedAt</th>
-                          <th>Status</th>
-                          <th>Actions</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -175,12 +230,16 @@ export const Vouchers = () => {
                           console.log(data),
                           data?.data?.map((u) => (
                             <tr key={u.id}>
+                              <td className="actions">
+                                <EditIcon onClick={handleEditClick(u.id)} />
+                              </td>
+                              <td>{u.status || 'N/A'}</td>
                               <td>{u.voucherCode}</td>
                               <td>{u.name}</td>
-                              <td> {u.description || 'N/A'}</td>
+                              <td>{u.description || 'N/A'}</td>
                               <td>{u.merchantId || 'N/A'}</td>
                               <td>{u.merchant || 'N/A'}</td>
-                              <td>{u.categoryId || 'N/A'}</td>
+                              <td>{categoryData?.data?.find(category => category.id === u.categoryId)?.name || 'N/A'}</td>
                               <td>{u.voucherAssetId || 'N/A'}</td>
                               <td>{u.voucherValue || 'N/A'}</td>
                               <td>{u.voucherValueType || 'N/A'}</td>
@@ -193,11 +252,6 @@ export const Vouchers = () => {
                               <td>{u.updatedBy || 'N/A'}</td>
                               <td>{u.createdAt}</td>
                               <td>{u.updatedAt}</td>
-                              <td>{u.status || 'N/A'}</td>
-
-                              <td className="actions">
-                                <EditIcon onClick={handleEditClick(u.id)} />
-                              </td>
                             </tr>
                           ))
                         )}

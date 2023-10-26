@@ -99,6 +99,7 @@ export const Categories = () => {
               />
             </form>
             <div className="d-flex">
+
               <select className="form-control  mr-sm-2" onChange={handleSelectIDChange} style={{ background: "white" }} aria-label="select">
                 <option value="">sortBy</option>
                 <option value="id">ID</option>
@@ -128,10 +129,12 @@ export const Categories = () => {
             <div className="col-md-12">
               <div className="card shadow">
                 <div className="card-body">
-                  <div className="resp-table priest-tb">
+                  <div className="resp-table categories-tb">
                     <table className="table">
                       <thead>
                         <tr>
+                          <th>Actions</th>
+                          <th>Status</th>
                           <th>ID</th>
                           <th>Name</th>
                           <th>Description</th>
@@ -139,8 +142,6 @@ export const Categories = () => {
                           <th>UpdatedBy</th>
                           <th>CreatedAt</th>
                           <th>UpdatedAt</th>
-                          <th>Status</th>
-                          <th>Actions</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -155,6 +156,10 @@ export const Categories = () => {
                         ) : (
                           data.data.map((p) => (
                             <tr key={p.id}>
+                              <td className="actions">
+                                <EditIcon onClick={handleEditClick(p.id)} />
+                              </td>
+                              <td>{p.status}</td>
                               <td>{p.id}</td>
                               <td>{p.name}</td>
                               <td> {p.description}</td>
@@ -162,10 +167,6 @@ export const Categories = () => {
                               <td>{p.updatedBy}</td>
                               <td>{p.createdAt}</td>
                               <td>{p.updatedAt}</td>
-                              <td>{p.status}</td>
-                              <td className="actions">
-                                <EditIcon onClick={handleEditClick(p.id)} />
-                              </td>
                             </tr>
                           ))
                         )}
