@@ -60,6 +60,10 @@ const Events = lazy(() =>
   import("./Events/Events").then((module) => ({ default: module.Events }))
 );
 
+const ViewTransaction = lazy(() =>
+  import("./Transactions/ViewTransaction").then((module) => ({ default: module.ViewTransaction }))
+);
+
 
 export const Layout = () => {
 
@@ -92,6 +96,7 @@ export const Layout = () => {
                   <Route path="/Merchants" element={<Merchants />} />
                   <Route path="/Purchases" element={<Purchases />} />
                   <Route path="/Transactions" element={<Transactions />} />
+                  <Route path="/view-transaction/:id" element={<ViewTransaction />} />
                   <Route path="/BusinessCategories" element={<BusinessCategories />} />
                   <Route path="/Categories" element={<Categories />} />
                   <Route path="/Industries" element={<Industries />} />

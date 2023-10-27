@@ -1,9 +1,11 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+import { EditIcon } from "../../components/EditIcon";
 import { Spinner } from "react-bootstrap";
 import { axiosInstance } from "../../axiosInstance";
 import { CustomPagination } from "../../components/CustomPagination";
+import { Typeahead } from "react-bootstrap-typeahead";
+import { NavLink } from "react-router-dom";
 
 
 const fetchTransactions = (pageIndex = 0, pageSize = 20, search, selectValueID, selectValueOrder, selectValueStatus, selectedValue) => {
@@ -79,6 +81,21 @@ export const Transactions = () => {
     refetch();
   };
 
+  const [usersData, setUsersData] = useState([]);
+
+  useEffect(() => {
+    axiosInstance
+      .get("/users")
+      .then((res) => res.data)
+      .then((data) => {
+        setUsersData(data);
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching categories:", error);
+      });
+  }, []);
+
 
   return (
     <>
@@ -86,11 +103,11 @@ export const Transactions = () => {
         <div className="col-12">
           <div className="row heading-add">
             <aside className="ml-2 mr-2">
-              <h2 className="mb-0 page-title">Cikka Transaction</h2>
+              <h2 className="mb-0 page-title" style={{ display: "inline" }}>Transaction</h2>
             </aside>
             <form className="form-inline searchform">
               <input
-                className="form-control mr-sm-2 border-0"
+                className="form-control mr-sm-4 border-0"
                 onChange={handleSearchChange}
                 type="text"
                 style={{ background: "white" }}
@@ -98,10 +115,10 @@ export const Transactions = () => {
                 aria-label="Search"
               />
             </form>
-            <aside className='col-sm-2 add-sec'>
+            <div className="d-flex">
               <select
                 id="receivedId"
-                className="form-control"
+                className="form-control mt-2 mr-sm-4 col-sm-4"
                 value={selectedValue}
                 onChange={handleTypeaheadChange}
               >
@@ -112,28 +129,22 @@ export const Transactions = () => {
                   </option>
                 ))}
               </select>
-            </aside>
-            <aside className="col-sm-1 add-sec">
-              <select className="form-control" onChange={handleSelectIDChange} style={{ background: "white" }} aria-label="select">
+              <select className="form-control mt-2 mr-sm-2" onChange={handleSelectIDChange} style={{ background: "white" }} aria-label="select">
                 <option value="">sortBy</option>
                 <option value="id">ID</option>
                 <option value="createdAt">TIME</option>
               </select>
-            </aside>
-            <aside className="col-sm-2 add-sec">
-              <select className="form-control" onChange={handleSelectOrderChange} style={{ background: "white" }} aria-label="select">
+              <select className="form-control mt-2 mr-sm-2" onChange={handleSelectOrderChange} style={{ background: "white" }} aria-label="select">
                 <option value="">sortOrder</option>
                 <option value="ASC">ASC</option>
                 <option value="DESC">DESC</option>
               </select>
-            </aside>
-            <aside className="col-sm-2 add-sec">
-              <select className="form-control" onChange={handleSelectStatusChange} style={{ background: "white" }} aria-label="select">
+              <select className="form-control mt-2" onChange={handleSelectStatusChange} style={{ background: "white" }} aria-label="select">
                 <option value="">STATUS</option>
                 <option value="0">0</option>
                 <option value="1">1</option>
               </select>
-            </aside>
+            </div>
           </div>
           <div className="row my-2">
             <div className="col-md-12">
@@ -152,12 +163,12 @@ export const Transactions = () => {
                           <th>TransactionPercentage</th>
                           <th>TransactionType</th>
                           <th>TransactionStatus</th>
-                          <th>VoucherUsageLogs</th>
                           <th>CreatedBy</th>
                           <th>UpdatedBy</th>
                           <th>CreatedAt</th>
                           <th>UpdatedAt</th>
                           <th>Status</th>
+                          <th>Actions</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -181,12 +192,16 @@ export const Transactions = () => {
                               <td>{p.transactionPercentage}</td>
                               <td>{p.transactionType}</td>
                               <td>{p.transactionStatus}</td>
-                              <td>{p.voucher ? p.voucher.id : ''}</td>
-                              <td>{p.createdBy}</td>
-                              <td>{p.updatedBy}</td>
-                              <td>{p.createdAt}</td>
-                              <td>{p.updatedAt}</td>
+                              <td>{usersData?.data?.find(user => user.id === p.createdBy)?.firstName || 'N/A'}</td>
+                              <td>{usersData?.data?.find(user => user.id === p.updatedBy)?.firstName || 'N/A'}</td>
+                              <td>{p.createdAt ? new Date(p.createdAt).toLocaleString() : 'N/A'}</td>
+                              <td>{p.updatedAt ? new Date(p.updatedAt).toLocaleString() : 'N/A'}</td>
                               <td>{p.status}</td>
+                              <td className="actions">
+                                <NavLink to={`/view-transaction/${p.id}`}>
+                                  <EditIcon />
+                                </NavLink>
+                              </td>
                             </tr>
                           ))
                         )}

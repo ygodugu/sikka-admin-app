@@ -1,6 +1,5 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react';
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
 import { EditIcon } from "../../components/EditIcon";
 import { axiosInstance } from "../../axiosInstance";
 import { CustomPagination } from "../../components/CustomPagination";
@@ -92,6 +91,22 @@ export const Vouchers = () => {
       });
   }, []);
 
+
+  const [usersData, setUsersData] = useState([]);
+
+  useEffect(() => {
+    axiosInstance
+      .get("/users")
+      .then((res) => res.data)
+      .then((data) => {
+        setUsersData(data);
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching categories:", error);
+      });
+  }, []);
+
   const handleTypeaheadChange = (e) => {
     const optionValue = e.target.value;
     setSelectedValue(optionValue);
@@ -147,8 +162,7 @@ export const Vouchers = () => {
             </form>
 
             <div className="d-flex">
-
-              <div className='col-sm-4 mr-sm-2'>
+              <div className='col-sm-4 mt-2 mr-sm-2'>
                 <select
                   id="categoryId"
                   className="form-control"
@@ -163,23 +177,23 @@ export const Vouchers = () => {
                   ))}
                 </select>
               </div>
-              <select className="form-control  mr-sm-2" onChange={handleSelectIDChange} style={{ background: "white" }} aria-label="select">
+              <select className="form-control mt-2  mr-sm-2" onChange={handleSelectIDChange} style={{ background: "white" }} aria-label="select">
                 <option value="">sortBy</option>
                 <option value="id">ID</option>
               </select>
 
-              <select className="form-control  mr-sm-2" onChange={handleSelectOrderChange} style={{ background: "white" }} aria-label="select">
+              <select className="form-control mt-2 mr-sm-2" onChange={handleSelectOrderChange} style={{ background: "white" }} aria-label="select">
                 <option value="">sortOrder</option>
                 <option value="ASC">ASC</option>
                 <option value="DESC">DESC</option>
               </select>
 
-              <select className="form-control  mr-sm-2" onChange={handleSelectStatusChange} style={{ background: "white" }} aria-label="select">
+              <select className="form-control mt-2 mr-sm-2" onChange={handleSelectStatusChange} style={{ background: "white" }} aria-label="select">
                 <option value="">STATUS</option>
                 <option value="0">0</option>
                 <option value="1">1</option>
               </select>
-              <aside className="col-sm-2 add-sec">
+              <aside className="col-sm-2 mt-2 add-sec">
                 <button className="bttn" onClick={() => setShowAddModal(true)}>
                   Add
                 </button>
@@ -227,7 +241,6 @@ export const Vouchers = () => {
                             </td>
                           </tr>
                         ) : (
-                          console.log(data),
                           data?.data?.map((u) => (
                             <tr key={u.id}>
                               <td className="actions">
@@ -235,7 +248,17 @@ export const Vouchers = () => {
                               </td>
                               <td>{u.status || 'N/A'}</td>
                               <td>{u.voucherCode}</td>
-                              <td>{u.name}</td>
+                              <td>
+                                {search ? (
+                                  u.name.toLowerCase().includes(search.toLowerCase()) ? (
+                                    <span className="highlighted">{u.name}</span>
+                                  ) : (
+                                    u.name
+                                  )
+                                ) : (
+                                  u.name
+                                )}
+                              </td>
                               <td>{u.description || 'N/A'}</td>
                               <td>{u.merchantId || 'N/A'}</td>
                               <td>{u.merchant || 'N/A'}</td>
@@ -248,10 +271,12 @@ export const Vouchers = () => {
                               <td>{u.restrictUsageForUser || 'N/A'}</td>
                               <td>{u.maxUsageCount || 'N/A'}</td>
                               <td>{u.consumedCount || 'N/A'}</td>
-                              <td>{u.createdBy || 'N/A'}</td>
-                              <td>{u.updatedBy || 'N/A'}</td>
-                              <td>{u.createdAt}</td>
-                              <td>{u.updatedAt}</td>
+                              {/* <td>{u.createdBy || 'N/A'}</td>
+                              <td>{u.updatedBy || 'N/A'}</td> */}
+                              <td>{usersData?.data?.find(user => user.id === u.createdBy)?.firstName || 'N/A'}</td>
+                              <td>{usersData?.data?.find(user => user.id === u.updatedBy)?.firstName || 'N/A'}</td>
+                              <td>{u.createdAt ? new Date(u.createdAt).toLocaleString() : 'N/A'}</td>
+                              <td>{u.updatedAt ? new Date(u.updatedAt).toLocaleString() : 'N/A'}</td>
                             </tr>
                           ))
                         )}

@@ -11,18 +11,49 @@ const fetchVouchersCounts = () => axiosInstance.get(`/vouchers`).then(res => res
 
 const fetchMerchantsCounts = () => axiosInstance.get(`/merchants`).then(res => res.data)
 
+const fetchPurchasesCounts = () => axiosInstance.get(`/cikka-purchases`).then(res => res.data)
+
+const fetchTransactionsCounts = () => axiosInstance.get(`/cikka-transactions`).then(res => res.data)
+
+const fetchBusinessCategoriesCounts = () => axiosInstance.get(`/business-categories`).then(res => res.data)
+
+const fetchCategoriesCounts = () => axiosInstance.get(`/categories`).then(res => res.data)
+
+const fetchIndustriesCounts = () => axiosInstance.get(`/industries`).then(res => res.data)
+
+const fetchCountriesCounts = () => axiosInstance.get(`/countries`).then(res => res.data)
+
+const fetchStatesCounts = () => axiosInstance.get(`/states`).then(res => res.data)
+
+const fetchCitiesCounts = () => axiosInstance.get(`/cities`).then(res => res.data)
+
+const fetchDocumentsCounts = () => axiosInstance.get(`/documents`).then(res => res.data)
+
+const fetchEventsCounts = () => axiosInstance.get(`/events`).then(res => res.data)
+
+
 
 export const Dashboard = () => {
     const {
         isLoading,
         data,
     } = useQuery({
-        queryKey: ['users', 'vouchers', 'merchants'],
+        queryKey: ['users', 'vouchers', 'merchants', 'cikka-purchases', 'cikka-transactions', 'business-categories', 'categories', 'industries', 'countries', 'states', 'cities', 'documents', 'events'],
         queryFn: async () => {
             const usersData = await fetchUsersCounts();
             const vouchersData = await fetchVouchersCounts();
             const merchantsData = await fetchMerchantsCounts();
-            return [usersData, vouchersData, merchantsData];
+            const purchasesData = await fetchPurchasesCounts();
+            const transactionsData = await fetchTransactionsCounts();
+            const businessCategoriesData = await fetchBusinessCategoriesCounts();
+            const categoriesData = await fetchCategoriesCounts();
+            const industriesData = await fetchIndustriesCounts();
+            const countriesData = await fetchCountriesCounts();
+            const statesData = await fetchStatesCounts();
+            const citiesData = await fetchCitiesCounts();
+            const documentsData = await fetchDocumentsCounts();
+            const eventsData = await fetchEventsCounts();
+            return [usersData, vouchersData, merchantsData, purchasesData, transactionsData, businessCategoriesData, categoriesData, industriesData, countriesData, statesData, citiesData, documentsData, eventsData];
         }
     })
 
@@ -115,6 +146,86 @@ export const Dashboard = () => {
                                 <div className="card-body">
                                     <p className="mb-1"><strong>Merchants</strong></p>
                                     <h4 className="mb-0">{data?.[2]?.count}</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col-md-12 col-lg-4">
+                            <div className="card eq-card mb-4">
+                                <div className="card-body">
+                                    <p className="mb-1"><strong>Purchases</strong></p>
+                                    <h4 className="mb-0">{data?.[3]?.count}</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col-md-12 col-lg-4">
+                            <div className="card eq-card mb-4">
+                                <div className="card-body">
+                                    <p className="mb-1"><strong>Transactions</strong></p>
+                                    <h4 className="mb-0">{data?.[4]?.count}</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col-md-12 col-lg-4">
+                            <div className="card eq-card mb-4">
+                                <div className="card-body">
+                                    <p className="mb-1"><strong>Business Categories</strong></p>
+                                    <h4 className="mb-0">{data?.[5]?.count}</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col-md-12 col-lg-4">
+                            <div className="card eq-card mb-4">
+                                <div className="card-body">
+                                    <p className="mb-1"><strong>Categories</strong></p>
+                                    <h4 className="mb-0">{data?.[6]?.count}</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col-md-12 col-lg-4">
+                            <div className="card eq-card mb-4">
+                                <div className="card-body">
+                                    <p className="mb-1"><strong>Industries</strong></p>
+                                    <h4 className="mb-0">{data?.[7]?.count}</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col-md-12 col-lg-4">
+                            <div className="card eq-card mb-4">
+                                <div className="card-body">
+                                    <p className="mb-1"><strong>Countries</strong></p>
+                                    <h4 className="mb-0">{data?.[8]?.count}</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col-md-12 col-lg-4">
+                            <div className="card eq-card mb-4">
+                                <div className="card-body">
+                                    <p className="mb-1"><strong>States</strong></p>
+                                    <h4 className="mb-0">{data?.[9]?.count}</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col-md-12 col-lg-4">
+                            <div className="card eq-card mb-4">
+                                <div className="card-body">
+                                    <p className="mb-1"><strong>Cities</strong></p>
+                                    <h4 className="mb-0">{data?.[10]?.count}</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col-md-12 col-lg-4">
+                            <div className="card eq-card mb-4">
+                                <div className="card-body">
+                                    <p className="mb-1"><strong>Documents</strong></p>
+                                    <h4 className="mb-0">{data?.[11]?.count}</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col-md-12 col-lg-4">
+                            <div className="card eq-card mb-4">
+                                <div className="card-body">
+                                    <p className="mb-1"><strong>Events</strong></p>
+                                    <h4 className="mb-0">{data?.[12]?.count}</h4>
                                 </div>
                             </div>
                         </div>

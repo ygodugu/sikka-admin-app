@@ -1,5 +1,5 @@
+import { useState, useEffect } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
 import { EditIcon } from "../../components/EditIcon";
 import { axiosInstance } from "../../axiosInstance";
 import { CustomPagination } from "../../components/CustomPagination";
@@ -79,7 +79,20 @@ export const States = () => {
     refetch();
   };
 
+  const [usersData, setUsersData] = useState([]);
 
+  useEffect(() => {
+    axiosInstance
+      .get("/users")
+      .then((res) => res.data)
+      .then((data) => {
+        setUsersData(data);
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching categories:", error);
+      });
+  }, []);
 
   return (
     <>
@@ -170,12 +183,24 @@ export const States = () => {
                               <td>{u.status}</td>
                               <td>{u.id || 'N/A'}</td>
                               <td> {u.countryId || 'N/A'}</td>
-                              <td>{u.name || 'N/A'}</td>
+                              <td>
+                                {search ? (
+                                  u.name.toLowerCase().includes(search.toLowerCase()) ? (
+                                    <span className="highlighted">{u.name}</span>
+                                  ) : (
+                                    u.name
+                                  )
+                                ) : (
+                                  u.name
+                                )}
+                              </td>
                               <td>{u.description || 'N/A'}</td>
-                              <td>{u.createdBy || 'N/A'}</td>
-                              <td>{u.updatedBy || 'N/A'}</td>
-                              <td>{u.createdAt || 'N/A'}</td>
-                              <td>{u.updatedAt || 'N/A'}</td>
+                              {/* <td>{u.createdBy || 'N/A'}</td>
+                              <td>{u.updatedBy || 'N/A'}</td> */}
+                              <td>{usersData?.data?.find(user => user.id === u.createdBy)?.firstName || 'N/A'}</td>
+                              <td>{usersData?.data?.find(user => user.id === u.updatedBy)?.firstName || 'N/A'}</td>
+                              <td>{u.createdAt ? new Date(u.createdAt).toLocaleString() : 'N/A'}</td>
+                              <td>{u.updatedAt ? new Date(u.updatedAt).toLocaleString() : 'N/A'}</td>
                             </tr>
                           ))
                         )}

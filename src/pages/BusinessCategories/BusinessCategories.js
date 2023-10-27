@@ -1,5 +1,5 @@
+import { useState, useEffect } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
 import { EditIcon } from "../../components/EditIcon";
 import { axiosInstance } from "../../axiosInstance";
 import { CustomPagination } from "../../components/CustomPagination";
@@ -26,6 +26,7 @@ export const BusinessCategories = () => {
   const [selectValueOrder, setSelectValueOrder] = useState("");
   const [selectValueStatus, setSelectValueStatus] = useState("");
   const [showError, setShowError] = useState(false);
+
   const pageSize = 20;
 
   const { data, refetch, isLoading } = useQuery({
@@ -79,6 +80,21 @@ export const BusinessCategories = () => {
     refetch();
   };
 
+  const [usersData, setUsersData] = useState([]);
+
+  useEffect(() => {
+    axiosInstance
+      .get("/users")
+      .then((res) => res.data)
+      .then((data) => {
+        setUsersData(data);
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching categories:", error);
+      });
+  }, []);
+
   return (
     <>
       {showError ? (
@@ -105,30 +121,26 @@ export const BusinessCategories = () => {
               />
             </form>
             <div className="d-flex">
-              <select className="form-control  mr-sm-2" onChange={handleSelectIDChange} style={{ background: "white" }} aria-label="select">
+              <select className="form-control mt-2 mr-sm-2" onChange={handleSelectIDChange} style={{ background: "white" }} aria-label="select">
                 <option value="">sortBy</option>
                 <option value="id">ID</option>
               </select>
-
-              <select className="form-control  mr-sm-2" onChange={handleSelectOrderChange} style={{ background: "white" }} aria-label="select">
+              <select className="form-control mt-2  mr-sm-2" onChange={handleSelectOrderChange} style={{ background: "white" }} aria-label="select">
                 <option value="">sortOrder</option>
                 <option value="ASC">ASC</option>
                 <option value="DESC">DESC</option>
               </select>
-
-              <select className="form-control  mr-sm-2" onChange={handleSelectStatusChange} style={{ background: "white" }} aria-label="select">
+              <select className="form-control mt-2 mr-sm-2" onChange={handleSelectStatusChange} style={{ background: "white" }} aria-label="select">
                 <option value="">STATUS</option>
                 <option value="0">0</option>
                 <option value="1">1</option>
               </select>
-
-              <aside className="col-sm-2 add-sec">
+              <aside className="col-sm-2 mt-2 add-sec">
                 <button className="bttn" onClick={() => setShowAddModal(true)}>
                   Add
                 </button>
               </aside>
             </div>
-
           </div>
           <div className="row my-2">
             <div className="col-md-12">
@@ -166,12 +178,24 @@ export const BusinessCategories = () => {
                               </td>
                               <td>{p.status}</td>
                               <td>{p.id}</td>
-                              <td>{p.name}</td>
-                              <td> {p.description}</td>
-                              <td>{p.createdBy}</td>
-                              <td>{p.updatedBy}</td>
-                              <td>{p.createdAt}</td>
-                              <td>{p.updatedAt}</td>
+                              <td>
+                                {search ? (
+                                  p.name.toLowerCase().includes(search.toLowerCase()) ? (
+                                    <span className="highlighted">{p.name}</span>
+                                  ) : (
+                                    p.name
+                                  )
+                                ) : (
+                                  p.name
+                                )}
+                              </td>
+                              <td>{p.description}</td>
+                              {/* <td>{p.createdBy}</td>
+                              <td>{p.updatedBy}</td> */}
+                              <td>{usersData?.data?.find(user => user.id === p.createdBy)?.firstName || 'N/A'}</td>
+                              <td>{usersData?.data?.find(user => user.id === p.updatedBy)?.firstName || 'N/A'}</td>
+                              <td>{p.createdAt ? new Date(p.createdAt).toLocaleString() : 'N/A'}</td>
+                              <td>{p.updatedAt ? new Date(p.updatedAt).toLocaleString() : 'N/A'}</td>
                             </tr>
                           ))
                         )}

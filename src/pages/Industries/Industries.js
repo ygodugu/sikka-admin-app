@@ -1,5 +1,5 @@
+import { useState, useEffect } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
 import Spinner from "react-bootstrap/Spinner";
 import { axiosInstance } from "../../axiosInstance";
 import { CustomPagination } from "../../components/CustomPagination";
@@ -78,6 +78,21 @@ export const Industries = () => {
     console.log(newSelectStatus);
     refetch();
   };
+
+  const [usersData, setUsersData] = useState([]);
+
+  useEffect(() => {
+    axiosInstance
+      .get("/users")
+      .then((res) => res.data)
+      .then((data) => {
+        setUsersData(data);
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching categories:", error);
+      });
+  }, []);
 
 
   return (
@@ -160,12 +175,24 @@ export const Industries = () => {
                               </td>
                               <td>{p.status}</td>
                               <td>{p.id}</td>
-                              <td>{p.name}</td>
+                              <td>
+                                {search ? (
+                                  p.name.toLowerCase().includes(search.toLowerCase()) ? (
+                                    <span className="highlighted">{p.name}</span>
+                                  ) : (
+                                    p.name
+                                  )
+                                ) : (
+                                  p.name
+                                )}
+                              </td>
                               <td>{p.description}</td>
-                              <td>{p.createdBy}</td>
-                              <td>{p.updatedBy}</td>
-                              <td>{p.createdAt}</td>
-                              <td>{p.updatedAt}</td>
+                              {/* <td>{p.createdBy}</td>
+                              <td>{p.updatedBy}</td> */}
+                              <td>{usersData?.data?.find(user => user.id === p.createdBy)?.firstName || 'N/A'}</td>
+                              <td>{usersData?.data?.find(user => user.id === p.updatedBy)?.firstName || 'N/A'}</td>
+                              <td>{p.createdAt ? new Date(p.createdAt).toLocaleString() : 'N/A'}</td>
+                              <td>{p.updatedAt ? new Date(p.updatedAt).toLocaleString() : 'N/A'}</td>
                             </tr>
                           ))
                         )}

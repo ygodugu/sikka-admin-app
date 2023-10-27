@@ -1,5 +1,5 @@
+import React, { useEffect, useState } from 'react';
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
 import { EditIcon } from "../../components/EditIcon";
 import { axiosInstance } from "../../axiosInstance";
 import { CustomPagination } from "../../components/CustomPagination";
@@ -73,6 +73,21 @@ export const Users = () => {
     refetch();
   };
 
+  const [usersData, setUsersData] = useState([]);
+
+  useEffect(() => {
+    axiosInstance
+      .get("/users")
+      .then((res) => res.data)
+      .then((data) => {
+        setUsersData(data);
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching categories:", error);
+      });
+  }, []);
+
   return (
     <>
       {showError ? (
@@ -98,20 +113,20 @@ export const Users = () => {
                 aria-label="Search"
               />
             </form>
-            <aside className="col-sm-2 add-sec">
+            <aside className="col-md-2 mt-2 mt-md-0 mb-2 mb-md-0">
               <select className="form-control" onChange={handleSelectIDChange} style={{ background: "white" }} aria-label="select">
                 <option value="">sortBy</option>
                 <option value="id">ID</option>
               </select>
             </aside>
-            <aside className="col-sm-2 add-sec">
+            <aside className="col-md-2 mb-2 mb-md-0">
               <select className="form-control" onChange={handleSelectOrderChange} style={{ background: "white" }} aria-label="select">
                 <option value="">sortOrder</option>
                 <option value="ASC">ASC</option>
                 <option value="DESC">DESC</option>
               </select>
             </aside>
-            <aside className="col-sm-2 add-sec">
+            <aside className="col-md-2 mb-2 mb-md-0">
               <select className="form-control" onChange={handleSelectStatusChange} style={{ background: "white" }} aria-label="select">
                 <option value="">STATUS</option>
                 <option value="0">0</option>
@@ -177,7 +192,17 @@ export const Users = () => {
                               <td>{u.status || 'N/A'}</td>
                               <td>{u.categoryId || 'N/A'}</td>
                               <td>{u.userReferralNumber || 'N/A'}</td>
-                              <td>{u.email || 'N/A'}</td>
+                              <td>
+                                {search ? (
+                                  u.email.toLowerCase().includes(search.toLowerCase()) ? (
+                                    <span className="highlighted">{u.email}</span>
+                                  ) : (
+                                    u.email
+                                  )
+                                ) : (
+                                  u.email
+                                )}
+                              </td>
                               <td>{u.userType || 'N/A'}</td>
                               <td>{u.userReferenceId || 'N/A'}</td>
                               <td>{u.firstName || 'N/A'}</td>
@@ -198,10 +223,12 @@ export const Users = () => {
                               <td>{u.numberOfActiveSessions || 'N/A'}</td>
                               <td>{u.addresses || 'N/A'}</td>
                               <td>{u.isTest || 'N/A'}</td>
-                              <td>{u.createdBy || 'N/A'}</td>
-                              <td>{u.updatedBy || 'N/A'}</td>
-                              <td>{u.createdAt || 'N/A'}</td>
-                              <td>{u.updatedAt || 'N/A'}</td>
+                              {/* <td>{u.createdBy || 'N/A'}</td> */}
+                              <td>{usersData?.data?.find(user => user.id === u.createdBy)?.firstName || 'N/A'}</td>
+                              <td>{usersData?.data?.find(user => user.id === u.updatedBy)?.firstName || 'N/A'}</td>
+                              {/* <td>{u.updatedBy || 'N/A'}</td> */}
+                              <td>{u.createdAt ? new Date(u.createdAt).toLocaleString() : 'N/A'}</td>
+                              <td>{u.updatedAt ? new Date(u.updatedAt).toLocaleString() : 'N/A'}</td>
                             </tr>
                           ))
                         )}

@@ -49,6 +49,7 @@
 
 nav.vertnav {
     padding: 0px;
+    z-index: 2;
 }
 
 .sidebar-left {
@@ -58,6 +59,9 @@ nav.vertnav {
 .sidebar-logo {
     background: #F8F8FB;
     padding: 0;
+    position: sticky;
+    top: 0;
+    z-index: 1;
 }
 
 .sidebar-left .navbar-brand img {
@@ -254,6 +258,12 @@ span.paid {
 .db-calendar h2.page-title {
     color: #70300D;
 }
+
+/* background highlate */
+
+.highlighted {
+    background-color: yellow;
+  }
 
 .resp-table {
     overflow-x: auto;

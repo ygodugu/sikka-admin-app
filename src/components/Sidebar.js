@@ -67,7 +67,7 @@ export const Sidebar = ({ isCollapsed, closeSidebar }) => {
                 isActive ? "nav-link active" : "nav-link"
               }
             >
-              <i className="fe fe-users fe-16"></i>
+              <i className="fe fe-framer fe-16"></i>
               <span className="ml-1 item-text">Merchants</span>
             </NavLink>
           </li>
