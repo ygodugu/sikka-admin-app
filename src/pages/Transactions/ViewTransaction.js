@@ -1,6 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
-import { Spinner } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import { axiosInstance } from "../../axiosInstance";
 import { NavLink } from "react-router-dom";
@@ -14,32 +12,10 @@ const getTransactionDetails = (id) => {
 export const ViewTransaction = () => {
   const { id } = useParams();
   console.log(id);
-  const [showAddServiceModal, setShowAddServiceModal] = useState(false);
-  const [showEditServiceModal, setShowEditServiceModal] = useState(false);
-  const [templeServiceId, setTempleServiceId] = useState();
   const { data: transactionDetails, error } = useQuery({
     queryKey: ["transaction-details", id],
     queryFn: () => getTransactionDetails(id),
   });
-
-
-  const handleAddServiceClick = () => {
-    setShowAddServiceModal(true);
-  };
-
-  const handleEditServiceClick = () => {
-    setShowEditServiceModal(true);
-  };
-
-  const handleAddTempleServiceSuccess = () => {
-    setShowAddServiceModal(false);
-    // refetch();
-  };
-
-  const handleEditTempleServiceSuccess = () => {
-    setShowEditServiceModal(false);
-    // refetch();
-  };
 
   return (
     <>
@@ -111,8 +87,64 @@ export const ViewTransaction = () => {
               </div>
               <div className="col-md-6">
                 <div className="card shadow">
-                  <div className="card-body">
-                    <h5 className="card-title">Temple Images</h5>
+                  <div className="card shadow">
+                    <div className="card-body">
+                      <div className="row">
+                        <aside className="col-sm-10">
+                          <h5 className="card-title">Transaction Receiver Details</h5>
+                        </aside>
+                      </div>
+                      <div className="row">
+                        <div className="col-md-5 mt-1">
+                          <label>UserID</label>
+                        </div>
+                        <div className="col-md-7 mt-1">
+                          <label>{transactionDetails.receiver.id}</label>
+                        </div>
+                        <div className="col-md-5 mt-1">
+                          <label>Email</label>
+                        </div>
+                        <div className="col-md-7 mt-1">
+                          <label>{transactionDetails.receiver.email}</label>
+                        </div>
+                        <div className="col-md-5 mt-1">
+                          <label>User-Type</label>
+                        </div>
+                        <div className="col-md-7 mt-1">
+                          <label>{transactionDetails.receiver.userType}</label>
+                        </div>
+                        <div className="col-md-5 mt-1">
+                          <label>First Name</label>
+                        </div>
+                        <div className="col-md-7 mt-1">
+                          <label>{transactionDetails.receiver.firstName}</label>
+                        </div>
+                        <div className="col-md-5 mt-1">
+                          <label>Middle Name</label>
+                        </div>
+                        <div className="col-md-7 mt-1">
+                          <label>{transactionDetails.receiver.middleName}</label>
+                        </div>
+                        <div className="col-md-5 mt-1">
+                          <label>Last Name</label>
+                        </div>
+                        <div className="col-md-7 mt-1">
+                          <label>{transactionDetails.receiver.lastName}</label>
+                        </div>
+                        <div className="col-md-5 mt-1">
+                          <label>Gender</label>
+                        </div>
+                        <div className="col-md-7 mt-1">
+                          <label>{transactionDetails.receiver.gender}</label>
+                        </div>
+                        <div className="col-md-5 mt-1">
+                          <label>Mobile Number</label>
+                        </div>
+                        <div className="col-md-7 mt-1">
+                          <label>{transactionDetails.receiver.mobileNumber}</label>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div className="col-md-6"></div>
@@ -121,58 +153,89 @@ export const ViewTransaction = () => {
             <div className="row my-2">
               <div className="col-md-6">
                 <div className="card shadow">
-                  <div className="card-body">
-                    <div className="row">
-                      <aside className="col-sm-10">
-                        <h5 className="card-title">Temple Services</h5>
-                      </aside>
-                      <aside className="col-sm-2 add-sec">
-                        <button
-                          className="bttn"
-                          onClick={handleAddServiceClick}
-                        >
-                          Add
-                        </button>
-                      </aside>
-                    </div>
-                    <div>
-                      <table className="table mt-2">
-                        <thead>
-                          <tr>
-                            <th>Name</th>
-                            <th>Price</th>
-                            <th>Time</th>
-                            <th>Actions</th>
-                          </tr>
-                        </thead>
-                        {/* <tbody>
-                          {templeServicesLoading ? (
-                            <tr>
-                              <td rowSpan="10" colSpan="4">
-                                <div className="text-center py-5">
-                                  <Spinner animation="border" />
+                  <div className="card shadow">
+                    <div className="card-body">
+                      <h5 className="card-title">Transaction Details Voucher Usage Logs</h5>
+                      {transactionDetails && transactionDetails.voucherUsageLogs ? (
+                        <div>
+                          {transactionDetails.voucherUsageLogs.map((usageLog) => (
+                            <div key={usageLog.id}>
+                              <div className="row">
+                                <div className="col-md-5 mt-1">
+                                  <label>voucher Usage Logs ID</label>
                                 </div>
-                              </td>
-                            </tr>
-                          ) : (
-                            templeServices.data.map((p) => (
-                              <tr key={p.id}>
-                                <td>{p.name}</td>
-                                <td>{p.boardName}</td>
-
-                                <td></td>
-                                <td></td>
-                                <td></td>
-
-                                 <td className="actions">
-                                <EditIcon onClick={handleEditClick(p.id)} />
-                                <DeleteIcon onClick={handleDelete(p.id)} />
-                              </td> 
-                              </tr>
-                            ))
-                          )}
-                        </tbody> */}
-                      </table>
+                                <div className="col-md-7 mt-1">
+                                  <label>{usageLog.id}</label>
+                                </div>
+                                <div className="col-md-5 mt-1">
+                                  <label>Voucher ID</label>
+                                </div>
+                                <div className="col-md-7 mt-1">
+                                  <label>{usageLog.voucher.id}</label>
+                                </div>
+                                <div className="col-md-5 mt-1">
+                                  <label>Voucher Code</label>
+                                </div>
+                                <div className="col-md-7 mt-1">
+                                  <label>{usageLog.voucher.voucherCode}</label>
+                                </div>
+                                <div className="col-md-5 mt-1">
+                                  <label>Name</label>
+                                </div>
+                                <div className="col-md-7 mt-1">
+                                  <label>{usageLog.voucher.name}</label>
+                                </div>
+                                <div className="col-md-5 mt-1">
+                                  <label>Description</label>
+                                </div>
+                                <div className="col-md-7 mt-1">
+                                  <label>{usageLog.voucher.description}</label>
+                                </div>
+                                <div className="col-md-5 mt-1">
+                                  <label>Voucher Value</label>
+                                </div>
+                                <div className="col-md-7 mt-1">
+                                  <label>{usageLog.voucher.voucherValue}</label>
+                                </div>
+                                <div className="col-md-5 mt-1">
+                                  <label>Voucher Value Type</label>
+                                </div>
+                                <div className="col-md-7 mt-1">
+                                  <label>{usageLog.voucher.voucherValueType}</label>
+                                </div>
+                                <div className="col-md-5 mt-1">
+                                  <label>Validity Start Date</label>
+                                </div>
+                                <div className="col-md-7 mt-1">
+                                  <label>{usageLog.voucher.validityStartDate}</label>
+                                </div>
+                                <div className="col-md-5 mt-1">
+                                  <label>Validity End Date</label>
+                                </div>
+                                <div className="col-md-7 mt-1">
+                                  <label>{usageLog.voucher.validityEndDate}</label>
+                                </div>
+                                <div className="col-md-5 mt-1">
+                                  <label>Max Usage Count</label>
+                                </div>
+                                <div className="col-md-7 mt-1">
+                                  <label>{usageLog.voucher.maxUsageCount}</label>
+                                </div>
+                                <div className="col-md-5 mt-1">
+                                  <label>Consumed Count</label>
+                                </div>
+                                <div className="col-md-7 mt-1">
+                                  <label>{usageLog.voucher.consumedCount}</label>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="p-3">
+                          <h6 className="col-md-7 mt-1">No Voucher Usage logs available for this transaction.</h6>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -183,43 +246,11 @@ export const ViewTransaction = () => {
                   <div className="card-body">
                     <div className="row">
                       <aside className="col-sm-10">
-                        <h5 className="card-title">Priests</h5>
-                      </aside>
-                      <aside className="col-sm-2 add-sec">
-                        <button
-                          className="bttn"
-                          onClick={handleAddServiceClick}
-                        >
-                          Add
-                        </button>
+                        <h5 className="card-title">Transaction sender Details</h5>
                       </aside>
                     </div>
-                    <div>
-                      <table className="table mt-2">
-                        <thead>
-                          <tr>
-                            <th>Priest Name</th>
-                            <th>Actions</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {/* {data.data.map((p) => (
-                              <tr key={p.id}>
-                                <td>{p.name}</td>
-                                <td>{p.boardName}</td>
-
-                                <td></td>
-                                <td></td>
-                                <td></td>
-
-                                <td className="actions">
-                                  <EditIcon onClick={handleEditClick(p.id)} />
-                                  <DeleteIcon onClick={handleDelete(p.id)} />
-                                </td>
-                              </tr>
-                            ))} */}
-                        </tbody>
-                      </table>
+                    <div className="p-3">
+                      <h6 className="col-md-7 mt-1">No Transaction sender Details available for this transaction.</h6>
                     </div>
                   </div>
                 </div>
@@ -229,21 +260,6 @@ export const ViewTransaction = () => {
           </div>
         </div>
       )}
-      {/* {showAddServiceModal ? (
-        <AddTempleServiceModal
-          handleSuccess={handleAddTempleServiceSuccess}
-          templeId={id}
-          handleClose={() => setShowAddServiceModal(false)}
-        />
-      ) : null}
-      {showEditServiceModal ? (
-        <AddTempleServiceModal
-          handleSuccess={handleEditTempleServiceSuccess}
-          id={templeServiceId}
-          templeId={id}
-          handleClose={() => setShowEditServiceModal(false)}
-        />
-      ) : null} */}
     </>
   );
 };

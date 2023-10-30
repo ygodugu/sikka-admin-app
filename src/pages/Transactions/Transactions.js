@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { EditIcon } from "../../components/EditIcon";
+import { ViewIcon } from "../../components/ViewIcon";
 import { Spinner } from "react-bootstrap";
 import { axiosInstance } from "../../axiosInstance";
 import { CustomPagination } from "../../components/CustomPagination";
@@ -154,6 +154,8 @@ export const Transactions = () => {
                     <table className="table">
                       <thead>
                         <tr>
+                          <th>Actions</th>
+                          <th>Status</th>
                           <th>ID</th>
                           <th>ReceiverId</th>
                           <th>TransactionValue</th>
@@ -167,8 +169,7 @@ export const Transactions = () => {
                           <th>UpdatedBy</th>
                           <th>CreatedAt</th>
                           <th>UpdatedAt</th>
-                          <th>Status</th>
-                          <th>Actions</th>
+
                         </tr>
                       </thead>
                       <tbody>
@@ -183,6 +184,12 @@ export const Transactions = () => {
                         ) : (
                           data?.data?.map((p) => (
                             <tr key={p.id}>
+                              <td className="actions">
+                                <NavLink to={`/view-transaction/${p.id}`}>
+                                  <ViewIcon />
+                                </NavLink>
+                              </td>
+                              <td>{p.status}</td>
                               <td>{p.id}</td>
                               <td>{p.receiverId}</td>
                               <td>{p.transactionValue}</td>
@@ -196,12 +203,6 @@ export const Transactions = () => {
                               <td>{usersData?.data?.find(user => user.id === p.updatedBy)?.firstName || 'N/A'}</td>
                               <td>{p.createdAt ? new Date(p.createdAt).toLocaleString() : 'N/A'}</td>
                               <td>{p.updatedAt ? new Date(p.updatedAt).toLocaleString() : 'N/A'}</td>
-                              <td>{p.status}</td>
-                              <td className="actions">
-                                <NavLink to={`/view-transaction/${p.id}`}>
-                                  <EditIcon />
-                                </NavLink>
-                              </td>
                             </tr>
                           ))
                         )}

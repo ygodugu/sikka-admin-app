@@ -274,15 +274,19 @@ span.paid {
     width: 2080px;
 }
 
-.temples-tb .table {
+.users-tb .table {
     width: 2880px !important;
 }
 
-.comments-tb .table {
+.vouchers-tb .table {
     width: 1500px;
 }
 
-.ratings-tb .table {
+.merchants-tb .table {
+    width: 1560px;
+}
+
+.transaction-tb .table {
     width: 1560px;
 }
 
@@ -290,12 +294,32 @@ span.paid {
     width: 1560px;
 }
 
-.certification-tb .table {
+.purchases-tb .table {
+    width: 1470px;
+}
+
+.business-categories-tb .table {
     width: 1270px;
 }
 
-.priest-tb .table {
-    width: 2080px !important;
+.categories-tb .table {
+    width: 1270px;
+}
+
+.industries-tb .table {
+    width: 1080px;
+}
+
+.countries-tb .table {
+    width: 1180px;
+}
+
+.states-tb .table {
+    width: 1180px;
+}
+
+.cities-tb .table {
+    width: 1080px;
 }
 
 .modal-body form .form-control {
