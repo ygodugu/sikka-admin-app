@@ -1,9 +1,10 @@
-
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import "chart.js/auto";
 import { Line } from 'react-chartjs-2';
 import { useQuery } from "@tanstack/react-query";
 import { axiosInstance } from "../axiosInstance";
+import LineChart from '../components/LineChart';
+
 
 const fetchUsersCounts = () => axiosInstance.get(`/users`).then(res => res.data)
 
@@ -98,6 +99,7 @@ export const Dashboard = () => {
     };
 
     const options = {
+        responsive: true,
         scales: {
             x: {
                 type: 'category',
@@ -109,10 +111,12 @@ export const Dashboard = () => {
         },
         plugins: {
             legend: {
-                display: false,
+                position: 'top',
+            },
+            title: {
+                display: true,
             },
         },
-        responsive: true
     };
 
     return (
@@ -123,109 +127,201 @@ export const Dashboard = () => {
                         <div className="col">
                             <h2 className="h5 page-title">WELCOME TO DASHBOARD</h2>
                         </div>
+
                     </div>
                     <div className="row db-cards items-align-baseline">
                         <div className="col-md-12 col-lg-4">
                             <div className="card eq-card mb-4">
                                 <div className="card-body">
-                                    <p className="mb-1"><strong>Users</strong></p>
-                                    <h4 className="mb-0">{data?.[0]?.count}</h4>
+                                    <div className="row">
+                                        <div className="col-sm-4">
+                                            <p className="mb-1"><strong>Users</strong></p>
+                                            <h4 className="mb-0">{data?.[0]?.count}</h4>
+                                        </div>
+                                        <div className="col-sm-8 mb-0">
+                                            <LineChart count={data?.[0]?.count} />
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <div className="col-md-12 col-lg-4">
                             <div className="card eq-card mb-4">
                                 <div className="card-body">
-                                    <p className="mb-1"><strong>Vouchers</strong></p>
-                                    <h4 className="mb-0">{data?.[1]?.count}</h4>
+                                    <div className="row">
+                                        <div className="col-sm-4">
+                                            <p className="mb-1"><strong>Vouchers</strong></p>
+                                            <h4 className="mb-0">{data?.[1]?.count}</h4>
+                                        </div>
+                                        <div className="col-sm-8 mb-0">
+                                            <LineChart count={data?.[1]?.count} />
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <div className="col-md-12 col-lg-4">
                             <div className="card eq-card mb-4">
                                 <div className="card-body">
-                                    <p className="mb-1"><strong>Merchants</strong></p>
-                                    <h4 className="mb-0">{data?.[2]?.count}</h4>
+                                    <div className="row">
+                                        <div className="col-sm-5">
+                                            <p className="mb-1"><strong>Merchants</strong></p>
+                                            <h4 className="mb-0">{data?.[2]?.count}</h4>
+                                        </div>
+                                        <div className="col-sm-7 mb-0">
+                                            <LineChart count={data?.[2]?.count} />
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <div className="col-md-12 col-lg-4">
                             <div className="card eq-card mb-4">
                                 <div className="card-body">
-                                    <p className="mb-1"><strong>Purchases</strong></p>
-                                    <h4 className="mb-0">{data?.[3]?.count}</h4>
+                                    <div className="row">
+                                        <div className="col-sm-5">
+                                            <p className="mb-1"><strong>Purchases</strong></p>
+                                            <h4 className="mb-0">{data?.[3]?.count}</h4>
+                                        </div>
+                                        <div className="col-sm-7 mb-0">
+                                            <LineChart count={data?.[3]?.count} />
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <div className="col-md-12 col-lg-4">
                             <div className="card eq-card mb-4">
                                 <div className="card-body">
-                                    <p className="mb-1"><strong>Transactions</strong></p>
-                                    <h4 className="mb-0">{data?.[4]?.count}</h4>
+                                    <div className="row">
+                                        <div className="col-sm-5">
+                                            <p className="mb-1"><strong>Transactions</strong></p>
+                                            <h4 className="mb-0">{data?.[4]?.count}</h4>
+                                        </div>
+                                        <div className="col-sm-7 mb-0">
+                                            <LineChart count={data?.[4]?.count} />
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <div className="col-md-12 col-lg-4">
                             <div className="card eq-card mb-4">
                                 <div className="card-body">
-                                    <p className="mb-1"><strong>Business Categories</strong></p>
-                                    <h4 className="mb-0">{data?.[5]?.count}</h4>
+                                    <div className="row">
+                                        <div className="col-sm-5">
+                                            <p className="mb-1"><strong>Business Categories</strong></p>
+                                            <h4 className="mb-0">{data?.[5]?.count}</h4>
+                                        </div>
+                                        <div className="col-sm-7 mb-0">
+                                            <LineChart count={data?.[5]?.count} />
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <div className="col-md-12 col-lg-4">
                             <div className="card eq-card mb-4">
                                 <div className="card-body">
-                                    <p className="mb-1"><strong>Categories</strong></p>
-                                    <h4 className="mb-0">{data?.[6]?.count}</h4>
+                                    <div className="row">
+                                        <div className="col-sm-5">
+                                            <p className="mb-1"><strong>Categories</strong></p>
+                                            <h4 className="mb-0">{data?.[6]?.count}</h4>
+                                        </div>
+                                        <div className="col-sm-7 mb-0">
+                                            <LineChart count={data?.[6]?.count} />
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <div className="col-md-12 col-lg-4">
                             <div className="card eq-card mb-4">
                                 <div className="card-body">
-                                    <p className="mb-1"><strong>Industries</strong></p>
-                                    <h4 className="mb-0">{data?.[7]?.count}</h4>
+                                    <div className="row">
+                                        <div className="col-sm-4">
+                                            <p className="mb-1"><strong>Industries</strong></p>
+                                            <h4 className="mb-0">{data?.[7]?.count}</h4>
+                                        </div>
+                                        <div className="col-sm-8 mb-0">
+                                            <LineChart count={data?.[7]?.count} />
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <div className="col-md-12 col-lg-4">
                             <div className="card eq-card mb-4">
                                 <div className="card-body">
-                                    <p className="mb-1"><strong>Countries</strong></p>
-                                    <h4 className="mb-0">{data?.[8]?.count}</h4>
+                                    <div className="row">
+                                        <div className="col-sm-4">
+                                            <p className="mb-1"><strong>Countries</strong></p>
+                                            <h4 className="mb-0">{data?.[8]?.count}</h4>
+                                        </div>
+                                        <div className="col-sm-8 mb-0">
+                                            <LineChart count={data?.[8]?.count} />
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <div className="col-md-12 col-lg-4">
                             <div className="card eq-card mb-4">
                                 <div className="card-body">
-                                    <p className="mb-1"><strong>States</strong></p>
-                                    <h4 className="mb-0">{data?.[9]?.count}</h4>
+                                    <div className="row">
+                                        <div className="col-sm-4">
+                                            <p className="mb-1"><strong>States</strong></p>
+                                            <h4 className="mb-0">{data?.[9]?.count}</h4>
+                                        </div>
+                                        <div className="col-sm-8 mb-0">
+                                            <LineChart count={data?.[9]?.count} />
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <div className="col-md-12 col-lg-4">
                             <div className="card eq-card mb-4">
                                 <div className="card-body">
-                                    <p className="mb-1"><strong>Cities</strong></p>
-                                    <h4 className="mb-0">{data?.[10]?.count}</h4>
+                                    <div className="row">
+                                        <div className="col-sm-4">
+                                            <p className="mb-1"><strong>Cities</strong></p>
+                                            <h4 className="mb-0">{data?.[10]?.count}</h4>
+                                        </div>
+                                        <div className="col-sm-8 mb-0">
+                                            <LineChart count={data?.[10]?.count} />
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <div className="col-md-12 col-lg-4">
                             <div className="card eq-card mb-4">
                                 <div className="card-body">
-                                    <p className="mb-1"><strong>Documents</strong></p>
-                                    <h4 className="mb-0">{data?.[11]?.count}</h4>
+                                    <div className="row">
+                                        <div className="col-sm-5">
+                                            <p className="mb-1"><strong>Documents</strong></p>
+                                            <h4 className="mb-0">{data?.[11]?.count}</h4>
+                                        </div>
+                                        <div className="col-sm-7 mb-0">
+                                            <LineChart count={data?.[11]?.count} />
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <div className="col-md-12 col-lg-4">
                             <div className="card eq-card mb-4">
                                 <div className="card-body">
-                                    <p className="mb-1"><strong>Events</strong></p>
-                                    <h4 className="mb-0">{data?.[12]?.count}</h4>
+                                    <div className="row">
+                                        <div className="col-sm-4">
+                                            <p className="mb-1"><strong>Events</strong></p>
+                                            <h4 className="mb-0">{data?.[12]?.count}</h4>
+                                        </div>
+                                        <div className="col-sm-8 mb-0">
+                                            <LineChart count={data?.[12]?.count} />
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

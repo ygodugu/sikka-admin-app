@@ -3,15 +3,23 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { EditIcon } from "../../components/EditIcon";
 import { axiosInstance } from "../../axiosInstance";
 import { CustomPagination } from "../../components/CustomPagination";
+import { DateFormate } from "../../components/DateFormate";
 import { AddMerchantModal } from "./AddMerchant";
 import { EditMerchantModal } from "./EditMerchant";
 import { Alert } from "react-bootstrap";
 import Spinner from "react-bootstrap/Spinner";
 
 const fetchMerchants = (selectValue, pageIndex = 0, pageSize = 20, search, selectValueID, selectValueOrder, selectValueStatus) => {
+  
+  let url = `merchants?&pageIndex=${pageIndex}&pageSize=${pageSize}&search=${search}&sortBy=${selectValueID}&sortOrder=${selectValueOrder}&status=${selectValueStatus}`
+
+  if (selectValue) {
+    url += `&merchantTypes=${selectValue}`;
+  }
+
   return axiosInstance
-    .get(`merchants?merchantTypes=${selectValue || "MERCHANT_PARTNER"}&pageIndex=${pageIndex}&pageSize=${pageSize}&search=${search}&sortBy=${selectValueID}&sortOrder=${selectValueOrder}&status=${selectValueStatus}`)
-    .then((res) => res.data);
+  .get(url)
+  .then((res) => res.data);
 };
 
 export const Merchants = () => {
@@ -131,7 +139,7 @@ export const Merchants = () => {
             <div className="d-flex">
 
               <select className="form-control mt-2 mr-sm-2" onChange={handleSelectChange} style={{ background: "white" }} aria-label="select">
-                <option value="">MerchantType</option>
+                <option value="">Choose a Merchant Type</option>
                 <option value="COMMUNITY">COMMUNITY</option>
                 <option value="LISTED_BUSINESS">LISTED_BUSINESS</option>
                 <option value="MERCHANT_PARTNER">MERCHANT_PARTNER</option>
@@ -261,8 +269,8 @@ export const Merchants = () => {
                               <td>{u.updatedBy || 'N/A'}</td> */}
                               <td>{usersData?.data?.find(user => user.id === u.createdBy)?.firstName || 'N/A'}</td>
                               <td>{usersData?.data?.find(user => user.id === u.updatedBy)?.firstName || 'N/A'}</td>
-                              <td>{u.createdAt ? new Date(u.createdAt).toLocaleString() : 'N/A'}</td>
-                              <td>{u.updatedAt ? new Date(u.updatedAt).toLocaleString() : 'N/A'}</td>
+                              <td>{u.createdAt ? <DateFormate dateTime={u.createdAt} /> : 'N/A'}</td>
+                              <td>{u.updatedAt ? <DateFormate dateTime={u.updatedAt} /> : 'N/A'}</td>
                             </tr>
                           ))
                         )}

@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { EditIcon } from "../../components/EditIcon";
 import { axiosInstance } from "../../axiosInstance";
+import { DeleteIcon } from "../../components/DeleteIcon";
 import { CustomPagination } from "../../components/CustomPagination";
+import { DateFormate } from "../../components/DateFormate";
 import { Alert } from "react-bootstrap";
 import Spinner from "react-bootstrap/Spinner";
 import { AddVoucherModal } from "./AddVoucher";
@@ -10,10 +12,18 @@ import { EditVoucherModal } from "./EditVoucher"
 
 
 const fetchvouchers = (pageIndex = 0, pageSize = 20, search, selectValueID, selectValueOrder, selectValueStatus, selectedValue) => {
+  let url = `/vouchers?pageIndex=${pageIndex}&pageSize=${pageSize}&search=${search}&sortBy=${selectValueID}&sortOrder=${selectValueOrder}&status=${selectValueStatus}`;
+
+  if (selectedValue) {
+    url += `&categoryId=${selectedValue}`;
+  }
+
   return axiosInstance
-    .get(`/vouchers?pageIndex=${pageIndex}&pageSize=${pageSize}&search=${search}&sortBy=${selectValueID}&sortOrder=${selectValueOrder}&status=${selectValueStatus}&categoryId=${selectedValue}`)
+    .get(url)
     .then((res) => res.data);
 };
+
+const deleteVoucher = (id) => axiosInstance.delete(`/vouchers/${id}`);
 
 export const Vouchers = () => {
   const queryClient = useQueryClient();
@@ -34,6 +44,9 @@ export const Vouchers = () => {
   const pageSize = 20;
   const [showError, setShowError] = useState(false);
 
+  const deleteMutation = useMutation({
+    mutationFn: deleteVoucher,
+  });
 
   const { isLoading, data, refetch } = useQuery({
     queryKey: ["vouchers", page, search, selectValueID, selectValueOrder, selectValueStatus, selectedValue],
@@ -55,6 +68,18 @@ export const Vouchers = () => {
   const handleEditClick = (id) => () => {
     setUserId(id);
     setShowEditModal(true);
+  };
+
+  const handleDelete = (id) => () => {
+    deleteMutation.mutate(id, {
+      onSuccess: refetch,
+      onError(error) {
+        setShowError(true);
+        setTimeout(() => {
+          setShowError(false);
+        }, 3000);
+      },
+    });
   };
 
   const handleSearchChange = (event) => {
@@ -245,6 +270,7 @@ export const Vouchers = () => {
                             <tr key={u.id}>
                               <td className="actions">
                                 <EditIcon onClick={handleEditClick(u.id)} />
+                                <DeleteIcon onClick={handleDelete(u.id)} />
                               </td>
                               <td>{u.status || 'N/A'}</td>
                               <td>{u.voucherCode}</td>
@@ -275,8 +301,8 @@ export const Vouchers = () => {
                               <td>{u.updatedBy || 'N/A'}</td> */}
                               <td>{usersData?.data?.find(user => user.id === u.createdBy)?.firstName || 'N/A'}</td>
                               <td>{usersData?.data?.find(user => user.id === u.updatedBy)?.firstName || 'N/A'}</td>
-                              <td>{u.createdAt ? new Date(u.createdAt).toLocaleString() : 'N/A'}</td>
-                              <td>{u.updatedAt ? new Date(u.updatedAt).toLocaleString() : 'N/A'}</td>
+                              <td>{u.createdAt ? <DateFormate dateTime={u.createdAt} /> : 'N/A'}</td>
+                              <td>{u.updatedAt ? <DateFormate dateTime={u.updatedAt} /> : 'N/A'}</td>
                             </tr>
                           ))
                         )}

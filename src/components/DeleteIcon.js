@@ -26,7 +26,7 @@ export const DeleteIcon = ({ onClick }) => {
             <Modal.Body>
                 Are you sure you want to delete?
                 <div className="modal-footer d-flex justify-content-end">
-                    <Button variant="primary" onClick={handleYes}> Yes</Button>
+                    <Button variant="success" onClick={handleYes}> Yes</Button>
                     <Button variant="danger" onClick={handleClose}>No</Button>
                 </div>
             </Modal.Body>

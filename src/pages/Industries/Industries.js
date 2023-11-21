@@ -3,6 +3,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Spinner from "react-bootstrap/Spinner";
 import { axiosInstance } from "../../axiosInstance";
 import { CustomPagination } from "../../components/CustomPagination";
+import { DateFormate } from "../../components/DateFormate";
 import { EditIcon } from "../../components/EditIcon";
 import { AddIndustriesModal } from "./AddIndustries";
 import { EditIndustriesModal } from "./EditIndustries";
@@ -191,8 +192,8 @@ export const Industries = () => {
                               <td>{p.updatedBy}</td> */}
                               <td>{usersData?.data?.find(user => user.id === p.createdBy)?.firstName || 'N/A'}</td>
                               <td>{usersData?.data?.find(user => user.id === p.updatedBy)?.firstName || 'N/A'}</td>
-                              <td>{p.createdAt ? new Date(p.createdAt).toLocaleString() : 'N/A'}</td>
-                              <td>{p.updatedAt ? new Date(p.updatedAt).toLocaleString() : 'N/A'}</td>
+                              <td>{p.createdAt ? <DateFormate dateTime={p.createdAt} /> : 'N/A'}</td>
+                              <td>{p.updatedAt ? <DateFormate dateTime={p.updatedAt} /> : 'N/A'}</td>
                             </tr>
                           ))
                         )}

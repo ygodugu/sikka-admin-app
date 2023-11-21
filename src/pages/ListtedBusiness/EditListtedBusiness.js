@@ -1,30 +1,29 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import Modal from "react-bootstrap/Modal";
 import { axiosInstance } from "../../axiosInstance";
-import { BusinessCategoriesForm } from "./BusinessCategoriesForm";
+import { ListtedBusinessForm } from "./ListtedBusinessForm";
 
 
-
-const updateBusinessCategories = (payload) => {
+const updateListtedBusiness = (payload) => {
   return axiosInstance.put(`/business-categories/${payload.id}`, payload);
 };
 
-const getBusinessCategoriesDetails = (id) => {
+const getListtedBusinessDetails = (id) => {
   return axiosInstance.get(`/business-categories/${id}`).then((res) => res.data);
 };
 
-export const EditBusinessCategoriesModal = ({ handleSuccess, handleClose, id }) => {
-  const { data: BusinessCategoriesDetails, error } = useQuery({
-    queryKey: ["BusinessCategories-details", id],
-    queryFn: () => getBusinessCategoriesDetails(id),
+export const EditListtedBusinessModal = ({ handleSuccess, handleClose, id }) => {
+  const { data: ListtedBusinessDetails, error } = useQuery({
+    queryKey: ["ListtedBusiness-details", id],
+    queryFn: () => getListtedBusinessDetails(id),
   });
 
-  const updateBusinessCategoriesMutation = useMutation({
-    mutationFn: updateBusinessCategories,
+  const updateListtedBusinessMutation = useMutation({
+    mutationFn: updateListtedBusiness,
   });
 
-  const handleUpdateBusinessCategories = (values) => {
-    updateBusinessCategoriesMutation.mutate(
+  const handleUpdateListtedBusiness = (values) => {
+    updateListtedBusinessMutation.mutate(
       { ...values, id },
       {
         onSuccess: handleSuccess,
@@ -34,10 +33,10 @@ export const EditBusinessCategoriesModal = ({ handleSuccess, handleClose, id }) 
 
   return (
     <>
-      {BusinessCategoriesDetails && (
+      {ListtedBusinessDetails && (
         <Modal show={true} onHide={handleClose} size="lg">
           <Modal.Header closeButton={false}>
-            <Modal.Title>Edit BusinessCategories</Modal.Title>
+            <Modal.Title>Edit Listted Business</Modal.Title>
             <button
               type="button"
               className="close"
@@ -49,9 +48,9 @@ export const EditBusinessCategoriesModal = ({ handleSuccess, handleClose, id }) 
             </button>
           </Modal.Header>
           <Modal.Body>
-            <BusinessCategoriesForm
-              initialValues={BusinessCategoriesDetails}
-              handleSubmit={handleUpdateBusinessCategories}
+            <ListtedBusinessForm
+              initialValues={ListtedBusinessDetails}
+              handleSubmit={handleUpdateListtedBusiness}
             />
           </Modal.Body>
         </Modal>

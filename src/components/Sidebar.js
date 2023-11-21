@@ -181,6 +181,39 @@ export const Sidebar = ({ isCollapsed, closeSidebar }) => {
               <span className="ml-1 item-text">Events</span>
             </NavLink>
           </li>
+          <li className="nav-item">
+            <NavLink
+              to="/ListtedBusiness"
+              className={({ isActive }) =>
+                isActive ? "nav-link active" : "nav-link"
+              }
+            >
+              <i className="fe fe-command fe-16"></i>
+              <span className="ml-1 item-text">Listted Business</span>
+            </NavLink>
+          </li>
+          <li className="nav-item">
+            <NavLink
+              to="/notification-templates"
+              className={({ isActive }) =>
+                isActive ? "nav-link active" : "nav-link"
+              }
+            >
+              <i className="fe fe-bell fe-16"></i>
+              <span className="ml-1 item-text">Notification Templates</span>
+            </NavLink>
+          </li>
+          <li className="nav-item">
+            <NavLink
+              to="/notification-triggers"
+              className={({ isActive }) =>
+                isActive ? "nav-link active" : "nav-link"
+              }
+            >
+              <i className="fe fe-bell fe-16"></i>
+              <span className="ml-1 item-text">Notification Triggers</span>
+            </NavLink>
+          </li>
         </ul>
       </nav>
     </aside>

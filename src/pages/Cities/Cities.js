@@ -3,6 +3,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { EditIcon } from "../../components/EditIcon";
 import { axiosInstance } from "../../axiosInstance";
 import { CustomPagination } from "../../components/CustomPagination";
+import { DateFormate } from "../../components/DateFormate";
 import { AddCitiesModal } from "./AddCities";
 import { EditCitiesModal } from "./EditCities";
 import { Alert } from "react-bootstrap";
@@ -199,8 +200,8 @@ export const Cities = () => {
                               <td>{u.updatedBy || 'N/A'}</td> */}
                               <td>{usersData?.data?.find(user => user.id === u.createdBy)?.firstName || 'N/A'}</td>
                               <td>{usersData?.data?.find(user => user.id === u.updatedBy)?.firstName || 'N/A'}</td>
-                              <td>{u.createdAt ? new Date(u.createdAt).toLocaleString() : 'N/A'}</td>
-                              <td>{u.updatedAt ? new Date(u.updatedAt).toLocaleString() : 'N/A'}</td>
+                              <td>{u.createdAt ? <DateFormate dateTime={u.createdAt} /> : 'N/A'}</td>
+                              <td>{u.updatedAt ? <DateFormate dateTime={u.updatedAt} /> : 'N/A'}</td>
                             </tr>
                           ))
                         )}

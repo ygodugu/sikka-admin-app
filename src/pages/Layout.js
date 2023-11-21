@@ -64,6 +64,22 @@ const ViewTransaction = lazy(() =>
   import("./Transactions/ViewTransaction").then((module) => ({ default: module.ViewTransaction }))
 );
 
+const ListtedBusiness = lazy(() =>
+  import("./ListtedBusiness/ListtedBusiness").then((module) => ({ default: module.ListtedBusiness }))
+);
+
+const NotificationTemplates = lazy(() =>
+  import("./NotificationTemplates/NotificationTemplates").then((module) => ({
+    default: module.NotificationTemplates,
+  }))
+);
+
+const NotificationTriggers = lazy(() =>
+  import("./NotificationTiggers/NotificationTriggers").then((module) => ({
+    default: module.NotificationTriggers,
+  }))
+);
+
 
 export const Layout = () => {
 
@@ -105,7 +121,15 @@ export const Layout = () => {
                   <Route path="/Cities" element={<Cities />} />
                   <Route path="/Documents" element={<Documents />} />
                   <Route path="/Events" element={<Events />} />
-                 
+                  <Route path="/ListtedBusiness" element={<ListtedBusiness />} />
+                  <Route
+                    path="/notification-templates"
+                    element={<NotificationTemplates />}
+                  />
+                    <Route
+                    path="/notification-triggers"
+                    element={<NotificationTriggers />}
+                  />
                   <Route
                     path="*"
                     element={<Navigate to="/dashboard" replace />}

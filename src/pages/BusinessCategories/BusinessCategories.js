@@ -3,6 +3,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { EditIcon } from "../../components/EditIcon";
 import { axiosInstance } from "../../axiosInstance";
 import { CustomPagination } from "../../components/CustomPagination";
+import { DateFormate } from "../../components/DateFormate";
 import { Alert } from "react-bootstrap";
 import Spinner from "react-bootstrap/Spinner";
 import { AddBusinessCategoriesModal } from "./AddBusinessCategories";
@@ -194,8 +195,8 @@ export const BusinessCategories = () => {
                               <td>{p.updatedBy}</td> */}
                               <td>{usersData?.data?.find(user => user.id === p.createdBy)?.firstName || 'N/A'}</td>
                               <td>{usersData?.data?.find(user => user.id === p.updatedBy)?.firstName || 'N/A'}</td>
-                              <td>{p.createdAt ? new Date(p.createdAt).toLocaleString() : 'N/A'}</td>
-                              <td>{p.updatedAt ? new Date(p.updatedAt).toLocaleString() : 'N/A'}</td>
+                              <td>{p.createdAt ? <DateFormate dateTime={p.createdAt} /> : 'N/A'}</td>
+                              <td>{p.updatedAt ? <DateFormate dateTime={p.updatedAt} /> : 'N/A'}</td>
                             </tr>
                           ))
                         )}

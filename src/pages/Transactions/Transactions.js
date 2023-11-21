@@ -4,6 +4,7 @@ import { ViewIcon } from "../../components/ViewIcon";
 import { Spinner } from "react-bootstrap";
 import { axiosInstance } from "../../axiosInstance";
 import { CustomPagination } from "../../components/CustomPagination";
+import { DateFormate } from "../../components/DateFormate";
 import { Typeahead } from "react-bootstrap-typeahead";
 import { NavLink } from "react-router-dom";
 
@@ -201,8 +202,8 @@ export const Transactions = () => {
                               <td>{p.transactionStatus}</td>
                               <td>{usersData?.data?.find(user => user.id === p.createdBy)?.firstName || 'N/A'}</td>
                               <td>{usersData?.data?.find(user => user.id === p.updatedBy)?.firstName || 'N/A'}</td>
-                              <td>{p.createdAt ? new Date(p.createdAt).toLocaleString() : 'N/A'}</td>
-                              <td>{p.updatedAt ? new Date(p.updatedAt).toLocaleString() : 'N/A'}</td>
+                              <td>{p.createdAt ? <DateFormate dateTime={p.createdAt} /> : 'N/A'}</td>
+                              <td>{p.updatedAt ? <DateFormate dateTime={p.updatedAt} /> : 'N/A'}</td>
                             </tr>
                           ))
                         )}
