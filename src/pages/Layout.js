@@ -20,6 +20,10 @@ const Merchants = lazy(() =>
   import("./Merchants/Merchants").then((module) => ({ default: module.Merchants }))
 );
 
+const ViewMerchants = lazy(() =>
+  import("./Merchants/ViewMerchants").then((module) => ({ default: module.ViewMerchants }))
+);
+
 const Purchases = lazy(() =>
   import("./Purchases/Purchases").then((module) => ({ default: module.Purchases }))
 );
@@ -110,6 +114,7 @@ export const Layout = () => {
                   <Route path="/users" element={<Users />} />
                   <Route path="/Vouchers" element={<Vouchers />} />
                   <Route path="/Merchants" element={<Merchants />} />
+                  <Route path="/viewMerchants/:userId" element={<ViewMerchants />} />
                   <Route path="/Purchases" element={<Purchases />} />
                   <Route path="/Transactions" element={<Transactions />} />
                   <Route path="/view-transaction/:id" element={<ViewTransaction />} />

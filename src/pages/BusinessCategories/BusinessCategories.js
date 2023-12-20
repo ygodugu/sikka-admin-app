@@ -4,6 +4,7 @@ import { EditIcon } from "../../components/EditIcon";
 import { axiosInstance } from "../../axiosInstance";
 import { CustomPagination } from "../../components/CustomPagination";
 import { DateFormate } from "../../components/DateFormate";
+import { Status } from "../../components/Status";
 import { Alert } from "react-bootstrap";
 import Spinner from "react-bootstrap/Spinner";
 import { AddBusinessCategoriesModal } from "./AddBusinessCategories";
@@ -177,7 +178,10 @@ export const BusinessCategories = () => {
                               <td className="actions">
                                 <EditIcon onClick={handleEditClick(p.id)} />
                               </td>
-                              <td>{p.status}</td>
+                              {/* <td>{p.status}</td> */}
+                              <td>
+                                <Status code={p.status} />
+                              </td>
                               <td>{p.id}</td>
                               <td>
                                 {search ? (

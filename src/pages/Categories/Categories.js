@@ -5,6 +5,7 @@ import { axiosInstance } from "../../axiosInstance";
 import { CustomPagination } from "../../components/CustomPagination";
 import { DateFormate } from "../../components/DateFormate";
 import { EditIcon } from "../../components/EditIcon";
+import { Status } from "../../components/Status";
 import { AddCategoriesModal } from "./AddCategories";
 import { EditCategoriesModal } from "./EditCategories";
 
@@ -168,7 +169,10 @@ export const Categories = () => {
                               <td className="actions">
                                 <EditIcon onClick={handleEditClick(p.id)} />
                               </td>
-                              <td>{p.status}</td>
+                              {/* <td>{p.status}</td> */}
+                              <td>
+                                <Status code={p.status} />
+                              </td>
                               <td>{p.id}</td>
                               <td>
                                 {search ? (

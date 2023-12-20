@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Alert, Spinner } from "react-bootstrap";
 import { axiosInstance } from "../../axiosInstance";
 import { CustomPagination } from "../../components/CustomPagination";
@@ -10,8 +10,8 @@ import { EditNotificationTriggerModal } from "./EditNotificationTriggers";
 
 const fetchNotificationTriggers = (pageIndex = 0, pageSize = 20) => {
   return axiosInstance
-    // .get(`/notifications?pageIndex=${pageIndex}&pageSize=${pageSize}`)
-    // .then((res) => res.data);
+  // .get(`/notifications?pageIndex=${pageIndex}&pageSize=${pageSize}`)
+  // .then((res) => res.data);
 };
 
 const deleteNotificationTrigger = (id) => {
@@ -29,7 +29,7 @@ export const NotificationTriggers = () => {
 
   const [notificationId, setNotificationId] = useState();
   const pageSize = 20;
-  
+
   const { data, refetch, isLoading } = useQuery({
     queryKey: ["notifications", page],
     // queryFn: () => fetchNotificationTriggers(page),
@@ -74,6 +74,45 @@ export const NotificationTriggers = () => {
     });
   };
 
+
+  const handleNotificationClick = () => {
+    if ('Notification' in window) {
+      Notification.requestPermission().then(function(permission) {
+        if (permission === 'granted') {
+          console.log('Notification permission granted.');
+          sendPushNotification('Yashwanth');
+        } else if (permission === 'denied') {
+          console.warn('Notification permission denied. Please enable notifications in your browser settings.');
+          showEnableNotificationMessage();
+        } else {
+          console.warn('Notification permission has not been granted yet.');
+        }
+      });
+    } else {
+      console.log('Notifications not supported in this browser.');
+    }
+  };
+  
+  const sendPushNotification = (message) => {
+    if ('serviceWorker' in navigator && 'PushManager' in window) {
+      navigator.serviceWorker.ready.then(function(registration) {
+        registration.showNotification('Cikka', {
+          body: message,
+          icon: 'https://api.slingacademy.com/public/sample-photos/1.jpeg',
+        });
+      });
+    } else {
+      console.log('Service worker or PushManager not supported.');
+    }
+  };
+  
+  const showEnableNotificationMessage = () => {
+    // Show a message or UI element instructing the user to enable notifications
+    alert('Notification permission denied. Please enable notifications in your browser settings.');
+  };
+  
+  
+
   return (
     <>
       {showError ? (
@@ -99,7 +138,7 @@ export const NotificationTriggers = () => {
               />
             </form> */}
             <aside className="col-sm-2 add-sec">
-              <button className="bttn" onClick={handleAddClick}>
+              <button className="bttn" onClick={handleNotificationClick}>
                 Add
               </button>
             </aside>

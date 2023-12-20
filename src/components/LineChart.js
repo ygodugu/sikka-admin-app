@@ -5,25 +5,15 @@ const LineChart = ({ count }) => {
     const chartContainer = useRef(null);
     const chartRef = useRef(null);
 
-    // const dailyCount = count / 7;
+    const hasDecreased = count < (0);
 
-    // const dailyCounts = Array(7).fill(dailyCount);
-    
-    // const dailyCounts = Array(7)
-    // .fill(0)
-    // .map((_, index) => (index + 1) * (count / 7));
-
-     // Check if count has decreased from the previous count
-  const hasDecreased = count < (0);
-
-  // Calculate daily count values based on whether it's decreasing or not
-  const dailyCounts = hasDecreased
-    ? Array(7)
-        .fill(0)
-        .map((_, index) => (7 - index) * (count / 7)) // Decreasing trend
-    : Array(7)
-        .fill(0)
-        .map((_, index) => (index + 1) * (count / 7)); // Increasing or stable trend
+    const dailyCounts = hasDecreased
+        ? Array(7)
+            .fill(0)
+            .map((_, index) => (7 - index) * (count / 7))
+        : Array(7)
+            .fill(0)
+            .map((_, index) => (index + 1) * (count / 7));
 
     useEffect(() => {
         if (chartContainer && chartContainer.current) {
@@ -46,6 +36,7 @@ const LineChart = ({ count }) => {
                             borderColor: 'rgba(75, 192, 192, 1)',
                             backgroundColor: 'rgba(75, 192, 192, 0.2)',
                             borderWidth: 1,
+                            lineTension: 0.4,
                         },
                     ],
                 },
@@ -64,7 +55,38 @@ const LineChart = ({ count }) => {
                             display: false,
                         },
                     },
+                    animations: {
+                        radius: {
+                            duration: 400,
+                            easing: 'linear',
+                            loop: (context) => context.active
+                        }
+                    },
+                    hoverRadius: 12,
+                    hoverBackgroundColor: '#70300D',
+                    interaction: {
+                        mode: 'nearest',
+                        intersect: false,
+                        axis: 'x'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function (context) {
+                                let label = context.dataset.label || '';
+
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed.y !== null) {
+                                    label += context.parsed.y.toFixed(2);
+                                }
+
+                                return label;
+                            },
+                        },
+                    },
                 },
+
             });
         }
     }, [count]);

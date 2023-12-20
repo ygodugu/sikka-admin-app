@@ -4,6 +4,7 @@ import { EditIcon } from "../../components/EditIcon";
 import { axiosInstance } from "../../axiosInstance";
 import { CustomPagination } from "../../components/CustomPagination";
 import { DateFormate } from "../../components/DateFormate";
+import { Status } from "../../components/Status";
 import { EditUserModal } from "./EditUser";
 import { Alert } from "react-bootstrap";
 import Spinner from "react-bootstrap/Spinner";
@@ -190,7 +191,10 @@ export const Users = () => {
                               <td className="actions">
                                 <EditIcon onClick={handleEditClick(u.id)} />
                               </td>
-                              <td>{u.status || 'N/A'}</td>
+                              <td>
+                                <Status code={u.status} />
+                              </td>
+                              {/* <td>{u.status || 'N/A'}</td> */}
                               <td>{u.categoryId || 'N/A'}</td>
                               <td>{u.userReferralNumber || 'N/A'}</td>
                               <td>

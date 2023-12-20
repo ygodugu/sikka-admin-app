@@ -5,6 +5,7 @@ import { Spinner } from "react-bootstrap";
 import { axiosInstance } from "../../axiosInstance";
 import { CustomPagination } from "../../components/CustomPagination";
 import { DateFormate } from "../../components/DateFormate";
+import { Status } from "../../components/Status";
 import { Typeahead } from "react-bootstrap-typeahead";
 import { NavLink } from "react-router-dom";
 
@@ -190,7 +191,10 @@ export const Transactions = () => {
                                   <ViewIcon />
                                 </NavLink>
                               </td>
-                              <td>{p.status}</td>
+                              {/* <td>{p.status}</td> */}
+                              <td>
+                                <Status code={p.status} />
+                              </td>
                               <td>{p.id}</td>
                               <td>{p.receiverId}</td>
                               <td>{p.transactionValue}</td>

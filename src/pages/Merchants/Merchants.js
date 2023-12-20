@@ -1,13 +1,17 @@
 import { useState, useEffect } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { EditIcon } from "../../components/EditIcon";
+import { ViewIcon } from "../../components/ViewIcon";
 import { axiosInstance } from "../../axiosInstance";
 import { CustomPagination } from "../../components/CustomPagination";
 import { DateFormate } from "../../components/DateFormate";
+import { Status } from "../../components/Status";
 import { AddMerchantModal } from "./AddMerchant";
 import { EditMerchantModal } from "./EditMerchant";
 import { Alert } from "react-bootstrap";
 import Spinner from "react-bootstrap/Spinner";
+import { NavLink } from "react-router-dom";
+
 
 const fetchMerchants = (selectValue, pageIndex = 0, pageSize = 20, search, selectValueID, selectValueOrder, selectValueStatus) => {
   
@@ -226,8 +230,14 @@ export const Merchants = () => {
                             <tr key={u.id}>
                               <td className="actions">
                                 <EditIcon onClick={handleEditClick(u.id)} />
+                                <NavLink to={`/ViewMerchants/${u.userId}`}>
+                                  <ViewIcon />
+                                </NavLink>
                               </td>
-                              <td>{u.status || 'N/A'}</td>
+                              <td>
+                                <Status code={u.status} />
+                              </td>
+                              {/* <td>{u.status || 'N/A'}</td> */}
                               <td>{u.merchantType || 'N/A'}</td>
                               <td>{u.user || 'N/A'}</td>
                               <td> {u.industry || 'N/A'}</td>

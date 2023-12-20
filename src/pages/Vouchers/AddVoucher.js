@@ -55,7 +55,7 @@ export const AddVoucherModal = ({ handleSuccess, handleClose }) => {
     name: "",
     consumedCount: "",
     maxUsageCount: "",
-    restrictUsageForUser: true,
+    restrictUsageForUser: false,
     description: "",
     validityEndDate: "",
     validityStartDate: "",

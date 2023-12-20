@@ -5,6 +5,7 @@ import { axiosInstance } from "../../axiosInstance";
 import { DeleteIcon } from "../../components/DeleteIcon";
 import { CustomPagination } from "../../components/CustomPagination";
 import { DateFormate } from "../../components/DateFormate";
+import { Status } from "../../components/Status";
 import { Alert } from "react-bootstrap";
 import Spinner from "react-bootstrap/Spinner";
 import { AddVoucherModal } from "./AddVoucher";
@@ -240,7 +241,6 @@ export const Vouchers = () => {
                           <th>Name</th>
                           <th>Description</th>
                           <th>MerchantId</th>
-                          <th>Merchant</th>
                           <th>CategoryId</th>
                           <th>VoucherAssetId</th>
                           <th>VoucherValue</th>
@@ -259,7 +259,7 @@ export const Vouchers = () => {
                       <tbody>
                         {isLoading ? (
                           <tr>
-                            <td rowSpan="10" colSpan="13">
+                            <td rowSpan="10" colSpan="8">
                               <div className="text-center py-5">
                                 <Spinner animation="border" />
                               </div>
@@ -272,7 +272,9 @@ export const Vouchers = () => {
                                 <EditIcon onClick={handleEditClick(u.id)} />
                                 <DeleteIcon onClick={handleDelete(u.id)} />
                               </td>
-                              <td>{u.status || 'N/A'}</td>
+                              <td>
+                                <Status code={u.status} />
+                              </td>
                               <td>{u.voucherCode}</td>
                               <td>
                                 {search ? (
@@ -287,7 +289,6 @@ export const Vouchers = () => {
                               </td>
                               <td>{u.description || 'N/A'}</td>
                               <td>{u.merchantId || 'N/A'}</td>
-                              <td>{u.merchant || 'N/A'}</td>
                               <td>{categoryData?.data?.find(category => category.id === u.categoryId)?.name || 'N/A'}</td>
                               <td>{u.voucherAssetId || 'N/A'}</td>
                               <td>{u.voucherValue || 'N/A'}</td>
@@ -297,8 +298,6 @@ export const Vouchers = () => {
                               <td>{u.restrictUsageForUser || 'N/A'}</td>
                               <td>{u.maxUsageCount || 'N/A'}</td>
                               <td>{u.consumedCount || 'N/A'}</td>
-                              {/* <td>{u.createdBy || 'N/A'}</td>
-                              <td>{u.updatedBy || 'N/A'}</td> */}
                               <td>{usersData?.data?.find(user => user.id === u.createdBy)?.firstName || 'N/A'}</td>
                               <td>{usersData?.data?.find(user => user.id === u.updatedBy)?.firstName || 'N/A'}</td>
                               <td>{u.createdAt ? <DateFormate dateTime={u.createdAt} /> : 'N/A'}</td>

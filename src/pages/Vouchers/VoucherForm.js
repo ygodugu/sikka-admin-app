@@ -76,10 +76,10 @@ export const VoucherForm = ({ initialValues, onSubmit, isEdit = false, isAdd = f
               onChange={(value) => {
                 if (value && value.length > 0) {
                   formik.setFieldValue("categoryId", value[0].id);
-                  formik.setFieldValue("categorie", value);
+                  // formik.setFieldValue("categorie", value);
                 } else {
                   formik.setFieldValue("categoryId", "");
-                  formik.setFieldValue("categorie", []);
+                  // formik.setFieldValue("categorie", []);
                 }
               }}
               placeholder="Choose a category"
@@ -132,7 +132,7 @@ export const VoucherForm = ({ initialValues, onSubmit, isEdit = false, isAdd = f
           <div className="form-group">
             <label for="voucherCode">Consumed Count</label>
             <input
-              type="text"
+              type="number"
               id="consumedCount"
               value={formik.values.consumedCount}
               onChange={formik.handleChange}
@@ -234,27 +234,26 @@ export const VoucherForm = ({ initialValues, onSubmit, isEdit = false, isAdd = f
               value={formik.values.voucherValueType}
             >
               <option value="">voucherValueType</option>
-              <option value=" FREE_PRODUCT">FREE_PRODUCT</option>
+              <option value="FREE_PRODUCT">FREE_PRODUCT</option>
               <option value="PRICE_PERCENTAGE">PRICE_PERCENTAGE</option>
               <option value="PRICE_VALUE ">PRICE_VALUE</option>
             </select>
           </div>
         </aside>
-        {!isAdd ?
-          <aside className="col-md-4">
-            <div className="form-group">
-              <label htmlFor="status">status</label>
-              <input
-                type="number"
-                id="status"
-                name="status"
-                value={formik.values.status}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                className="form-control form-control-lg"
-              />
-            </div>
-          </aside> : null}
+        <aside className="col-md-4">
+          <div className="form-group">
+            <label htmlFor="status">status</label>
+            <input
+              type="number"
+              id="status"
+              name="status"
+              value={formik.values.status}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              className="form-control form-control-lg"
+            />
+          </div>
+        </aside>
         {!isEdit ?
           <aside className="col-md-4">
             <div className="form-group">

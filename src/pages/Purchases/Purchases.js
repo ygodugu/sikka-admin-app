@@ -4,6 +4,8 @@ import { Spinner } from "react-bootstrap";
 import { axiosInstance } from "../../axiosInstance";
 import { CustomPagination } from "../../components/CustomPagination";
 import { DateFormate } from "../../components/DateFormate";
+import { Status } from "../../components/Status";
+
 
 const fetchPurchases = (pageIndex = 0, pageSize = 20, selectValue, selectValueID, selectValueOrder, selectValueStatus) => {
   return axiosInstance
@@ -161,7 +163,10 @@ export const Purchases = () => {
                               <td>{usersData?.data?.find(user => user.id === p.updatedBy)?.firstName || 'N/A'}</td>
                               <td>{p.createdAt ? <DateFormate dateTime={p.createdAt} /> : 'N/A'}</td>
                               <td>{p.updatedAt ? <DateFormate dateTime={p.updatedAt} /> : 'N/A'}</td>
-                              <td>{p.status} </td>
+                              {/* <td>{p.status} </td> */}
+                              <td>
+                                <Status code={p.status} />
+                              </td>
                             </tr>
                           ))
                         )}

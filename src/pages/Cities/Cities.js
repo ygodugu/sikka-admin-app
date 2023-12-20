@@ -4,6 +4,7 @@ import { EditIcon } from "../../components/EditIcon";
 import { axiosInstance } from "../../axiosInstance";
 import { CustomPagination } from "../../components/CustomPagination";
 import { DateFormate } from "../../components/DateFormate";
+import { Status } from "../../components/Status";
 import { AddCitiesModal } from "./AddCities";
 import { EditCitiesModal } from "./EditCities";
 import { Alert } from "react-bootstrap";
@@ -181,7 +182,10 @@ export const Cities = () => {
                               <td className="actions">
                                 <EditIcon onClick={handleEditClick(u.id)} />
                               </td>
-                              <td>{u.status}</td>
+                              {/* <td>{u.status}</td> */}
+                              <td>
+                                <Status code={u.status} />
+                              </td>
                               <td>{u.id || 'N/A'}</td>
                               <td>{u.stateId || 'N/A'}</td>
                               <td>

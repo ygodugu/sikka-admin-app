@@ -279,7 +279,7 @@ span.paid {
 }
 
 .vouchers-tb .table {
-    width: 1500px;
+    width: 2880px !important; 
 }
 
 .merchants-tb .table {
@@ -458,6 +458,14 @@ span.badge {
 
     .events-tb .table {
         width: 1010px;
+    }
+
+    .cikka-purchase-tb .table {
+        width: 1010px;
+    }
+
+    .cikka-transaction-tb .table {
+        width: 1270px;
     }
 }
 
