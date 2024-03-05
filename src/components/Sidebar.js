@@ -183,6 +183,18 @@ export const Sidebar = ({ isCollapsed, closeSidebar }) => {
           </li>
           <li className="nav-item">
             <NavLink
+              to="/Services"
+              className={({ isActive }) =>
+                isActive ? "nav-link active" : "nav-link"
+              }
+            >
+              <i className="fe fe-tool fe-16"></i>
+              <span className="ml-1 item-text">Services</span>
+            </NavLink>
+          </li>
+
+          <li className="nav-item">
+            <NavLink
               to="/ListtedBusiness"
               className={({ isActive }) =>
                 isActive ? "nav-link active" : "nav-link"

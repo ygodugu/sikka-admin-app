@@ -115,31 +115,34 @@ export const Industries = () => {
                 aria-label="Search"
               />
             </form>
-            <div className="d-flex">
-              <select className="form-control  mr-sm-2" onChange={handleSelectIDChange} style={{ background: "white" }} aria-label="select">
+            <aside className="col-sm-2 add-sec">
+              <button className="bttn" onClick={() => setShowAddModal(true)}>
+                Add
+              </button>
+            </aside>
+          </div>
+          <div className="d-flex flex-wrap">
+            <aside className="col-md-4 mt-2 mt-md-0 mb-2 mb-md-0">
+              <select className="form-control" onChange={handleSelectIDChange} style={{ background: "white" }} aria-label="select">
                 <option value="">sortBy</option>
                 <option value="id">ID</option>
               </select>
-
-              <select className="form-control  mr-sm-2" onChange={handleSelectOrderChange} style={{ background: "white" }} aria-label="select">
+            </aside>
+            <aside className="col-md-4 mt-2 mt-md-0 mb-2 mb-md-0">
+              <select className="form-control" onChange={handleSelectOrderChange} style={{ background: "white" }} aria-label="select">
                 <option value="">sortOrder</option>
                 <option value="ASC">ASC</option>
                 <option value="DESC">DESC</option>
               </select>
-
-              <select className="form-control  mr-sm-2" onChange={handleSelectStatusChange} style={{ background: "white" }} aria-label="select">
+            </aside>
+            <aside className="col-md-4 mt-2 mt-md-0 mb-2 mb-md-0">
+              <select className="form-control" onChange={handleSelectStatusChange} style={{ background: "white" }} aria-label="select">
                 <option value="">STATUS</option>
-                <option value="0">0</option>
-                <option value="1">1</option>
+                <option value="1">Active</option>
+                <option value="2">Hold</option>
+                <option value="0">Deleted</option>
               </select>
-
-              <aside className="col-sm-2 add-sec">
-                <button className="bttn" onClick={() => setShowAddModal(true)}>
-                  Add
-                </button>
-              </aside>
-            </div>
-
+            </aside>
           </div>
           <div className="row my-2">
             <div className="col-md-12">
@@ -175,7 +178,6 @@ export const Industries = () => {
                               <td className="actions">
                                 <EditIcon onClick={handleEditClick(p.id)} />
                               </td>
-                              {/* <td>{p.status}</td> */}
                               <td>
                                 <Status code={p.status} />
                               </td>
@@ -192,12 +194,10 @@ export const Industries = () => {
                                 )}
                               </td>
                               <td>{p.description}</td>
-                              {/* <td>{p.createdBy}</td>
-                              <td>{p.updatedBy}</td> */}
                               <td>{usersData?.data?.find(user => user.id === p.createdBy)?.firstName || 'N/A'}</td>
                               <td>{usersData?.data?.find(user => user.id === p.updatedBy)?.firstName || 'N/A'}</td>
-                              <td>{p.createdAt ? <DateFormate dateTime={p.createdAt} /> : 'N/A'}</td>
-                              <td>{p.updatedAt ? <DateFormate dateTime={p.updatedAt} /> : 'N/A'}</td>
+                              <td>{<DateFormate dateTime={p.createdAt} />}</td>
+                              <td>{<DateFormate dateTime={p.updatedAt} />}</td>
                             </tr>
                           ))
                         )}

@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import React, { useState } from 'react';
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import demoLogo from "../../assets/images/Cikka_Logo_Dashboard.png"
 import { EditIcon } from "../../components/EditIcon";
 import { axiosInstance } from "../../axiosInstance";
+import { DeleteIcon } from "../../components/DeleteIcon";
 import { CustomPagination } from "../../components/CustomPagination";
 import { DateFormate } from "../../components/DateFormate";
 import { Status } from "../../components/Status";
@@ -16,6 +18,9 @@ const fetchUsers = (pageIndex = 0, pageSize = 20, search, selectValueID, selectV
     .then((res) => res.data);
 };
 
+const deleteUser = (id) => axiosInstance.delete(`/users/${id}`);
+
+
 export const Users = () => {
   const queryClient = useQueryClient();
 
@@ -29,6 +34,10 @@ export const Users = () => {
   const pageSize = 20;
   const [showError, setShowError] = useState(false);
 
+
+  const deleteMutation = useMutation({
+    mutationFn: deleteUser,
+  });
 
   const { isLoading, data, refetch } = useQuery({
     queryKey: ["users", page, selectValueID, selectValueOrder, selectValueStatus],
@@ -46,6 +55,18 @@ export const Users = () => {
   const handleEditClick = (id) => () => {
     setUserId(id);
     setShowEditModal(true);
+  };
+
+  const handleDelete = (id) => () => {
+    deleteMutation.mutate(id, {
+      onSuccess: refetch,
+      onError(error) {
+        setShowError(true);
+        setTimeout(() => {
+          setShowError(false);
+        }, 3000);
+      },
+    });
   };
 
   const handleSearchChange = (event) => {
@@ -75,20 +96,17 @@ export const Users = () => {
     refetch();
   };
 
-  const [usersData, setUsersData] = useState([]);
+  const modifyImageUrl = (originalUrl) => {
+    let parts = originalUrl.split('?');
 
-  useEffect(() => {
-    axiosInstance
-      .get("/users")
-      .then((res) => res.data)
-      .then((data) => {
-        setUsersData(data);
-        console.log(data);
-      })
-      .catch((error) => {
-        console.error("Error fetching categories:", error);
-      });
-  }, []);
+    let fileName = parts[1].split('=')[1];
+    let folderName = 'user_profile_image';
+    // Construct the new URL
+    let newUrl = `https://app.cikka.com.au/api/files/file-preview?fileName=${fileName}&folderName=${folderName}`;
+
+    return newUrl;
+  };
+
 
   return (
     <>
@@ -119,6 +137,8 @@ export const Users = () => {
               <select className="form-control" onChange={handleSelectIDChange} style={{ background: "white" }} aria-label="select">
                 <option value="">sortBy</option>
                 <option value="id">ID</option>
+                <option value="joiningDate">joiningDate</option>
+                <option value="createdAt">createdAt</option>
               </select>
             </aside>
             <aside className="col-md-2 mb-2 mb-md-0">
@@ -131,8 +151,9 @@ export const Users = () => {
             <aside className="col-md-2 mb-2 mb-md-0">
               <select className="form-control" onChange={handleSelectStatusChange} style={{ background: "white" }} aria-label="select">
                 <option value="">STATUS</option>
-                <option value="0">0</option>
-                <option value="1">1</option>
+                <option value="1">Active</option>
+                <option value="2">Hold</option>
+                <option value="0">Deleted</option>
               </select>
             </aside>
           </div>
@@ -146,11 +167,10 @@ export const Users = () => {
                         <tr>
                           <th>Actions</th>
                           <th>Status</th>
+                          <th>User Profile Image</th>
                           <th>CategoryId</th>
-                          <th>UserReferralNumber</th>
                           <th>Email</th>
                           <th>UserType</th>
-                          <th>UserReferenceId</th>
                           <th>FirstName</th>
                           <th>MiddleName</th>
                           <th>LastName</th>
@@ -167,7 +187,6 @@ export const Users = () => {
                           <th>Religion</th>
                           <th>JoiningDate</th>
                           <th>NumberOfActiveSessions</th>
-                          <th>Addresses</th>
                           <th>IsTest</th>
                           <th>CreatedBy</th>
                           <th>UpdatedBy</th>
@@ -185,18 +204,23 @@ export const Users = () => {
                             </td>
                           </tr>
                         ) : (
-                          console.log(data),
                           data?.data?.map((u) => (
                             <tr key={u.id}>
                               <td className="actions">
                                 <EditIcon onClick={handleEditClick(u.id)} />
+                                <DeleteIcon onClick={handleDelete(u.id)} />
                               </td>
                               <td>
                                 <Status code={u.status} />
                               </td>
-                              {/* <td>{u.status || 'N/A'}</td> */}
-                              <td>{u.categoryId || 'N/A'}</td>
-                              <td>{u.userReferralNumber || 'N/A'}</td>
+                              <td>
+                                {u.profileImage && u.profileImage.filePath ? (
+                                  <img src={modifyImageUrl(u.profileImage.filePath)} alt="logo" className="table-logo" />
+                                ) : (
+                                  <img src={demoLogo} alt='demoLogo' className="table-logo" />
+                                )}
+                              </td>
+                              <td>{u.categoryId}</td>
                               <td>
                                 {search ? (
                                   u.email.toLowerCase().includes(search.toLowerCase()) ? (
@@ -208,33 +232,28 @@ export const Users = () => {
                                   u.email
                                 )}
                               </td>
-                              <td>{u.userType || 'N/A'}</td>
-                              <td>{u.userReferenceId || 'N/A'}</td>
-                              <td>{u.firstName || 'N/A'}</td>
-                              <td>{u.middleName || 'N/A'}</td>
-                              <td>{u.lastName || 'N/A'}</td>
-                              <td>{u.gender || 'N/A'}</td>
-                              <td>{u.mobileNumber || 'N/A'}</td>
-                              <td>{u.alternativeNumber || 'N/A'}</td>
-                              <td>{u.motherTongue || 'N/A'}</td>
-                              <td>{u.proofNumber || 'N/A'}</td>
-                              <td>{u.bloodGroup || 'N/A'}</td>
-                              <td>{u.dateOfBirth || 'N/A'}</td>
-                              <td>{u.anniversaryDate || 'N/A'}</td>
-                              <td>{u.cityId || 'N/A'}</td>
-                              <td>{u.city || 'N/A'}</td>
-                              <td>{u.religion || 'N/A'}</td>
-                              <td>{u.joiningDate || 'N/A'}</td>
-                              <td>{u.numberOfActiveSessions || 'N/A'}</td>
-                              <td>{u.addresses || 'N/A'}</td>
-                              <td>{u.isTest || 'N/A'}</td>
-                              {/* <td>{u.createdBy || 'N/A'}</td> */}
-                              <td>{usersData?.data?.find(user => user.id === u.createdBy)?.firstName || 'N/A'}</td>
-                              <td>{usersData?.data?.find(user => user.id === u.updatedBy)?.firstName || 'N/A'}</td>
-                              {/* <td>{u.updatedBy || 'N/A'}</td> */}
-                             
-                              <td>{u.createdAt ? <DateFormate dateTime={u.createdAt} /> : 'N/A'}</td>
-                              <td>{u.updatedAt ? <DateFormate dateTime={u.updatedAt} /> : 'N/A'}</td>
+                              <td>{u.userType}</td>
+                              <td>{u.firstName}</td>
+                              <td>{u.middleName}</td>
+                              <td>{u.lastName}</td>
+                              <td>{u.gender}</td>
+                              <td>{u.mobileNumber}</td>
+                              <td>{u.alternativeNumber}</td>
+                              <td>{u.motherTongue}</td>
+                              <td>{u.proofNumber}</td>
+                              <td>{u.bloodGroup}</td>
+                              <td>{u.dateOfBirth}</td>
+                              <td>{u.anniversaryDate}</td>
+                              <td>{u.cityId}</td>
+                              <td>{u.city}</td>
+                              <td>{u.religion}</td>
+                              <td>{u.joiningDate}</td>
+                              <td>{u.numberOfActiveSessions}</td>
+                              <td>{u.isTest}</td>
+                              <td>{data.data?.find(user => user.id === u.createdBy)?.firstName || 'N/A'}</td>
+                              <td>{data.data?.find(user => user.id === u.updatedBy)?.firstName || 'N/A'}</td>
+                              <td>{<DateFormate dateTime={u.createdAt} />}</td>
+                              <td>{<DateFormate dateTime={u.updatedAt} />}</td>
                             </tr>
                           ))
                         )}

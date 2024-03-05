@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import demoLogo from "../../assets/images/Cikka_Logo_Dashboard.png"
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { EditIcon } from "../../components/EditIcon";
 import { axiosInstance } from "../../axiosInstance";
@@ -94,6 +95,16 @@ export const Events = () => {
       });
   }, []);
 
+  const modifyImageUrl = (originalUrl) => {
+    let parts = originalUrl.split('?');
+
+    let fileName = parts[1].split('=')[1];
+    let folderName = "event";
+    let newUrl = `https://app.cikka.com.au/api/files/file-preview?fileName=${fileName}&folderName=${folderName}`;
+
+    return newUrl;
+  };
+
   return (
     <>
       {showError ? (
@@ -119,32 +130,37 @@ export const Events = () => {
                 aria-label="Search"
               />
             </form>
-            <div className="d-flex">
-              <select className="form-control  mr-sm-2" onChange={handleSelectIDChange} style={{ background: "white" }} aria-label="select">
+            <aside className="col-sm-2 add-sec">
+              <button className="bttn" onClick={() => setShowAddModal(true)}>
+                Add
+              </button>
+            </aside>
+          </div>
+
+          <div className="d-flex flex-wrap">
+            <aside className="col-md-4 mt-2 mt-md-0 mb-2 mb-md-0">
+              <select className="form-control" onChange={handleSelectIDChange} style={{ background: "white" }} aria-label="select">
                 <option value="">sortBy</option>
                 <option value="id">ID</option>
               </select>
-
-              <select className="form-control  mr-sm-2" onChange={handleSelectOrderChange} style={{ background: "white" }} aria-label="select">
+            </aside>
+            <aside className="col-md-4 mt-2 mt-md-0 mb-2 mb-md-0">
+              <select className="form-control" onChange={handleSelectOrderChange} style={{ background: "white" }} aria-label="select">
                 <option value="">sortOrder</option>
                 <option value="ASC">ASC</option>
                 <option value="DESC">DESC</option>
               </select>
-
-              <select className="form-control  mr-sm-2" onChange={handleSelectStatusChange} style={{ background: "white" }} aria-label="select">
+            </aside>
+            <aside className="col-md-4 mt-2 mt-md-0 mb-2 mb-md-0">
+              <select className="form-control" onChange={handleSelectStatusChange} style={{ background: "white" }} aria-label="select">
                 <option value="">STATUS</option>
-                <option value="0">0</option>
-                <option value="1">1</option>
+                <option value="1">Active</option>
+                <option value="2">Hold</option>
+                <option value="0">Deleted</option>
               </select>
-
-              <aside className="col-sm-2 add-sec">
-                <button className="bttn" onClick={() => setShowAddModal(true)}>
-                  Add
-                </button>
-              </aside>
-            </div>
-
+            </aside>
           </div>
+
           <div className="row my-2">
             <div className="col-md-12">
               <div className="card shadow">
@@ -155,6 +171,7 @@ export const Events = () => {
                         <tr>
                           <th>Actions</th>
                           <th>Status</th>
+                          <th>Image</th>
                           <th>ID</th>
                           <th>Name</th>
                           <th>EventDate</th>
@@ -183,11 +200,17 @@ export const Events = () => {
                               <td className="actions">
                                 <EditIcon onClick={handleEditClick(u.id)} />
                               </td>
-                              {/* <td>{u.status}</td> */}
                               <td>
                                 <Status code={u.status} />
                               </td>
-                              <td>{u.id || 'N/A'}</td>
+                              <td>
+                                {u.fileUpload && u.fileUpload.filePath ? (
+                                  <img src={modifyImageUrl(u.fileUpload.filePath)} alt="logo" className="table-logo " />
+                                ) : (
+                                  <img src={demoLogo} alt='demoLogo' className="table-logo" />
+                                )}
+                              </td>
+                              <td>{u.id}</td>
                               <td>
                                 {search ? (
                                   u.name.toLowerCase().includes(search.toLowerCase()) ? (
@@ -199,17 +222,15 @@ export const Events = () => {
                                   u.name
                                 )}
                               </td>
-                              <td>{u.eventDate || 'N/A'}</td>
-                              <td>{u.description || 'N/A'}</td>
-                              <td>{u.url || 'N/A'}</td>
-                              <td>{u.totalPasses || 'N/A'}</td>
-                              <td>{u.utilizedPasses || 'N/A'}</td>
-                              {/* <td>{u.createdBy || 'N/A'}</td>
-                              <td>{u.updatedBy || 'N/A'}</td> */}
+                              <td>{u.eventDate}</td>
+                              <td>{u.description}</td>
+                              <td>{u.url}</td>
+                              <td>{u.totalPasses}</td>
+                              <td>{u.utilizedPasses}</td>
                               <td>{usersData?.data?.find(user => user.id === u.createdBy)?.firstName || 'N/A'}</td>
                               <td>{usersData?.data?.find(user => user.id === u.updatedBy)?.firstName || 'N/A'}</td>
-                              <td>{u.createdAt ? <DateFormate dateTime={u.createdAt} /> : 'N/A'}</td>
-                              <td>{u.updatedAt ? <DateFormate dateTime={u.updatedAt} /> : 'N/A'}</td>
+                              <td>{<DateFormate dateTime={u.createdAt} />}</td>
+                              <td>{<DateFormate dateTime={u.updatedAt} />}</td>
                             </tr>
                           ))
                         )}

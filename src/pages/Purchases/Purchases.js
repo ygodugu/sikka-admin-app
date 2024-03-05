@@ -25,8 +25,8 @@ export const Purchases = () => {
   const [showError, setShowError] = useState(false);
   const pageSize = 20;
   const { data, refetch, isLoading } = useQuery({
-    queryKey: ["Purchases", page, selectValue,  selectValueID, selectValueOrder, selectValueStatus],
-    queryFn: () => fetchPurchases(page, pageSize, selectValue,  selectValueID, selectValueOrder, selectValueStatus),
+    queryKey: ["Purchases", page, selectValue, selectValueID, selectValueOrder, selectValueStatus],
+    queryFn: () => fetchPurchases(page, pageSize, selectValue, selectValueID, selectValueOrder, selectValueStatus),
     keepPreviousData: true,
   });
 
@@ -78,7 +78,7 @@ export const Purchases = () => {
       <div className="row justify-content-center">
         <div className="col-12">
           <div className="row heading-add">
-            <aside className="ml-2 mr-auto">
+            <aside className="ml-2 mr-2">
               <h2 className="mb-0 page-title">Cikka Purchases</h2>
             </aside>
             {/* <form className="form-inline  mr-auto searchform">
@@ -91,35 +91,43 @@ export const Purchases = () => {
                 aria-label="Search"
               />
             </form> */}
-            <div className="d-flex">
-              <select className="form-control col-sm-4 mt-2  mr-sm-2" onChange={handleSelectChange} style={{ background: "white" }} aria-label="select">
+          </div>
+          <div className="d-flex flex-wrap">
+            <aside className="col-md-4 mt-2 mt-md-0 mb-2 mb-md-0">
+              <select className="form-control" onChange={handleSelectChange} style={{ background: "white" }} aria-label="select">
                 <option value="">PurchaseStatus</option>
                 <option value="CANCELLED">CANCELLED</option>
                 <option value="INITIATED">INITIATED</option>
                 <option value="PURCHASED">PURCHASED</option>
               </select>
+            </aside>
 
-              <select className="form-control mt-2 mr-sm-2" onChange={handleSelectIDChange} style={{ background: "white" }} aria-label="select">
+            <aside className="col-md-4 mt-2 mt-md-0 mb-2 mb-md-0">
+              <select className="form-control" onChange={handleSelectIDChange} style={{ background: "white" }} aria-label="select">
                 <option value="">sortBy</option>
                 <option value="id">ID</option>
                 <option value="purchaseValue">PurchaseValue</option>
               </select>
+            </aside>
 
-              <select className="form-control mt-2 mr-sm-2" onChange={handleSelectOrderChange} style={{ background: "white" }} aria-label="select">
+            <aside className="col-md-2 mt-2 mt-md-0 mb-2 mb-md-0">
+              <select className="form-control" onChange={handleSelectOrderChange} style={{ background: "white" }} aria-label="select">
                 <option value="">sortOrder</option>
                 <option value="ASC">ASC</option>
                 <option value="DESC">DESC</option>
               </select>
+            </aside>
 
-              <select className="form-control mt-2 mt-2 mr-sm-2" onChange={handleSelectStatusChange} style={{ background: "white" }} aria-label="select">
+            <aside className="col-md-2 mt-2 mt-md-0 mb-2 mb-md-0">
+              <select className="form-control" onChange={handleSelectStatusChange} style={{ background: "white" }} aria-label="select">
                 <option value="">STATUS</option>
-                <option value="0">0</option>
-                <option value="1">1</option>
+                <option value="1">Active</option>
+                <option value="2">Hold</option>
+                <option value="0">Deleted</option>
               </select>
-
-            </div>
-
+            </aside>
           </div>
+
           <div className="row my-2">
             <div className="col-md-12">
               <div className="card shadow">
@@ -157,13 +165,10 @@ export const Purchases = () => {
                               <td>{p.purchaseStatus}</td>
                               <td>{p.purchaseValue}</td>
                               <td>{p.paymentDetails}</td>
-                              {/* <td>{p.createdBy}</td>
-                              <td>{p.updatedBy}</td> */}
                               <td>{usersData?.data?.find(user => user.id === p.createdBy)?.firstName || 'N/A'}</td>
                               <td>{usersData?.data?.find(user => user.id === p.updatedBy)?.firstName || 'N/A'}</td>
-                              <td>{p.createdAt ? <DateFormate dateTime={p.createdAt} /> : 'N/A'}</td>
-                              <td>{p.updatedAt ? <DateFormate dateTime={p.updatedAt} /> : 'N/A'}</td>
-                              {/* <td>{p.status} </td> */}
+                              <td>{<DateFormate dateTime={p.createdAt} />}</td>
+                              <td>{<DateFormate dateTime={p.updatedAt} />}</td>
                               <td>
                                 <Status code={p.status} />
                               </td>

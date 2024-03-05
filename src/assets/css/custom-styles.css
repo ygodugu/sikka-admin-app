@@ -88,8 +88,8 @@ nav.vertnav {
 .disable-button {
     pointer-events: none;
     opacity: 0.0;
-    cursor: not-allowed; 
-  }
+    cursor: not-allowed;
+}
 
 .navbar-light .navbar-toggler {
     color: #555B6D;
@@ -263,7 +263,7 @@ span.paid {
 
 .highlighted {
     background-color: yellow;
-  }
+}
 
 .resp-table {
     overflow-x: auto;
@@ -279,11 +279,11 @@ span.paid {
 }
 
 .vouchers-tb .table {
-    width: 2880px !important; 
+    width: 2880px !important;
 }
 
 .merchants-tb .table {
-    width: 1560px;
+    width: 2880px !important;
 }
 
 .transaction-tb .table {
@@ -322,6 +322,7 @@ span.paid {
     width: 1080px;
 }
 
+
 .modal-body form .form-control {
     font-size: .9rem;
 }
@@ -331,7 +332,8 @@ span.paid {
 }
 
 .actions img {
-    max-width: 15px;
+    max-width: 16px;
+    margin-left: 8px;
 }
 
 textarea {
@@ -342,6 +344,11 @@ textarea {
     max-width: 500px;
     margin: 0;
 }
+
+/* .merchants-tb tr th:nth-child(3),
+.merchants-tb tr td:nth-child(3) {
+    width: 10px;
+} */
 
 p.date-field {
     display: inline;
@@ -401,7 +408,7 @@ span.badge {
 
     .sidebar-left.collapsed {
         width: 40%;
-      }
+    }
 
     .resp-table .table,
     .edu-tb .table {
@@ -457,7 +464,7 @@ span.badge {
     }
 
     .events-tb .table {
-        width: 1010px;
+        width: 1410px;
     }
 
     .cikka-purchase-tb .table {
@@ -518,4 +525,26 @@ span.avatar {
     color: #212529;
     background-color: #fff;
     border: 1px solid #dee2e6;
+}
+
+
+.table-logo {
+    max-width: 100%;
+    display: block;
+    margin: 0 auto;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+}
+
+.form-image-tag {
+    max-width: 100%;
+    height: 150px;
+    display: block;
+    margin: 0 auto;
+}
+
+.empty-placeholder {
+    text-align: center;
+    padding: 20px;
 }

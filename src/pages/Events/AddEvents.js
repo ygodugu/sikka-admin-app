@@ -43,7 +43,7 @@ const FileUpload = (dataToSend) => {
 
 
 export const AddEventsModal = ({ handleSuccess, handleClose }) => {
-  
+
   const addEventsMutation = useMutation({
     mutationFn: addEvents,
   });
@@ -54,9 +54,9 @@ export const AddEventsModal = ({ handleSuccess, handleClose }) => {
     merchantId: "",
     totalPasses: "",
     utilizedPasses: "",
+    merchantId: "",
     url: "",
-    description: "", 
-    status: ""
+    description: ""
   };
 
   const saveEvents = (values) => {

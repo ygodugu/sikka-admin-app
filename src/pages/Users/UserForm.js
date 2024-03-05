@@ -66,6 +66,7 @@ export const UserForm = ({ initialValues, handleSubmit, isAdd = false }) => {
             </select>
           </div>
         </aside>
+
         <aside className="col-md-4">
           <div className="form-group">
             <label for="email">Email *</label>
@@ -81,6 +82,7 @@ export const UserForm = ({ initialValues, handleSubmit, isAdd = false }) => {
             <div className="invalid-feedback">{formik.errors.email}</div>
           </div>
         </aside>
+
         <aside className="col-md-4">
           <div className="form-group">
             <label for="firstName">First Name *</label>
@@ -96,6 +98,7 @@ export const UserForm = ({ initialValues, handleSubmit, isAdd = false }) => {
             <div className="invalid-feedback">{formik.errors.firstName}</div>
           </div>
         </aside>
+
         <aside className="col-md-4">
           <div className="form-group">
             <label for="middleName">Middle Name</label>
@@ -110,6 +113,7 @@ export const UserForm = ({ initialValues, handleSubmit, isAdd = false }) => {
             />
           </div>
         </aside>
+
         <aside className="col-md-4">
           <div className="form-group">
             <label for="lastName">Last Name *</label>
@@ -125,6 +129,7 @@ export const UserForm = ({ initialValues, handleSubmit, isAdd = false }) => {
             <div className="invalid-feedback">{formik.errors.lastName}</div>
           </div>
         </aside>
+
         <aside className="col-md-4">
           <div className="form-group">
             <label for="gender">Gender</label>
@@ -141,6 +146,7 @@ export const UserForm = ({ initialValues, handleSubmit, isAdd = false }) => {
             </select>
           </div>
         </aside>
+
         <aside className="col-md-4">
           <div className="form-group">
             <label for="mobileNumber">MobileNumber</label>
@@ -155,6 +161,7 @@ export const UserForm = ({ initialValues, handleSubmit, isAdd = false }) => {
             />
           </div>
         </aside>
+
         <aside className="col-md-4">
           <div className="form-group">
             <label for="alternativeNumber">AlternativeNumber</label>
@@ -169,6 +176,7 @@ export const UserForm = ({ initialValues, handleSubmit, isAdd = false }) => {
             />
           </div>
         </aside>
+
         <aside className="col-md-4">
           <div className="form-group">
             <label for="motherTongue">MotherTongue</label>
@@ -183,6 +191,7 @@ export const UserForm = ({ initialValues, handleSubmit, isAdd = false }) => {
             />
           </div>
         </aside>
+
         <aside className="col-md-4">
           <div className="form-group">
             <label for="bloodGroup">BloodGroup</label>
@@ -197,6 +206,7 @@ export const UserForm = ({ initialValues, handleSubmit, isAdd = false }) => {
             />
           </div>
         </aside>
+
         <aside className="col-md-4">
           <div className="form-group">
             <label for="dateOfBirth">DateOfBirth</label>
@@ -211,6 +221,7 @@ export const UserForm = ({ initialValues, handleSubmit, isAdd = false }) => {
             />
           </div>
         </aside>
+
         <aside className="col-md-4">
           <div className="form-group">
             <label for="anniversaryDate">AnniversaryDate</label>
@@ -225,6 +236,7 @@ export const UserForm = ({ initialValues, handleSubmit, isAdd = false }) => {
             />
           </div>
         </aside>
+
         {/* address Input feilds start here  */}
         <aside className="col-md-4">
           <div className="form-group">
@@ -259,6 +271,7 @@ export const UserForm = ({ initialValues, handleSubmit, isAdd = false }) => {
             />
           </div>
         </aside>
+
         <aside className="col-md-4">
           <div className="form-group">
             <label for="block">Block</label>
@@ -273,6 +286,7 @@ export const UserForm = ({ initialValues, handleSubmit, isAdd = false }) => {
             />
           </div>
         </aside>
+
         <aside className="col-md-4">
           <div className="form-group">
             <label htmlFor="cityId">City</label>
@@ -291,6 +305,7 @@ export const UserForm = ({ initialValues, handleSubmit, isAdd = false }) => {
             />
           </div>
         </aside>
+
         <aside className="col-md-4">
           <div className="form-group">
             <label for="description">Description</label>
@@ -305,6 +320,7 @@ export const UserForm = ({ initialValues, handleSubmit, isAdd = false }) => {
             />
           </div>
         </aside>
+
         <aside className="col-md-4">
           <div className="form-group">
             <label for="googleId">GoogleId</label>
@@ -319,6 +335,7 @@ export const UserForm = ({ initialValues, handleSubmit, isAdd = false }) => {
             />
           </div>
         </aside>
+
         <aside className="col-md-4">
           <div className="form-group">
             <label for="latitude">Latitude</label>
@@ -333,6 +350,7 @@ export const UserForm = ({ initialValues, handleSubmit, isAdd = false }) => {
             />
           </div>
         </aside>
+
         <aside className="col-md-4">
           <div className="form-group">
             <label for="longitude">Longitude</label>
@@ -347,6 +365,7 @@ export const UserForm = ({ initialValues, handleSubmit, isAdd = false }) => {
             />
           </div>
         </aside>
+
         <aside className="col-md-4">
           <div className="form-group">
             <label for="physicalAddress">PhysicalAddress *</label>
@@ -362,6 +381,7 @@ export const UserForm = ({ initialValues, handleSubmit, isAdd = false }) => {
             <div className="invalid-feedback">{formik.errors.physicalAddress}</div>
           </div>
         </aside>
+
         <aside className="col-md-4">
           <div className="form-group">
             <label for="pin">PIN</label>
@@ -376,6 +396,7 @@ export const UserForm = ({ initialValues, handleSubmit, isAdd = false }) => {
             />
           </div>
         </aside>
+
         <aside className="col-md-4">
           <div className="form-group">
             <label for="street">street</label>
@@ -390,6 +411,7 @@ export const UserForm = ({ initialValues, handleSubmit, isAdd = false }) => {
             />
           </div>
         </aside>
+
         {/* address Input feilds start here  */}
         <aside className="col-md-4">
           <div className="form-group">
@@ -416,17 +438,19 @@ export const UserForm = ({ initialValues, handleSubmit, isAdd = false }) => {
           <aside className="col-md-4">
             <div className="form-group">
               <label htmlFor="status">status</label>
-              <input
-                type="number"
+              <select
                 id="status"
-                name="status"
-                value={formik.values.status}
+                className="form-control select2"
                 onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                className="form-control form-control-lg"
-              />
+                value={formik.values.status}
+              >
+                <option value="1">Active</option>
+                <option value="2">Hold</option>
+                <option value="0">Deleted</option>
+              </select>
             </div>
           </aside> : null}
+
         <aside className="col-md-8">
           <div className="form-group">
             <label for="shortBio">shortBio</label>
@@ -441,6 +465,7 @@ export const UserForm = ({ initialValues, handleSubmit, isAdd = false }) => {
             />
           </div>
         </aside>
+
       </div>
       <div className="modal-footer d-flex justify-content-end">
         <button type="submit" className="btn mb-2 btn-primary">

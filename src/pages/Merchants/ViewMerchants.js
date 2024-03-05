@@ -30,6 +30,7 @@ export const ViewMerchants = () => {
     return (
         <>
             {viewMerchantDetails && (
+                console.log(viewMerchantDetails),
                 <div className="row justify-content-center">
                     <div className="col-12">
                         <div className="row heading-add">
@@ -141,16 +142,16 @@ export const ViewMerchants = () => {
                                                                                 <>
                                                                                     {viewMerchantDetails.cikkaPurchase.map((purchase) => (
                                                                                         <tr key={purchase.id}>
-                                                                                            <td>{purchase.id || "N/A"}</td>
-                                                                                            <td>{purchase.userId || "N/A"}</td>
-                                                                                            <td>{purchase.purchaseStatus || "N/A"}</td>
-                                                                                            <td>{purchase.purchaseValue || "N/A"}</td>
-                                                                                            <td>{purchase.paymentDetails || "N/A"}</td>
-                                                                                            <td>{purchase.createdBy || "N/A"}</td>
-                                                                                            <td>{purchase.updatedBy || "N/A"}</td>
-                                                                                            <td>{purchase.createdAt || "N/A"}</td>
-                                                                                            <td>{purchase.updatedAt || "N/A"}</td>
-                                                                                            <td>{purchase.status || "N/A"}</td>
+                                                                                            <td>{purchase.id}</td>
+                                                                                            <td>{purchase.userId}</td>
+                                                                                            <td>{purchase.purchaseStatus}</td>
+                                                                                            <td>{purchase.purchaseValue}</td>
+                                                                                            <td>{purchase.paymentDetails}</td>
+                                                                                            <td>{purchase.createdBy}</td>
+                                                                                            <td>{purchase.updatedBy}</td>
+                                                                                            <td>{purchase.createdAt}</td>
+                                                                                            <td>{purchase.updatedAt}</td>
+                                                                                            <td>{purchase.status}</td>
                                                                                         </tr>
                                                                                     ))}
                                                                                 </>
@@ -187,36 +188,10 @@ export const ViewMerchants = () => {
                                                                 <thead>
                                                                     <tr>
                                                                         <th>id</th>
+                                                                        <th>senderId</th>
                                                                         <th>receiverId</th>
-                                                                        <th>categoryId</th>
-                                                                        <th>category</th>
-                                                                        <th>userReferralNumber</th>
-                                                                        <th>email</th>
-                                                                        <th>userType</th>
-                                                                        <th>userReferenceId</th>
-                                                                        <th>firstName</th>
-                                                                        <th>middleName</th>
-                                                                        <th>lastName</th>
-                                                                        <th>profileImagePathId</th>
-                                                                        <th>profileImage</th>
-                                                                        <th>gender</th>
-                                                                        <th>mobileNumber</th>
-                                                                        <th>alternativeNumber</th>
-                                                                        <th>shortBio</th>
-                                                                        <th>motherTongue</th>
-                                                                        <th>proofNumber</th>
-                                                                        <th>proofImagePathId</th>
-                                                                        <th>proofImage</th>
-                                                                        <th>bloodGroup</th>
-                                                                        <th>dateOfBirth</th>
-                                                                        <th>anniversaryDate</th>
-                                                                        <th>cityId</th>
-                                                                        <th>city</th>
-                                                                        <th>religion</th>
-                                                                        <th>joiningDate</th>
-                                                                        <th>numberOfActiveSessions</th>
-                                                                        <th>addresses</th>
-                                                                        <th>isTest</th>
+                                                                        <th>merchantId</th>
+                                                                        <th>merchant</th>
                                                                         <th>transactionValue</th>
                                                                         <th>memberCutValue</th>
                                                                         <th>merchantCutValue</th>
@@ -224,7 +199,6 @@ export const ViewMerchants = () => {
                                                                         <th>transactionPercentage</th>
                                                                         <th>transactionType</th>
                                                                         <th>transactionStatus</th>
-                                                                        <th>voucherUsageLogs</th>
                                                                         <th>createdBy</th>
                                                                         <th>updatedBy</th>
                                                                         <th>createdAt</th>
@@ -246,50 +220,23 @@ export const ViewMerchants = () => {
                                                                             <>
                                                                                 {viewMerchantDetails.cikkaTransaction.map((transaction) => (
                                                                                     <tr key={transaction.id}>
-                                                                                        <td>{transaction.id || "N/A"}</td>
-                                                                                        <td>{transaction.receiverId || "N/A"}</td>
-                                                                                        <td>{transaction.categoryId || "N/A"}</td>
-                                                                                        <td>{transaction.category || "N/A"}</td>
-                                                                                        <td>{transaction.receiver.userReferralNumber || "N/A"}</td>
-                                                                                        <td>{transaction.receiver.email || "N/A"}</td>
-                                                                                        <td>{transaction.receiver.userType || "N/A"}</td>
-                                                                                        <td>{transaction.receiver.userReferenceId || "N/A"}</td>
-                                                                                        <td>{transaction.receiver.firstName || "N/A"}</td>
-                                                                                        <td>{transaction.receiver.middleName || "N/A"}</td>
-                                                                                        <td>{transaction.receiver.lastName || "N/A"}</td>
-                                                                                        <td>{transaction.receiver.profileImagePathId || "N/A"}</td>
-                                                                                        <td>{transaction.receiver.profileImage || "N/A"}</td>
-                                                                                        <td>{transaction.receiver.gender || "N/A"}</td>
-                                                                                        <td>{transaction.receiver.mobileNumber || "N/A"}</td>
-                                                                                        <td>{transaction.receiver.alternativeNumber || "N/A"}</td>
-                                                                                        <td>{transaction.receiver.shortBio || "N/A"}</td>
-                                                                                        <td>{transaction.receiver.motherTongue || "N/A"}</td>
-                                                                                        <td>{transaction.receiver.proofNumber || "N/A"}</td>
-                                                                                        <td>{transaction.receiver.proofImagePathId || "N/A"}</td>
-                                                                                        <td>{transaction.receiver.proofImage || "N/A"}</td>
-                                                                                        <td>{transaction.receiver.bloodGroup || "N/A"}</td>
-                                                                                        <td>{transaction.receiver.dateOfBirth || "N/A"}</td>
-                                                                                        <td>{transaction.receiver.anniversaryDate || "N/A"}</td>
-                                                                                        <td>{transaction.receiver.cityId || "N/A"}</td>
-                                                                                        <td>{transaction.receiver.city || "N/A"}</td>
-                                                                                        <td>{transaction.receiver.religion || "N/A"}</td>
-                                                                                        <td>{transaction.receiver.joiningDate || "N/A"}</td>
-                                                                                        <td>{transaction.receiver.numberOfActiveSessions || "N/A"}</td>
-                                                                                        <td>{transaction.receiver.addresses || "N/A"}</td>
-                                                                                        <td>{transaction.receiver.isTest || "N/A"}</td>
-                                                                                        <td>{transaction.transactionValue || "N/A"}</td>
-                                                                                        <td>{transaction.memberCutValue || "N/A"}</td>
-                                                                                        <td>{transaction.merchantCutValue || "N/A"}</td>
-                                                                                        <td>{transaction.superAgentCutValue || "N/A"}</td>
-                                                                                        <td>{transaction.transactionPercentage || "N/A"}</td>
-                                                                                        <td>{transaction.transactionType || "N/A"}</td>
-                                                                                        <td>{transaction.transactionStatus || "N/A"}</td>
-                                                                                        <td>{transaction.voucherUsageLogs || "N/A"}</td>
-                                                                                        <td>{transaction.createdBy || "N/A"}</td>
-                                                                                        <td>{transaction.updatedBy || "N/A"}</td>
-                                                                                        <td>{transaction.createdAt || "N/A"}</td>
-                                                                                        <td>{transaction.updatedAt || "N/A"}</td>
-                                                                                        <td>{transaction.status || "N/A"}</td>
+                                                                                        <td>{transaction.id}</td>
+                                                                                        <td>{transaction.senderId}</td>
+                                                                                        <td>{transaction.receiverId}</td>
+                                                                                        <td>{transaction.merchantId}</td>
+                                                                                        <td>{transaction.merchant}</td>
+                                                                                        <td>{transaction.transactionValue}</td>
+                                                                                        <td>{transaction.memberCutValue}</td>
+                                                                                        <td>{transaction.merchantCutValue}</td>
+                                                                                        <td>{transaction.superAgentCutValue}</td>
+                                                                                        <td>{transaction.transactionPercentage}</td>
+                                                                                        <td>{transaction.transactionType}</td>
+                                                                                        <td>{transaction.transactionStatus}</td>
+                                                                                        <td>{transaction.createdBy}</td>
+                                                                                        <td>{transaction.updatedBy}</td>
+                                                                                        <td>{transaction.createdAt}</td>
+                                                                                        <td>{transaction.updatedAt}</td>
+                                                                                        <td>{transaction.status}</td>
                                                                                     </tr>
                                                                                 ))}
                                                                             </>
@@ -302,7 +249,6 @@ export const ViewMerchants = () => {
                                                                                 </td>
                                                                             </tr>
                                                                         )
-
                                                                     )}
                                                                 </tbody>
                                                             </table>

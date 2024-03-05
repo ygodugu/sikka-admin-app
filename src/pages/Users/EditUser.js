@@ -2,14 +2,30 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import Modal from "react-bootstrap/Modal";
 import { axiosInstance } from "../../axiosInstance";
 import { UserForm } from "./UserForm";
+// import NotFound from "../NotFound";
+import React from "react";
 
 const updateUser = (payload) => {
   return axiosInstance.put(`/users/${payload.id}`, payload);
 };
 
+
+// const getUserDetails = (id) => {
+//   return axiosInstance.get(`/users/${id}`).then((res) => res.data);
+// };
+
 const getUserDetails = (id) => {
-  return axiosInstance.get(`/users/${id}`).then((res) => res.data);
+  return axiosInstance.get(`/users/${id}`)
+    .then((res) => {
+      console.log(res.data); // Logging the response data
+      return res.data; // Returning the response data
+    })
+    .catch((error) => {
+      console.error('Error fetching user details:', error);
+      throw error; // Propagating the error further
+    });
 };
+
 
 export const EditUserModal = ({ handleSuccess, handleClose, id }) => {
   const { data: userDetails } = useQuery({
@@ -62,7 +78,7 @@ export const EditUserModal = ({ handleSuccess, handleClose, id }) => {
         pin,
         status,
         street,
-        userId : id,
+        userId: id,
       },
     ];
     updateUserMutation.mutate(
@@ -204,7 +220,6 @@ export const EditUserModal = ({ handleSuccess, handleClose, id }) => {
   //     );
   //   }
   // };
-
 
   return (
     <>

@@ -62,6 +62,65 @@ export const VoucherForm = ({ initialValues, onSubmit, isEdit = false, isAdd = f
       });
   }, []);
 
+  const convertToISOTime = (backendTimeString) => {
+    // Handle empty or null values
+    if (!backendTimeString || typeof backendTimeString !== 'string') {
+      return null;
+    }
+
+    // Split the time string into hours, minutes, and seconds
+    const timeComponents = backendTimeString.split(":");
+    if (timeComponents.length !== 3) {
+      return null; // Invalid time format
+    }
+
+    const [hours, minutes, seconds] = timeComponents.map(component => parseInt(component, 10));
+
+    // Check if the components are valid numbers
+    if (isNaN(hours) || isNaN(minutes) || isNaN(seconds)) {
+      return null;
+    }
+
+    // Create a new Date object with the time components
+    const currentDate = new Date();
+    currentDate.setHours(hours);
+    currentDate.setMinutes(minutes);
+    currentDate.setSeconds(seconds);
+
+    return currentDate;
+  };
+
+  // const convertToISOTime = (backendTimeString) => {
+  //   if (typeof backendTimeString !== 'string') {
+  //     // Return null or handle the case appropriately based on your application's logic
+  //     return null;
+  //   }
+
+  //   const [hours, minutes, seconds] = backendTimeString.split(":");
+  //   const currentDate = new Date();
+  //   const formattedDate = new Date(
+  //     currentDate.getFullYear(),
+  //     currentDate.getMonth(),
+  //     currentDate.getDate(),
+  //     parseInt(hours),
+  //     parseInt(minutes),
+  //     parseInt(seconds || 0) // Add default value for seconds if not provided
+  //   );
+  //   return formattedDate;
+  // };
+
+
+
+  const modifyImageUrl = (originalUrl) => {
+    let parts = originalUrl.split('?');
+
+    let fileName = parts[1].split('=')[1];
+    let folderName = "merchant_offer";
+    // Construct the new URL
+    let newUrl = `https://app.cikka.com.au/api/files/file-preview?fileName=${fileName}&folderName=${folderName}`;
+
+    return newUrl;
+  };
 
   return (
     <form onSubmit={formik.handleSubmit}>
@@ -76,16 +135,32 @@ export const VoucherForm = ({ initialValues, onSubmit, isEdit = false, isAdd = f
               onChange={(value) => {
                 if (value && value.length > 0) {
                   formik.setFieldValue("categoryId", value[0].id);
-                  // formik.setFieldValue("categorie", value);
+                  formik.setFieldValue("categorie", value);
                 } else {
                   formik.setFieldValue("categoryId", "");
-                  // formik.setFieldValue("categorie", []);
+                  formik.setFieldValue("categorie", []);
                 }
               }}
               placeholder="Choose a category"
             />
           </div>
         </aside>
+
+        <aside className="col-md-4">
+          <div className="form-group">
+            <label htmlFor="rank">Rank</label>
+            <input
+              type="number"
+              id="rank"
+              name="rank"
+              value={formik.values.rank}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              className="form-control form-control-lg"
+            />
+          </div>
+        </aside>
+
         <aside className="col-md-4">
           <div className="form-group">
             <label for="voucherValue">VoucherCode</label>
@@ -100,6 +175,7 @@ export const VoucherForm = ({ initialValues, onSubmit, isEdit = false, isAdd = f
             />
           </div>
         </aside>
+
         <aside className="col-md-4">
           <div className="form-group">
             <label for="voucherValue">Voucher Value</label>
@@ -114,6 +190,7 @@ export const VoucherForm = ({ initialValues, onSubmit, isEdit = false, isAdd = f
             />
           </div>
         </aside>
+
         <aside className="col-md-4">
           <div className="form-group">
             <label for="name">Name</label>
@@ -128,6 +205,7 @@ export const VoucherForm = ({ initialValues, onSubmit, isEdit = false, isAdd = f
             />
           </div>
         </aside>
+
         <aside className="col-md-4">
           <div className="form-group">
             <label for="voucherCode">Consumed Count</label>
@@ -142,6 +220,7 @@ export const VoucherForm = ({ initialValues, onSubmit, isEdit = false, isAdd = f
             />
           </div>
         </aside>
+
         <aside className="col-md-4">
           <div className="form-group">
             <label for="maxUsageCount">MaxUsage Count</label>
@@ -158,6 +237,7 @@ export const VoucherForm = ({ initialValues, onSubmit, isEdit = false, isAdd = f
             />
           </div>
         </aside>
+
         <aside className="col-md-4">
           <div className="form-group">
             <label for="description">Description</label>
@@ -187,6 +267,8 @@ export const VoucherForm = ({ initialValues, onSubmit, isEdit = false, isAdd = f
             />
           </div>
         </aside>
+
+        {/* adding date for fields starts here */}
 
         <aside className="col-md-4">
           <div className="form-group">
@@ -224,9 +306,117 @@ export const VoucherForm = ({ initialValues, onSubmit, isEdit = false, isAdd = f
           </div>
         </aside>
 
+        {/* adding date for fields end here */}
+
+        {/* adding time feilds start here  */}
+
+        {!isEdit ?
+          <aside className="col-md-4">
+            <div className="form-group">
+              <label htmlFor="validityStartTime">validityStartTime</label>
+              <DatePicker
+                selected={
+                  formik.values.validityStartTime
+                    ? new Date(formik.values.validityStartTime)
+                    : null
+                }
+                onChange={(e) => {
+                  formik.setFieldValue("validityStartTime", e);
+                  formik.setFieldTouched("validityStartTime");
+                }}
+                showTimeSelect
+                showTimeSelectOnly
+                timeIntervals={15}
+                timeCaption="Time"
+                dateFormat="h:mm aa"
+                className="form-control"
+              />
+            </div>
+          </aside>
+          : null}
+
+
+        {!isEdit ?
+          <aside className="col-md-4">
+            <div className="form-group">
+              <label htmlFor="validityEndTime">validityEndTime</label>
+              <DatePicker
+                selected={
+                  formik.values.validityEndTime
+                    ? new Date(formik.values.validityEndTime)
+                    : null
+                }
+                onChange={(e) => {
+                  formik.setFieldValue("validityEndTime", e);
+                  formik.setFieldTouched("validityEndTime");
+                }}
+                showTimeSelect
+                showTimeSelectOnly
+                timeIntervals={15}
+                timeCaption="Time"
+                dateFormat="h:mm aa"
+                className="form-control"
+              />
+            </div>
+          </aside>
+          : null}
+
+        {/* {!isAdd ?
+          <aside className="col-md-4">
+            <div className="form-group">
+              <label htmlFor="validityStartTime">validityStartTime</label>
+              <DatePicker
+                selected={
+                  formik.values.validityStartTime
+                    ? convertToISOTime(formik.values.validityStartTime)
+                    : null
+                }
+                onChange={(date) => {
+                  formik.setFieldValue("validityStartTime", date ? date.toISOString() : null);
+                  formik.setFieldTouched("validityStartTime");
+                }}
+                showTimeSelect
+                showTimeSelectOnly
+                timeIntervals={15}
+                timeCaption="Time"
+                dateFormat="h:mm aa"
+                className="form-control"
+              />
+            </div>
+          </aside>
+          : null}
+
+
+        {!isAdd ?
+          <aside className="col-md-4">
+            <div className="form-group">
+              <label htmlFor="validityEndTime">validityEndTime</label>
+              <DatePicker
+                selected={
+                  formik.values.validityEndTime
+                    ? convertToISOTime(formik.values.validityEndTime)
+                    : null
+                }
+                onChange={(date) => {
+                  formik.setFieldValue("validityEndTime", date ? date.toISOString() : null);
+                  formik.setFieldTouched("validityEndTime");
+                }}
+                showTimeSelect
+                showTimeSelectOnly
+                timeIntervals={15}
+                timeCaption="Time"
+                dateFormat="h:mm aa"
+                className="form-control"
+              />
+            </div>
+          </aside>
+          : null} */}
+
+        {/* adding time feilds end here  */}
+
         <aside className="col-md-4">
           <div className="form-group">
-            <label htmlFor="voucherValueType">voucherValueType</label>
+            <label htmlFor="voucherValueType">VoucherValueType *</label>
             <select
               id="voucherValueType"
               className="form-control select2"
@@ -240,33 +430,47 @@ export const VoucherForm = ({ initialValues, onSubmit, isEdit = false, isAdd = f
             </select>
           </div>
         </aside>
+
         <aside className="col-md-4">
           <div className="form-group">
             <label htmlFor="status">status</label>
-            <input
-              type="number"
+            <select
               id="status"
-              name="status"
-              value={formik.values.status}
+              className="form-control select2"
               onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              className="form-control form-control-lg"
-            />
+              value={formik.values.status}
+            >
+              <option value="1">Active</option>
+              <option value="2">Hold</option>
+              <option value="0">Deleted</option>
+            </select>
           </div>
         </aside>
-        {!isEdit ?
-          <aside className="col-md-4">
-            <div className="form-group">
-              <label htmlFor="uploadImage">UploadImage</label>
-              <input type="file" id="uploadImage" name="uploadImage" onChange={handleFileSelect} className="form-control form-control-lg" />
-            </div>
-          </aside> : null}
+
+        <aside className="col-md-4">
+          <div className="form-group">
+            <label htmlFor="uploadImage">UploadImage *</label>
+            <input type="file" id="uploadImage" name="uploadImage" onChange={handleFileSelect} className="form-control form-control-lg" />
+          </div>
+        </aside>
       </div>
+
+      {
+        !isAdd ?
+          <aside className="col-md-4">
+            {formik.values.voucherAsset.filePath && formik.values.voucherAsset.filePath ? (
+              <img src={modifyImageUrl(formik.values.voucherAsset.filePath)} alt="logo" className="form-image-tag" />
+            ) : (
+              <div className="empty-placeholder">Empty Image</div>
+            )}
+          </aside> : null
+      }
+
       <div className="modal-footer d-flex justify-content-end">
         <button type="submit" className="btn mb-2 btn-primary">
           Save
         </button>
       </div>
-    </form>
+    </form >
   );
 };

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import demoLogo from "../../assets/images/Cikka_Logo_Dashboard.png"
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { EditIcon } from "../../components/EditIcon";
 import { axiosInstance } from "../../axiosInstance";
@@ -97,6 +98,40 @@ export const BusinessCategories = () => {
       });
   }, []);
 
+  const modifyImageUrl = (originalUrl) => {
+    let parts = originalUrl.split('?');
+
+    let fileName = parts[1].split('=')[1];
+    let folderName = "business_category";
+    // Construct the new URL
+    let newUrl = `https://app.cikka.com.au/api/files/file-preview?fileName=${fileName}&folderName=${folderName}`;
+
+    return newUrl;
+  };
+
+  // const modifyImageUrl = (originalUrl) => {
+  //   if (!originalUrl) {
+  //     return ''; // or return a default image URL or handle it accordingly
+  //   }
+
+  //   // Split the original URL into parts based on '?'
+  //   let parts = originalUrl.split('?');
+
+  //   if (parts.length < 2) {
+  //     return ''; // or return a default image URL or handle it accordingly
+  //   }
+
+  //   // Extract the file name and other parameters
+  //   let fileName = parts[1].split('=')[1]; // Extract the file name from the URL
+  //   let folderName = 'merchant'; // Extract the folder name from the URL
+
+  //   // Construct the new URL
+  //   let newUrl = `http://149.28.174.167/api/files/file-preview?fileName=${fileName}&folderName=${folderName}`;
+
+  //   return newUrl;
+  // };
+
+
   return (
     <>
       {showError ? (
@@ -122,28 +157,40 @@ export const BusinessCategories = () => {
                 aria-label="Search"
               />
             </form>
-            <div className="d-flex">
-              <select className="form-control mt-2 mr-sm-2" onChange={handleSelectIDChange} style={{ background: "white" }} aria-label="select">
+            <aside className="col-sm-2 mt-2 add-sec">
+              <button className="bttn" onClick={() => setShowAddModal(true)}>
+                Add
+              </button>
+            </aside>
+          </div>
+
+          <div className="d-flex flex-wrap">
+            <aside className="col-md-4 mt-2 mt-md-0 mb-2 mb-md-0">
+              <select className="form-control" onChange={handleSelectIDChange} style={{ background: "white" }} aria-label="select">
                 <option value="">sortBy</option>
                 <option value="id">ID</option>
+                <option value="rank">Rank</option>
               </select>
-              <select className="form-control mt-2  mr-sm-2" onChange={handleSelectOrderChange} style={{ background: "white" }} aria-label="select">
+            </aside>
+
+            <aside className="col-md-4 mt-2 mt-md-0 mb-2 mb-md-0">
+              <select className="form-control" onChange={handleSelectOrderChange} style={{ background: "white" }} aria-label="select">
                 <option value="">sortOrder</option>
                 <option value="ASC">ASC</option>
                 <option value="DESC">DESC</option>
               </select>
-              <select className="form-control mt-2 mr-sm-2" onChange={handleSelectStatusChange} style={{ background: "white" }} aria-label="select">
+            </aside>
+
+            <aside className="col-md-4 mt-2 mt-md-0 mb-2 mb-md-0">
+              <select className="form-control" onChange={handleSelectStatusChange} style={{ background: "white" }} aria-label="select">
                 <option value="">STATUS</option>
-                <option value="0">0</option>
-                <option value="1">1</option>
+                <option value="1">Active</option>
+                <option value="2">Hold</option>
+                <option value="0">Deleted</option>
               </select>
-              <aside className="col-sm-2 mt-2 add-sec">
-                <button className="bttn" onClick={() => setShowAddModal(true)}>
-                  Add
-                </button>
-              </aside>
-            </div>
+            </aside>
           </div>
+
           <div className="row my-2">
             <div className="col-md-12">
               <div className="card shadow">
@@ -154,6 +201,8 @@ export const BusinessCategories = () => {
                         <tr>
                           <th>Actions</th>
                           <th>Status</th>
+                          <th>Image</th>
+                          <th>Rank</th>
                           <th>ID</th>
                           <th>Name</th>
                           <th>Description</th>
@@ -178,10 +227,17 @@ export const BusinessCategories = () => {
                               <td className="actions">
                                 <EditIcon onClick={handleEditClick(p.id)} />
                               </td>
-                              {/* <td>{p.status}</td> */}
                               <td>
                                 <Status code={p.status} />
                               </td>
+                              <td>
+                                {p.logo && p.logo.filePath ? (
+                                  <img src={modifyImageUrl(p.logo.filePath)} alt="logo" className="table-logo " />
+                                ) : (
+                                  <img src={demoLogo} alt='demoLogo' className="table-logo" />
+                                )}
+                              </td>
+                              <td>{p.rank}</td>
                               <td>{p.id}</td>
                               <td>
                                 {search ? (
@@ -195,19 +251,16 @@ export const BusinessCategories = () => {
                                 )}
                               </td>
                               <td>{p.description}</td>
-                              {/* <td>{p.createdBy}</td>
-                              <td>{p.updatedBy}</td> */}
                               <td>{usersData?.data?.find(user => user.id === p.createdBy)?.firstName || 'N/A'}</td>
                               <td>{usersData?.data?.find(user => user.id === p.updatedBy)?.firstName || 'N/A'}</td>
-                              <td>{p.createdAt ? <DateFormate dateTime={p.createdAt} /> : 'N/A'}</td>
-                              <td>{p.updatedAt ? <DateFormate dateTime={p.updatedAt} /> : 'N/A'}</td>
+                              <td>{<DateFormate dateTime={p.createdAt} />}</td>
+                              <td>{<DateFormate dateTime={p.updatedAt} />}</td>
                             </tr>
                           ))
                         )}
                       </tbody>
                     </table>
                   </div>
-
                   {!isLoading ? (
                     <CustomPagination
                       page={page}

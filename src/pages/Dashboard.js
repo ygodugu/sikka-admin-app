@@ -4,6 +4,7 @@ import { Line } from 'react-chartjs-2';
 import { useQuery } from "@tanstack/react-query";
 import { axiosInstance } from "../axiosInstance";
 import LineChart from '../components/LineChart';
+import { ShimmerThumbnail } from "react-shimmer-effects";
 
 
 const fetchUsersCounts = () => axiosInstance.get(`/users`).then(res => res.data)
@@ -35,6 +36,7 @@ const fetchEventsCounts = () => axiosInstance.get(`/events`).then(res => res.dat
 
 
 export const Dashboard = () => {
+
     const {
         isLoading,
         data,
@@ -118,7 +120,7 @@ export const Dashboard = () => {
             },
         },
     };
-
+    
     return (
         <>
             <div className="row justify-content-center">
@@ -138,9 +140,15 @@ export const Dashboard = () => {
                                             <p className="mb-1"><strong>Users</strong></p>
                                             <h4 className="mb-0">{data?.[0]?.count}</h4>
                                         </div>
-                                        <div className="col-8">
-                                            <LineChart count={data?.[0]?.count} />
-                                        </div>
+                                        {isLoading ? (
+                                            <div className='col-8'>
+                                                <ShimmerThumbnail height={120} rounded />
+                                            </div>
+                                        ) : (
+                                            <div className="col-8">
+                                                <LineChart count={data?.[0]?.count} />
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             </div>
@@ -153,9 +161,15 @@ export const Dashboard = () => {
                                             <p className="mb-1"><strong>Vouchers</strong></p>
                                             <h4 className="mb-0">{data?.[1]?.count}</h4>
                                         </div>
-                                        <div className="col-7">
-                                            <LineChart count={data?.[1]?.count} />
-                                        </div>
+                                        {isLoading ? (
+                                            <div className='col-7'>
+                                                <ShimmerThumbnail height={120} rounded />
+                                            </div>
+                                        ) : (
+                                            <div className="col-7">
+                                                <LineChart count={data?.[1]?.count} />
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             </div>
@@ -168,9 +182,15 @@ export const Dashboard = () => {
                                             <p className="mb-1"><strong>Merchants</strong></p>
                                             <h4 className="mb-0">{data?.[2]?.count}</h4>
                                         </div>
-                                        <div className="col-7">
-                                            <LineChart count={data?.[2]?.count} />
-                                        </div>
+                                        {isLoading ? (
+                                            <div className='col-7'>
+                                                <ShimmerThumbnail height={120} rounded />
+                                            </div>
+                                        ) : (
+                                            <div className="col-7">
+                                                <LineChart count={data?.[2]?.count} />
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             </div>
@@ -183,9 +203,15 @@ export const Dashboard = () => {
                                             <p className="mb-1"><strong>Purchases</strong></p>
                                             <h4 className="mb-0">{data?.[3]?.count}</h4>
                                         </div>
-                                        <div className="col-7 mb-0">
-                                            <LineChart count={data?.[3]?.count} />
-                                        </div>
+                                        {isLoading ? (
+                                            <div className='col-7 mb-0'>
+                                                <ShimmerThumbnail height={120} rounded />
+                                            </div>
+                                        ) : (
+                                            <div className="col-7 mb-0">
+                                                <LineChart count={data?.[3]?.count} />
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             </div>
@@ -198,9 +224,15 @@ export const Dashboard = () => {
                                             <p className="mb-1"><strong>Transactions</strong></p>
                                             <h4 className="mb-0">{data?.[4]?.count}</h4>
                                         </div>
-                                        <div className="col-7 mb-0">
-                                            <LineChart count={data?.[4]?.count} />
-                                        </div>
+                                        {isLoading ? (
+                                            <div className='col-7 mb-0'>
+                                                <ShimmerThumbnail height={120} rounded />
+                                            </div>
+                                        ) : (
+                                            <div className="col-7 mb-0">
+                                                <LineChart count={data?.[4]?.count} />
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             </div>
@@ -213,9 +245,15 @@ export const Dashboard = () => {
                                             <p className="mb-1"><strong>Business Categories</strong></p>
                                             <h4 className="mb-0">{data?.[5]?.count}</h4>
                                         </div>
-                                        <div className="col-7 mb-0">
-                                            <LineChart count={data?.[5]?.count} />
-                                        </div>
+                                        {isLoading ? (
+                                            <div className='col-7 mb-0'>
+                                                <ShimmerThumbnail height={120} rounded />
+                                            </div>
+                                        ) : (
+                                            <div className="col-7 mb-0">
+                                                <LineChart count={data?.[5]?.count} />
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             </div>
@@ -228,9 +266,15 @@ export const Dashboard = () => {
                                             <p className="mb-1"><strong>Categories</strong></p>
                                             <h4 className="mb-0">{data?.[6]?.count}</h4>
                                         </div>
-                                        <div className="col-7 mb-0">
-                                            <LineChart count={data?.[6]?.count} />
-                                        </div>
+                                        {isLoading ? (
+                                            <div className='col-7 mb-0'>
+                                                <ShimmerThumbnail height={120} rounded />
+                                            </div>
+                                        ) : (
+                                            <div className="col-7 mb-0">
+                                                <LineChart count={data?.[6]?.count} />
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             </div>
@@ -243,9 +287,15 @@ export const Dashboard = () => {
                                             <p className="mb-1"><strong>Industries</strong></p>
                                             <h4 className="mb-0">{data?.[7]?.count}</h4>
                                         </div>
-                                        <div className="col-8 mb-0">
-                                            <LineChart count={data?.[7]?.count} />
-                                        </div>
+                                        {isLoading ? (
+                                            <div className='col-8 mb-0'>
+                                                <ShimmerThumbnail height={120} rounded />
+                                            </div>
+                                        ) : (
+                                            <div className="col-8 mb-0">
+                                                <LineChart count={data?.[7]?.count} />
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             </div>
@@ -258,9 +308,15 @@ export const Dashboard = () => {
                                             <p className="mb-1"><strong>Countries</strong></p>
                                             <h4 className="mb-0">{data?.[8]?.count}</h4>
                                         </div>
-                                        <div className="col-7 mb-0">
-                                            <LineChart count={data?.[8]?.count} />
-                                        </div>
+                                        {isLoading ? (
+                                            <div className='col-7 mb-0'>
+                                                <ShimmerThumbnail height={120} rounded />
+                                            </div>
+                                        ) : (
+                                            <div className="col-7 mb-0">
+                                                <LineChart count={data?.[8]?.count} />
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             </div>
@@ -273,9 +329,15 @@ export const Dashboard = () => {
                                             <p className="mb-1"><strong>States</strong></p>
                                             <h4 className="mb-0">{data?.[9]?.count}</h4>
                                         </div>
-                                        <div className="col-8 mb-0">
-                                            <LineChart count={data?.[9]?.count} />
-                                        </div>
+                                        {isLoading ? (
+                                            <div className='col-8 mb-0'>
+                                                <ShimmerThumbnail height={120} rounded />
+                                            </div>
+                                        ) : (
+                                            <div className="col-8 mb-0">
+                                                <LineChart count={data?.[9]?.count} />
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             </div>
@@ -288,9 +350,15 @@ export const Dashboard = () => {
                                             <p className="mb-1"><strong>Cities</strong></p>
                                             <h4 className="mb-0">{data?.[10]?.count}</h4>
                                         </div>
-                                        <div className="col-8 mb-0">
-                                            <LineChart count={data?.[10]?.count} />
-                                        </div>
+                                        {isLoading ? (
+                                            <div className='col-8 mb-0'>
+                                                <ShimmerThumbnail height={120} rounded />
+                                            </div>
+                                        ) : (
+                                            <div className="col-8 mb-0">
+                                                <LineChart count={data?.[10]?.count} />
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             </div>
@@ -303,9 +371,15 @@ export const Dashboard = () => {
                                             <p className="mb-1"><strong>Documents</strong></p>
                                             <h4 className="mb-0">{data?.[11]?.count}</h4>
                                         </div>
-                                        <div className="col-7 mb-0">
-                                            <LineChart count={data?.[11]?.count} />
-                                        </div>
+                                        {isLoading ? (
+                                            <div className='col-7 mb-0'>
+                                                <ShimmerThumbnail height={120} rounded />
+                                            </div>
+                                        ) : (
+                                            <div className="col-7 mb-0">
+                                                <LineChart count={data?.[11]?.count} />
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             </div>
@@ -318,16 +392,22 @@ export const Dashboard = () => {
                                             <p className="mb-1"><strong>Events</strong></p>
                                             <h4 className="mb-0">{data?.[12]?.count}</h4>
                                         </div>
-                                        <div className="col-8 mb-0">
-                                            <LineChart count={data?.[12]?.count} />
-                                        </div>
+                                        {isLoading ? (
+                                            <div className='col-8 mb-0'>
+                                                <ShimmerThumbnail height={120} rounded />
+                                            </div>
+                                        ) : (
+                                            <div className="col-8 mb-0">
+                                                <LineChart count={data?.[12]?.count} />
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </div >
             <div className="container-fluid">
                 <div className="row">
                     <div className="col-md-12">

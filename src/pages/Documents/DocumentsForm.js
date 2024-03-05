@@ -30,6 +30,7 @@ export const DocumentsForm = ({ initialValues, handleSubmit, isAdd = false }) =>
                         <div className="invalid-feedback">{formik.errors.name}</div>
                     </div>
                 </aside>
+
                 <aside className="col-md-6">
                     <div className="form-group">
                         <label for="description">description</label>
@@ -44,21 +45,24 @@ export const DocumentsForm = ({ initialValues, handleSubmit, isAdd = false }) =>
                         />
                     </div>
                 </aside>
+
                 {!isAdd ?
-                    <aside className="col-md-4">
+                    <aside className="col-md-6">
                         <div className="form-group">
                             <label htmlFor="status">status</label>
-                            <input
-                                type="number"
+                            <select
                                 id="status"
-                                name="status"
-                                value={formik.values.status}
+                                className="form-control select2"
                                 onChange={formik.handleChange}
-                                onBlur={formik.handleBlur}
-                                className="form-control form-control-lg"
-                            />
+                                value={formik.values.status}
+                            >
+                                <option value="1">Active</option>
+                                <option value="2">Hold</option>
+                                <option value="0">Deleted</option>
+                            </select>
                         </div>
                     </aside> : null}
+                    
             </div>
             <div className="modal-footer d-flex justify-content-end">
                 <button type="submit" className="btn mb-2 btn-primary">

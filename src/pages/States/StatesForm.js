@@ -58,6 +58,7 @@ export const StatesForm = ({ initialValues, handleSubmit, isAdd = false }) => {
                         <div className="invalid-feedback">{formik.errors.name}</div>
                     </div>
                 </aside>
+
                 <aside className="col-md-6">
                     <div className="form-group">
                         <label for="countryId">countryId *</label>
@@ -77,6 +78,24 @@ export const StatesForm = ({ initialValues, handleSubmit, isAdd = false }) => {
                         <div className="invalid-feedback">{formik.errors.countryId}</div>
                     </div>
                 </aside>
+
+                {!isAdd ?
+                    <aside className="col-md-6">
+                        <div className="form-group">
+                            <label htmlFor="status">status</label>
+                            <select
+                                id="status"
+                                className="form-control select2"
+                                onChange={formik.handleChange}
+                                value={formik.values.status}
+                            >
+                                <option value="1">Active</option>
+                                <option value="2">Hold</option>
+                                <option value="0">Deleted</option>
+                            </select>
+                        </div>
+                    </aside> : null}
+
                 <aside className="col-md-12">
                     <div className="form-group">
                         <label for="description">description</label>
@@ -91,21 +110,7 @@ export const StatesForm = ({ initialValues, handleSubmit, isAdd = false }) => {
                         />
                     </div>
                 </aside>
-                {!isAdd ?
-                    <aside className="col-md-4">
-                        <div className="form-group">
-                            <label htmlFor="status">status</label>
-                            <input
-                                type="number"
-                                id="status"
-                                name="status"
-                                value={formik.values.status}
-                                onChange={formik.handleChange}
-                                onBlur={formik.handleBlur}
-                                className="form-control form-control-lg"
-                            />
-                        </div>
-                    </aside> : null}
+                
             </div>
             <div className="modal-footer d-flex justify-content-end">
                 <button type="submit" className="btn mb-2 btn-primary">

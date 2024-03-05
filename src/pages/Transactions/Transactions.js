@@ -117,10 +117,13 @@ export const Transactions = () => {
                 aria-label="Search"
               />
             </form>
-            <div className="d-flex">
+          </div>
+
+          <div className="d-flex flex-wrap">
+            <aside className="col-md-4 mt-2 mt-md-0 mb-2 mb-md-0">
               <select
                 id="receivedId"
-                className="form-control mt-2 mr-sm-4 col-sm-4"
+                className="form-control"
                 value={selectedValue}
                 onChange={handleTypeaheadChange}
               >
@@ -131,23 +134,34 @@ export const Transactions = () => {
                   </option>
                 ))}
               </select>
-              <select className="form-control mt-2 mr-sm-2" onChange={handleSelectIDChange} style={{ background: "white" }} aria-label="select">
+            </aside>
+
+            <aside className="col-md-4 mt-2 mt-md-0 mb-2 mb-md-0">
+              <select className="form-control" onChange={handleSelectIDChange} style={{ background: "white" }} aria-label="select">
                 <option value="">sortBy</option>
                 <option value="id">ID</option>
                 <option value="createdAt">TIME</option>
               </select>
-              <select className="form-control mt-2 mr-sm-2" onChange={handleSelectOrderChange} style={{ background: "white" }} aria-label="select">
+            </aside>
+
+            <aside className="col-md-2 mt-2 mt-md-0 mb-2 mb-md-0">
+              <select className="form-control" onChange={handleSelectOrderChange} style={{ background: "white" }} aria-label="select">
                 <option value="">sortOrder</option>
                 <option value="ASC">ASC</option>
                 <option value="DESC">DESC</option>
               </select>
-              <select className="form-control mt-2" onChange={handleSelectStatusChange} style={{ background: "white" }} aria-label="select">
+            </aside>
+
+            <aside className="col-md-2 mt-2 mt-md-0 mb-2 mb-md-0">
+              <select className="form-control" onChange={handleSelectStatusChange} style={{ background: "white" }} aria-label="select">
                 <option value="">STATUS</option>
-                <option value="0">0</option>
-                <option value="1">1</option>
+                <option value="1">Active</option>
+                <option value="2">Hold</option>
+                <option value="0">Deleted</option>
               </select>
-            </div>
+            </aside>
           </div>
+
           <div className="row my-2">
             <div className="col-md-12">
               <div className="card shadow">
@@ -171,7 +185,6 @@ export const Transactions = () => {
                           <th>UpdatedBy</th>
                           <th>CreatedAt</th>
                           <th>UpdatedAt</th>
-
                         </tr>
                       </thead>
                       <tbody>
@@ -191,7 +204,6 @@ export const Transactions = () => {
                                   <ViewIcon />
                                 </NavLink>
                               </td>
-                              {/* <td>{p.status}</td> */}
                               <td>
                                 <Status code={p.status} />
                               </td>
@@ -206,15 +218,14 @@ export const Transactions = () => {
                               <td>{p.transactionStatus}</td>
                               <td>{usersData?.data?.find(user => user.id === p.createdBy)?.firstName || 'N/A'}</td>
                               <td>{usersData?.data?.find(user => user.id === p.updatedBy)?.firstName || 'N/A'}</td>
-                              <td>{p.createdAt ? <DateFormate dateTime={p.createdAt} /> : 'N/A'}</td>
-                              <td>{p.updatedAt ? <DateFormate dateTime={p.updatedAt} /> : 'N/A'}</td>
+                              <td>{<DateFormate dateTime={p.createdAt} />}</td>
+                              <td>{<DateFormate dateTime={p.updatedAt} />}</td>
                             </tr>
                           ))
                         )}
                       </tbody>
                     </table>
                   </div>
-
                   {!isLoading ? (
                     <CustomPagination
                       page={page}

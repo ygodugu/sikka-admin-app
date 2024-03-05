@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import demoLogo from "../../assets/images/Cikka_Logo_Dashboard.png"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { EditIcon } from "../../components/EditIcon";
 import { axiosInstance } from "../../axiosInstance";
@@ -160,6 +161,16 @@ export const Vouchers = () => {
     refetch();
   };
 
+  const modifyImageUrl = (originalUrl) => {
+    let parts = originalUrl.split('?');
+
+    let fileName = parts[1].split('=')[1];
+    let folderName = 'merchant_offer';
+    let newUrl = `https://app.cikka.com.au/api/files/file-preview?fileName=${fileName}&folderName=${folderName}`;
+
+    return newUrl;
+  };
+
 
   return (
     <>
@@ -186,47 +197,88 @@ export const Vouchers = () => {
                 aria-label="Search"
               />
             </form>
+            <aside className="col-sm-2 mt-2 add-sec">
+              <button className="bttn" onClick={() => setShowAddModal(true)}>
+                Add
+              </button>
+            </aside>
+          </div>
 
-            <div className="d-flex">
-              <div className='col-sm-4 mt-2 mr-sm-2'>
-                <select
-                  id="categoryId"
-                  className="form-control"
-                  value={selectedValue}
-                  onChange={handleTypeaheadChange}
-                >
-                  <option value="">Choose a category</option>
-                  {selectValueCategoryID?.data?.map((option) => (
-                    <option key={option.id} value={option.id}>
-                      {option.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <select className="form-control mt-2  mr-sm-2" onChange={handleSelectIDChange} style={{ background: "white" }} aria-label="select">
+          <div className="d-flex flex-wrap">
+            <div className='col-sm-4 mt-2'>
+              <select
+                id="categoryId"
+                className="form-control"
+                value={selectedValue}
+                onChange={handleTypeaheadChange}
+              >
+                <option value="">Choose a category</option>
+                {selectValueCategoryID?.data?.map((option) => (
+                  <option key={option.id} value={option.id}>
+                    {option.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="col-sm-2 mt-2">
+              <select className="form-control" onChange={handleSelectIDChange} style={{ background: "white" }} aria-label="select">
                 <option value="">sortBy</option>
                 <option value="id">ID</option>
+                <option value="rank">Rank</option>
               </select>
-
-              <select className="form-control mt-2 mr-sm-2" onChange={handleSelectOrderChange} style={{ background: "white" }} aria-label="select">
+            </div>
+            <div className="col-sm-4 mt-2">
+              <select className="form-control" onChange={handleSelectOrderChange} style={{ background: "white" }} aria-label="select">
                 <option value="">sortOrder</option>
                 <option value="ASC">ASC</option>
                 <option value="DESC">DESC</option>
               </select>
-
-              <select className="form-control mt-2 mr-sm-2" onChange={handleSelectStatusChange} style={{ background: "white" }} aria-label="select">
-                <option value="">STATUS</option>
-                <option value="0">0</option>
-                <option value="1">1</option>
-              </select>
-              <aside className="col-sm-2 mt-2 add-sec">
-                <button className="bttn" onClick={() => setShowAddModal(true)}>
-                  Add
-                </button>
-              </aside>
             </div>
-
+            <div className="col-sm-2 mt-2">
+              <select className="form-control" onChange={handleSelectStatusChange} style={{ background: "white" }} aria-label="select">
+                <option value="">STATUS</option>
+                <option value="1">Active</option>
+                <option value="2">Hold</option>
+                <option value="0">Deleted</option>
+              </select>
+            </div>
           </div>
+
+
+          {/* <div className="d-flex">
+            <div className='col-sm-4 mt-2 mr-sm-2'>
+              <select
+                id="categoryId"
+                className="form-control"
+                value={selectedValue}
+                onChange={handleTypeaheadChange}
+              >
+                <option value="">Choose a category</option>
+                {selectValueCategoryID?.data?.map((option) => (
+                  <option key={option.id} value={option.id}>
+                    {option.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <select className="form-control mt-2  mr-sm-2" onChange={handleSelectIDChange} style={{ background: "white" }} aria-label="select">
+              <option value="">sortBy</option>
+              <option value="id">ID</option>
+            </select>
+
+            <select className="form-control mt-2 mr-sm-2" onChange={handleSelectOrderChange} style={{ background: "white" }} aria-label="select">
+              <option value="">sortOrder</option>
+              <option value="ASC">ASC</option>
+              <option value="DESC">DESC</option>
+            </select>
+
+            <select className="form-control mt-2 mr-sm-2" onChange={handleSelectStatusChange} style={{ background: "white" }} aria-label="select">
+              <option value="">STATUS</option>
+              <option value="0">0</option>
+              <option value="1">1</option>
+            </select>
+          </div> */}
+
           <div className="row my-2">
             <div className="col-md-12">
               <div className="card shadow">
@@ -237,6 +289,8 @@ export const Vouchers = () => {
                         <tr>
                           <th>Actions</th>
                           <th>Status</th>
+                          <th>Logo</th>
+                          <th>Rank</th>
                           <th>VoucherCode</th>
                           <th>Name</th>
                           <th>Description</th>
@@ -275,6 +329,14 @@ export const Vouchers = () => {
                               <td>
                                 <Status code={u.status} />
                               </td>
+                              <td>
+                                {u.voucherAsset.filePath && u.voucherAsset.filePath ? (
+                                  <img src={modifyImageUrl(u.voucherAsset.filePath)} alt="logo" className="table-logo" />
+                                ) : (
+                                  <img src={demoLogo} alt='demoLogo' className="table-logo" />
+                                )}
+                              </td>
+                              <td>{u.rank}</td>
                               <td>{u.voucherCode}</td>
                               <td>
                                 {search ? (
@@ -287,21 +349,21 @@ export const Vouchers = () => {
                                   u.name
                                 )}
                               </td>
-                              <td>{u.description || 'N/A'}</td>
-                              <td>{u.merchantId || 'N/A'}</td>
-                              <td>{categoryData?.data?.find(category => category.id === u.categoryId)?.name || 'N/A'}</td>
-                              <td>{u.voucherAssetId || 'N/A'}</td>
-                              <td>{u.voucherValue || 'N/A'}</td>
-                              <td>{u.voucherValueType || 'N/A'}</td>
-                              <td>{u.validityStartDate || 'N/A'}</td>
-                              <td>{u.validityEndDate || 'N/A'}</td>
-                              <td>{u.restrictUsageForUser || 'N/A'}</td>
-                              <td>{u.maxUsageCount || 'N/A'}</td>
-                              <td>{u.consumedCount || 'N/A'}</td>
+                              <td>{u.description}</td>
+                              <td>{u.merchantId}</td>
+                              <td>{categoryData?.data?.find(category => category.id === u.categoryId)?.name || u.categoryId}</td>
+                              <td>{u.voucherAssetId}</td>
+                              <td>{u.voucherValue}</td>
+                              <td>{u.voucherValueType}</td>
+                              <td>{u.validityStartDate}</td>
+                              <td>{u.validityEndDate}</td>
+                              <td>{u.restrictUsageForUser}</td>
+                              <td>{u.maxUsageCount}</td>
+                              <td>{u.consumedCount}</td>
                               <td>{usersData?.data?.find(user => user.id === u.createdBy)?.firstName || 'N/A'}</td>
                               <td>{usersData?.data?.find(user => user.id === u.updatedBy)?.firstName || 'N/A'}</td>
-                              <td>{u.createdAt ? <DateFormate dateTime={u.createdAt} /> : 'N/A'}</td>
-                              <td>{u.updatedAt ? <DateFormate dateTime={u.updatedAt} /> : 'N/A'}</td>
+                              <td>{<DateFormate dateTime={u.createdAt} />}</td>
+                              <td>{<DateFormate dateTime={u.updatedAt} />}</td>
                             </tr>
                           ))
                         )}

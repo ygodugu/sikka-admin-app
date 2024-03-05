@@ -41,7 +41,14 @@ export const Login = () => {
       email: "",
       password: "",
     },
-    onSubmit: loginMutation.mutate,
+    onSubmit: (values) => {
+      // Trim leading and trailing spaces from email and password
+      const trimmedValues = {
+        email: values.email.trim(),
+        password: values.password.trim(),
+      };
+      loginMutation.mutate(trimmedValues);
+    },
     validationSchema: loginSchema,
     validateOnBlur: true,
   });
@@ -62,7 +69,7 @@ export const Login = () => {
             className="navbar-brand mx-auto flex-fill text-center"
             href="/index.html"
           >
-            <img src={Logo} style={{height:"150px"}}/>
+            <img src={Logo} style={{ height: "150px" }} />
           </a>
           <div className="login-form-box">
             <div className="form-group is-invalid">
@@ -113,7 +120,7 @@ export const Login = () => {
               </a>
             </div>
           </div>
-          <p className="mt-4 mb-1 copy-right">&copy; 2023 Cikka.</p>
+          <p className="mt-4 mb-1 copy-right">&copy; {(new Date().getFullYear())} cikka.</p>
         </form>
       </div>
     </div>

@@ -6,6 +6,8 @@ import DatePicker from "react-datepicker";
 
 let eventsSchema = object({
     name: string().required("Name is required"),
+    eventDate: string().required("eventDate is required"),
+    merchantId: string().required("merchantId is required"),
 });
 
 export const EventsForm = ({ initialValues, onSubmit, isEdit = false, isAdd = false }) => {
@@ -28,6 +30,19 @@ export const EventsForm = ({ initialValues, onSubmit, isEdit = false, isAdd = fa
         validationSchema: eventsSchema,
     });
 
+
+    const modifyImageUrl = (originalUrl) => {
+        let parts = originalUrl.split('?');
+
+        let fileName = parts[1].split('=')[1];
+        let folderName = "event";
+        // Construct the new URL
+        let newUrl = `https://app.cikka.com.au/api/files/file-preview?fileName=${fileName}&folderName=${folderName}`;
+
+        return newUrl;
+    };
+
+
     return (
         <form onSubmit={formik.handleSubmit}>
             <div className="row">
@@ -46,9 +61,26 @@ export const EventsForm = ({ initialValues, onSubmit, isEdit = false, isAdd = fa
                         <div className="invalid-feedback">{formik.errors.name}</div>
                     </div>
                 </aside>
+
                 <aside className="col-md-4">
                     <div className="form-group">
-                        <label htmlFor="eventDate">EventDate</label>
+                        <label htmlFor="merchantId">merchantId *</label>
+                        <input
+                            type="text"
+                            id="merchantId"
+                            value={formik.values.merchantId}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            className="form-control form-control-lg"
+                            placeholder="Enter merchantId"
+                        />
+                        <div className="invalid-feedback">{formik.errors.merchantId}</div>
+                    </div>
+                </aside>
+
+                <aside className="col-md-4">
+                    <div className="form-group">
+                        <label htmlFor="eventDate">EventDate *</label>
                         <DatePicker
                             selected={
                                 formik.values.eventDate
@@ -61,8 +93,10 @@ export const EventsForm = ({ initialValues, onSubmit, isEdit = false, isAdd = fa
                             }}
                             className="form-control"
                         />
+                           <div className="invalid-feedback">{formik.errors.eventDate}</div>
                     </div>
                 </aside>
+
                 <aside className="col-md-4">
                     <div className="form-group">
                         <label for="totalPasses">TotalPasses</label>
@@ -77,6 +111,7 @@ export const EventsForm = ({ initialValues, onSubmit, isEdit = false, isAdd = fa
                         />
                     </div>
                 </aside>
+
                 <aside className="col-md-4">
                     <div className="form-group">
                         <label for="url">url</label>
@@ -91,6 +126,7 @@ export const EventsForm = ({ initialValues, onSubmit, isEdit = false, isAdd = fa
                         />
                     </div>
                 </aside>
+
                 <aside className="col-md-4">
                     <div className="form-group">
                         <label for="utilizedPasses">UtilizedPasses</label>
@@ -105,6 +141,7 @@ export const EventsForm = ({ initialValues, onSubmit, isEdit = false, isAdd = fa
                         />
                     </div>
                 </aside>
+
                 <aside className="col-md-4">
                     <div className="form-group">
                         <label for="description">Description</label>
@@ -119,31 +156,41 @@ export const EventsForm = ({ initialValues, onSubmit, isEdit = false, isAdd = fa
                         />
                     </div>
                 </aside>
+
                 {!isAdd ?
                     <aside className="col-md-4">
                         <div className="form-group">
                             <label htmlFor="status">status</label>
-                            <input
-                                type="number"
+                            <select
                                 id="status"
-                                name="status"
-                                value={formik.values.status}
+                                className="form-control select2"
                                 onChange={formik.handleChange}
-                                onBlur={formik.handleBlur}
-                                className="form-control form-control-lg"
-                            />
+                                value={formik.values.status}
+                            >
+                                <option value="1">Active</option>
+                                <option value="2">Hold</option>
+                                <option value="0">Deleted</option>
+                            </select>
                         </div>
                     </aside> : null}
 
-                {!isEdit ?
-                    <aside className="col-md-4">
-                        <div className="form-group">
-                            <label htmlFor="uploadImage">UploadImage</label>
-                            <input type="file" id="uploadImage" name="uploadImage" onChange={handleFileSelect} className="form-control form-control-lg" />
-                        </div>
-                    </aside> : null}
+                <aside className="col-md-4">
+                    <div className="form-group">
+                        <label htmlFor="uploadImage">UploadImage</label>
+                        <input type="file" id="uploadImage" name="uploadImage" onChange={handleFileSelect} className="form-control form-control-lg" />
+                    </div>
+                </aside>
 
+                {!isAdd ?
+                    <aside className="col-md-6">
+                        {formik.values.fileUpload.filePath && formik.values.fileUpload.filePath ? (
+                            <img src={modifyImageUrl(formik.values.fileUpload.filePath)} alt="logo" className="form-image-tag" />
+                        ) : (
+                            <div className="empty-placeholder">Empty Image</div>
+                        )}
+                    </aside> : null}
             </div>
+
             <div className="modal-footer d-flex justify-content-end">
                 <button type="submit" className="btn mb-2 btn-primary">
                     Save

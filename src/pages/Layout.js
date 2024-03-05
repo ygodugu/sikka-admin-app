@@ -1,4 +1,4 @@
-import React,{ useState } from 'react';
+import React, { useState } from 'react';
 import { Topbar } from "../components/Topbar";
 import { Sidebar } from "../components/Sidebar";
 import { Routes, Route, Navigate } from "react-router-dom";
@@ -64,24 +64,12 @@ const Events = lazy(() =>
   import("./Events/Events").then((module) => ({ default: module.Events }))
 );
 
+const Services = lazy(() =>
+  import("./Services/Services").then((module) => ({ default: module.Services }))
+);
+
 const ViewTransaction = lazy(() =>
   import("./Transactions/ViewTransaction").then((module) => ({ default: module.ViewTransaction }))
-);
-
-const ListtedBusiness = lazy(() =>
-  import("./ListtedBusiness/ListtedBusiness").then((module) => ({ default: module.ListtedBusiness }))
-);
-
-const NotificationTemplates = lazy(() =>
-  import("./NotificationTemplates/NotificationTemplates").then((module) => ({
-    default: module.NotificationTemplates,
-  }))
-);
-
-const NotificationTriggers = lazy(() =>
-  import("./NotificationTiggers/NotificationTriggers").then((module) => ({
-    default: module.NotificationTriggers,
-  }))
 );
 
 
@@ -97,18 +85,18 @@ export const Layout = () => {
 
   return (
     <div className="wrapper">
-      <Topbar toggleSidebar={toggleSidebar}/>
+      <Topbar toggleSidebar={toggleSidebar} />
       <Sidebar isCollapsed={isSidebarCollapsed} closeSidebar={toggleSidebar} />
       <main role="main" className="main-content">
         <div className="container-fluid">
           <Suspense>
             <Routes>
-               {!token ? (
+              {!token ? (
                 <Route
                   path="*"
                   element={<Navigate to="/auth/login" replace />}
                 />
-                ) : (
+              ) : (
                 <>
                   <Route path="/dashboard" element={<Dashboard />} />
                   <Route path="/users" element={<Users />} />
@@ -126,21 +114,13 @@ export const Layout = () => {
                   <Route path="/Cities" element={<Cities />} />
                   <Route path="/Documents" element={<Documents />} />
                   <Route path="/Events" element={<Events />} />
-                  <Route path="/ListtedBusiness" element={<ListtedBusiness />} />
-                  <Route
-                    path="/notification-templates"
-                    element={<NotificationTemplates />}
-                  />
-                    <Route
-                    path="/notification-triggers"
-                    element={<NotificationTriggers />}
-                  />
+                  <Route path="/Services" element={<Services />} />
                   <Route
                     path="*"
                     element={<Navigate to="/dashboard" replace />}
                   />
                 </>
-               )}
+              )}
             </Routes>
           </Suspense>
         </div>
