@@ -166,8 +166,10 @@ export const MerchantForm = ({ initialValues, onSubmit, isEdit = false, isAdd = 
               onChange={(value) => {
                 if (value && value.length > 0) {
                   formik.setFieldValue("businessCategoryId", value[0].id);
+                  formik.setFieldValue("BusinessCategories", value);
                 } else {
                   formik.setFieldValue("businessCategoryId", "");
+                  formik.setFieldValue("BusinessCategories", []);
                 }
               }}
               placeholder="Choose a businessCategory..."
@@ -186,8 +188,11 @@ export const MerchantForm = ({ initialValues, onSubmit, isEdit = false, isAdd = 
               onChange={(value) => {
                 if (value && value.length > 0) {
                   formik.setFieldValue("industryId", value[0].id);
+                  formik.setFieldValue("Industries", value);
+
                 } else {
                   formik.setFieldValue("industryId", "");
+                  formik.setFieldValue("Industries", []);
                 }
               }}
               placeholder="Choose a Industries..."

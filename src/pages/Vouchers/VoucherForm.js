@@ -426,7 +426,7 @@ export const VoucherForm = ({ initialValues, onSubmit, isEdit = false, isAdd = f
               <option value="">voucherValueType</option>
               <option value="FREE_PRODUCT">FREE_PRODUCT</option>
               <option value="PRICE_PERCENTAGE">PRICE_PERCENTAGE</option>
-              <option value="PRICE_VALUE ">PRICE_VALUE</option>
+              <option value="PRICE_VALUE">PRICE_VALUE</option>
             </select>
           </div>
         </aside>
