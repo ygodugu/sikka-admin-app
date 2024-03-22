@@ -96,12 +96,10 @@ export const Users = () => {
     refetch();
   };
 
-  const modifyImageUrl = (originalUrl) => {
+  const modifyImageUrl = (originalUrl, folderName) => {
     let parts = originalUrl.split('?');
 
     let fileName = parts[1].split('=')[1];
-    let folderName = 'user_profile_image';
-    // Construct the new URL
     let newUrl = `https://app.cikka.com.au/api/files/file-preview?fileName=${fileName}&folderName=${folderName}`;
 
     return newUrl;
@@ -215,7 +213,7 @@ export const Users = () => {
                               </td>
                               <td>
                                 {u.profileImage && u.profileImage.filePath ? (
-                                  <img src={modifyImageUrl(u.profileImage.filePath)} alt="logo" className="table-logo" />
+                                  <img src={modifyImageUrl(u.profileImage.filePath, u.profileImage.folderName)} alt="logo" className="table-logo" />
                                 ) : (
                                   <img src={demoLogo} alt='demoLogo' className="table-logo" />
                                 )}

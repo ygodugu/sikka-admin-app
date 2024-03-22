@@ -1,27 +1,27 @@
 import { useMutation } from "@tanstack/react-query";
 import Modal from "react-bootstrap/Modal";
-import { axiosInstance } from "../../axiosInstance";
-import { ServicesForm } from "./ServicesForm";
+import { axiosInstance } from "../../../../axiosInstance";
+import { MerchantServiceAppointmentBlockingForm } from "./MerchantServiceAppointmentBlockingForm";
 
-const addServices = (payload) => {
-    return axiosInstance.post(`/services`, payload);
+const addMerchantServiceAppointmentBlocking = (payload) => {
+    return axiosInstance.post(`/appointment-blocking`, payload);
 };
 
-export const AddServicesModal = ({ handleSuccess, handleClose }) => {
+export const AddMerchantServiceAppointmentBlockingModal = ({ handleSuccess, handleClose, merchantUserId, id }) => {
+    console.log(merchantUserId);
     const addServicesMutation = useMutation({
-        mutationFn: addServices,
+        mutationFn: addMerchantServiceAppointmentBlocking,
     });
     const initialValues = {
-        fileId: "b2a68eb4-70ea-4b3e-8404-6f003a0dcf17",
-        id: "",
-        merchantUserId: "",
-        name: "",
-        duration: "",
-        description: "",
+        note: "",
+        userId: merchantUserId,
+        startTime: "",
+        endTime: "",
+        serviceId: id,
         status: ""
     };
 
-    const saveServices = (values) => {
+    const saveaddMerchantServiceAppointmentBlocking = (values) => {
         addServicesMutation.mutate(values, {
             onSuccess: handleSuccess,
         });
@@ -30,7 +30,7 @@ export const AddServicesModal = ({ handleSuccess, handleClose }) => {
     return (
         <Modal show={true} onHide={handleClose} size="lg">
             <Modal.Header closeButton={false}>
-                <Modal.Title>New Service</Modal.Title>
+                <Modal.Title>New Service Appointment Blocking</Modal.Title>
                 <button
                     type="button"
                     className="close"
@@ -42,9 +42,9 @@ export const AddServicesModal = ({ handleSuccess, handleClose }) => {
                 </button>
             </Modal.Header>
             <Modal.Body>
-                <ServicesForm
+                <MerchantServiceAppointmentBlockingForm
                     initialValues={initialValues}
-                    handleSubmit={saveServices}
+                    handleSubmit={saveaddMerchantServiceAppointmentBlocking}
                 />
             </Modal.Body>
         </Modal>

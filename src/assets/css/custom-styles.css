@@ -310,6 +310,14 @@ span.paid {
     width: 1080px;
 }
 
+.events-tb .table {
+    width: 1880px;
+}
+
+.services-tb .table {
+    width: 1680px;
+}
+
 .countries-tb .table {
     width: 1180px;
 }
@@ -331,9 +339,11 @@ span.paid {
     font-weight: 600;
 }
 
-.actions img {
+.actions img, .actions i.icon {
     max-width: 16px;
-    margin-left: 8px;
+    margin-left: 4px;
+    color: #0000FF;
+    text-decoration: none;
 }
 
 textarea {
@@ -427,6 +437,10 @@ span.badge {
         width: 1830px;
     }
 
+    .services-tb .table {
+        width: 1030px;
+    }
+
     .purchases-tb .table {
         width: 1200px;
     }
@@ -446,6 +460,7 @@ span.badge {
     .industries-tb .table {
         width: 1080px;
     }
+
 
     .countries-tb .table {
         width: 980px;

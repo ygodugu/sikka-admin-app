@@ -1,22 +1,27 @@
 import { useState, useEffect } from "react";
-import demoLogo from "../../assets/images/Cikka_Logo_Dashboard.png"
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useParams } from "react-router-dom";
 import Spinner from "react-bootstrap/Spinner";
-import { axiosInstance } from "../../axiosInstance";
-import { CustomPagination } from "../../components/CustomPagination";
-import { DateFormate } from "../../components/DateFormate";
-import { EditIcon } from "../../components/EditIcon";
-import { Status } from "../../components/Status";
-import { AddServicesModal } from "./AddService";
-import { EditServicesModal } from "./EditService";
+import { axiosInstance } from "../../../../axiosInstance";
+import { NavLink } from "react-router-dom";
+import { DateFormate } from "../../../../components/DateFormate";
+import { EditIcon } from "../../../../components/EditIcon";
+import { Status } from "../../../../components/Status";
+import { AddMerchantServiceAppointmentBlockingModal } from "./AddMerchantServiceAppointmentBlocking";
+import { EditMerchantServiceAppointmentBlockingModal } from "./EditMerchantServiceAppointmentBlocking";
 
-const fetchServices = (pageIndex = 0, pageSize = 20, search, selectValueID, selectValueOrder, selectValueStatus) => {
+const fetchServices = (id) => {
     return axiosInstance
-        .get(`/services?pageIndex=${pageIndex}&pageSize=${pageSize}&search=${search}&sortBy=${selectValueID}&sortOrder=${selectValueOrder}&status=${selectValueStatus}`)
+        .get(`/appointment-blocking?pageIndex=0&pageSize=20&serviceId=${id}`)
         .then((res) => res.data);
 };
 
-export const Services = () => {
+export const MerchantServiceAppointmentBlocking = () => {
+
+    const { userId } = useParams();
+    const { id } = useParams();
+    console.log(userId);
+
     const queryClient = useQueryClient();
 
     const [page, setPage] = useState(0);
@@ -31,8 +36,8 @@ export const Services = () => {
     const pageSize = 20;
 
     const { data, refetch, isLoading } = useQuery({
-        queryKey: ["Services", page, search, selectValueID, selectValueOrder, selectValueStatus],
-        queryFn: () => fetchServices(page, pageSize, search, selectValueID, selectValueOrder, selectValueStatus),
+        queryKey: ["merchantServices", userId],
+        queryFn: () => fetchServices(userId),
         keepPreviousData: true,
     });
 
@@ -45,7 +50,7 @@ export const Services = () => {
 
     const handleUpdateServicesSuccess = () => {
         queryClient.invalidateQueries({
-            queryKey: ["Services-details", ServicesId],
+            queryKey: ["merchantServices-details", ServicesId],
         });
         setShowEditModal(false);
         refetch();
@@ -98,23 +103,20 @@ export const Services = () => {
             });
     }, []);
 
-    const modifyImageUrl = (originalUrl, folderName) => {
-        let parts = originalUrl.split('?');
-        let fileName = parts[1].split('=')[1];
-        let newUrl = `https://app.cikka.com.au/api/files/file-preview?fileName=${fileName}&folderName=${folderName}`;
-
-        return newUrl;
-    };
-
     return (
         <>
             <div className="row justify-content-center">
+                <aside className="col-md-12 mt-3 mb-3">
+                    <NavLink to={`/Merchants`}>
+                        <i className="fe fe-arrow-left-circle fe-24"></i>
+                    </NavLink>
+                </aside>
                 <div className="col-12">
                     <div className="row heading-add">
                         <aside className="ml-2 mr-2">
-                            <h2 className="mb-0 page-title">Services</h2>
+                            <h2 className="mb-0 page-title">Merchant Service Appointment Blocking</h2>
                         </aside>
-                        <form className="form-inline  mr-auto searchform">
+                        <form className="form-inline mr-auto searchform">
                             <input
                                 className="form-control mr-sm-2 border-0"
                                 onChange={handleSearchChange}
@@ -130,29 +132,7 @@ export const Services = () => {
                             </button>
                         </aside>
                     </div>
-                    <div className="d-flex flex-wrap">
-                        <aside className="col-md-4 mt-2 mt-md-0 mb-2 mb-md-0">
-                            <select className="form-control" onChange={handleSelectIDChange} style={{ background: "white" }} aria-label="select">
-                                <option value="">sortBy</option>
-                                <option value="id">ID</option>
-                            </select>
-                        </aside>
-                        <aside className="col-md-4 mt-2 mt-md-0 mb-2 mb-md-0">
-                            <select className="form-control" onChange={handleSelectOrderChange} style={{ background: "white" }} aria-label="select">
-                                <option value="">sortOrder</option>
-                                <option value="ASC">ASC</option>
-                                <option value="DESC">DESC</option>
-                            </select>
-                        </aside>
-                        <aside className="col-md-4 mt-2 mt-md-0 mb-2 mb-md-0">
-                            <select className="form-control" onChange={handleSelectStatusChange} style={{ background: "white" }} aria-label="select">
-                                <option value="">STATUS</option>
-                                <option value="1">Active</option>
-                                <option value="2">Hold</option>
-                                <option value="0">Deleted</option>
-                            </select>
-                        </aside>
-                    </div>
+
                     <div className="row my-2">
                         <div className="col-md-12">
                             <div className="card shadow">
@@ -163,12 +143,12 @@ export const Services = () => {
                                                 <tr>
                                                     <th>Actions</th>
                                                     <th>Status</th>
-                                                    <th>Image</th>
-                                                    <th>ID</th>
-                                                    <th>Merchant-UserId</th>
-                                                    <th>Name</th>
-                                                    <th>duration</th>
-                                                    <th>Description</th>
+                                                    <th>userId</th>
+                                                    <th>serviceId</th>
+                                                    <th>service</th>
+                                                    <th>note</th>
+                                                    <th>startTime</th>
+                                                    <th>endTime</th>
                                                     <th>CreatedBy</th>
                                                     <th>UpdatedBy</th>
                                                     <th>CreatedAt</th>
@@ -185,7 +165,8 @@ export const Services = () => {
                                                         </td>
                                                     </tr>
                                                 ) : (
-                                                    data.data.map((p) => (
+
+                                                    data?.data?.map((p) => (
                                                         <tr key={p.id}>
                                                             <td className="actions">
                                                                 <EditIcon onClick={handleEditClick(p.id)} />
@@ -193,19 +174,13 @@ export const Services = () => {
                                                             <td>
                                                                 <Status code={p.status} />
                                                             </td>
-                                                            <td>
-                                                                {p.fileUpload && p.fileUpload.filePath ? (
-                                                                    <img src={modifyImageUrl(p.fileUpload.filePath, p.fileUpload.folderName)} alt="logo" className="table-logo" />
-                                                                ) : (
-                                                                    <img src={demoLogo} alt='demoLogo' className="table-logo" />
-                                                                )}
-                                                            </td>
-                                                            <td>{p.id}</td>
-                                                            <td>{p.merchantUserId}</td>
-                                                            <td>{p.merchantUserId}</td>
-                                                            <td>{p.name}</td>
-                                                            <td>{p.duration}</td>
-                                                            <td>{p.description}</td>
+
+                                                            <td>{p.userId}</td>
+                                                            <td>{p.serviceId}</td>
+                                                            <td>{p.service}</td>
+                                                            <td>{p.note}</td>
+                                                            <td>{p.startTime}</td>
+                                                            <td>{p.endTime}</td>
                                                             <td>{usersData?.data?.find(user => user.id === p.createdBy)?.firstName || 'N/A'}</td>
                                                             <td>{usersData?.data?.find(user => user.id === p.updatedBy)?.firstName || 'N/A'}</td>
                                                             <td>{<DateFormate dateTime={p.createdAt} />}</td>
@@ -217,14 +192,14 @@ export const Services = () => {
                                         </table>
                                     </div>
 
-                                    {!isLoading ? (
+                                    {/* {!isLoading ? (
                                         <CustomPagination
                                             page={page}
                                             pageSize={pageSize}
                                             data={data}
                                             setPage={setPage}
                                         />
-                                    ) : null}
+                                    ) : null} */}
                                 </div>
                             </div>
                         </div>
@@ -232,13 +207,15 @@ export const Services = () => {
                 </div>
             </div>
             {showAddModal ? (
-                <AddServicesModal
+                <AddMerchantServiceAppointmentBlockingModal
                     handleSuccess={handleAddServicesSuccess}
                     handleClose={() => setShowAddModal(false)}
+                    merchantUserId={userId}
+                    id={id}
                 />
             ) : null}
             {showEditModal ? (
-                <EditServicesModal
+                <EditMerchantServiceAppointmentBlockingModal
                     handleSuccess={handleUpdateServicesSuccess}
                     id={ServicesId}
                     handleClose={() => setShowEditModal(false)}

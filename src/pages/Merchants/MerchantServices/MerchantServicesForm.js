@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import { object, string } from "yup";
-import { axiosInstance } from "../../axiosInstance";
+import { axiosInstance } from "../../../axiosInstance";
 import { Typeahead } from "react-bootstrap-typeahead";
 
 
@@ -15,58 +15,9 @@ export const ServicesForm = ({ initialValues, handleSubmit, isAdd = false }) => 
         validationSchema: ServicesSchema,
     });
 
-
-
-    const [MerchantID, setMerchantID] = useState([]);
-
-    useEffect(() => {
-        axiosInstance
-            .get("/merchants")
-            .then((res) =>
-                res.data?.data?.map((p) => ({
-                    id: p.id,
-                    label: `${p.user.firstName} + ${p.user.firstName}`,
-                }))
-            )
-            .then((data) => {
-                setMerchantID(data);
-                if (initialValues.merchantUserId) {
-                    if (initialValues.merchantUserId) {
-                        formik.setFieldValue(
-                            "MerchantID",
-                            data.filter((x) => x.id === initialValues.merchantUserId)
-                        );
-                    }
-                }
-            });
-    }, []);
-
-
     return (
         <form onSubmit={formik.handleSubmit}>
             <div className="row">
-
-                <aside className="col-md-6">
-                    <div className="form-group">
-                        <label for="merchantUserId">MerchantUserId *</label>
-                        <Typeahead
-                            selected={formik.values.MerchantID}
-                            id="merchantUserId"
-                            options={MerchantID}
-                            onChange={(value) => {
-                                if (value && value.length > 0) {
-                                    formik.setFieldValue("merchantUserId", value[0].id);
-                                    formik.setFieldValue("MerchantID", value);
-                                } else {
-                                    formik.setFieldValue("merchantUserId", "");
-                                    formik.setFieldValue("MerchantID", []);
-                                }
-                            }}
-                            placeholder="Choose a MerchantUser..."
-                        />
-                        <div className="invalid-feedback">{formik.errors.businessCategoryId}</div>
-                    </div>
-                </aside>
 
                 <aside className="col-md-6">
                     <div className="form-group">

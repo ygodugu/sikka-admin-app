@@ -1,22 +1,27 @@
 import { useState, useEffect } from "react";
-import demoLogo from "../../assets/images/Cikka_Logo_Dashboard.png"
+import demoLogo from "../../../assets/images/Cikka_Logo_Dashboard.png"
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useParams } from "react-router-dom";
 import Spinner from "react-bootstrap/Spinner";
-import { axiosInstance } from "../../axiosInstance";
-import { CustomPagination } from "../../components/CustomPagination";
-import { DateFormate } from "../../components/DateFormate";
-import { EditIcon } from "../../components/EditIcon";
-import { Status } from "../../components/Status";
-import { AddServicesModal } from "./AddService";
-import { EditServicesModal } from "./EditService";
+import { axiosInstance } from "../../../axiosInstance";
+import { NavLink } from "react-router-dom";
+import { CustomPagination } from "../../../components/CustomPagination";
+import { DateFormate } from "../../../components/DateFormate";
+import { EditIcon } from "../../../components/EditIcon";
+import { Status } from "../../../components/Status";
+import { AddMerchantServicesModal } from "./AddMerchantServices";
+import { EditMerchantServicesModal } from "./EditMerchantServices";
 
-const fetchServices = (pageIndex = 0, pageSize = 20, search, selectValueID, selectValueOrder, selectValueStatus) => {
+const fetchServices = (userId) => {
     return axiosInstance
-        .get(`/services?pageIndex=${pageIndex}&pageSize=${pageSize}&search=${search}&sortBy=${selectValueID}&sortOrder=${selectValueOrder}&status=${selectValueStatus}`)
+        .get(`/services/merchant-user-id?merchantUserId=${userId}`)
         .then((res) => res.data);
 };
 
-export const Services = () => {
+export const MerchantServices = () => {
+    const { userId } = useParams();
+    console.log(userId);
+
     const queryClient = useQueryClient();
 
     const [page, setPage] = useState(0);
@@ -31,8 +36,8 @@ export const Services = () => {
     const pageSize = 20;
 
     const { data, refetch, isLoading } = useQuery({
-        queryKey: ["Services", page, search, selectValueID, selectValueOrder, selectValueStatus],
-        queryFn: () => fetchServices(page, pageSize, search, selectValueID, selectValueOrder, selectValueStatus),
+        queryKey: ["merchantServices", userId],
+        queryFn: () => fetchServices(userId),
         keepPreviousData: true,
     });
 
@@ -45,7 +50,7 @@ export const Services = () => {
 
     const handleUpdateServicesSuccess = () => {
         queryClient.invalidateQueries({
-            queryKey: ["Services-details", ServicesId],
+            queryKey: ["merchantServices-details", ServicesId],
         });
         setShowEditModal(false);
         refetch();
@@ -109,12 +114,17 @@ export const Services = () => {
     return (
         <>
             <div className="row justify-content-center">
+                <aside className="col-md-12 mt-3 mb-3">
+                    <NavLink to={`/Merchants`}>
+                        <i className="fe fe-arrow-left-circle fe-24"></i>
+                    </NavLink>
+                </aside>
                 <div className="col-12">
                     <div className="row heading-add">
                         <aside className="ml-2 mr-2">
-                            <h2 className="mb-0 page-title">Services</h2>
+                            <h2 className="mb-0 page-title">Merchant Services</h2>
                         </aside>
-                        <form className="form-inline  mr-auto searchform">
+                        <form className="form-inline mr-auto searchform">
                             <input
                                 className="form-control mr-sm-2 border-0"
                                 onChange={handleSearchChange}
@@ -130,29 +140,7 @@ export const Services = () => {
                             </button>
                         </aside>
                     </div>
-                    <div className="d-flex flex-wrap">
-                        <aside className="col-md-4 mt-2 mt-md-0 mb-2 mb-md-0">
-                            <select className="form-control" onChange={handleSelectIDChange} style={{ background: "white" }} aria-label="select">
-                                <option value="">sortBy</option>
-                                <option value="id">ID</option>
-                            </select>
-                        </aside>
-                        <aside className="col-md-4 mt-2 mt-md-0 mb-2 mb-md-0">
-                            <select className="form-control" onChange={handleSelectOrderChange} style={{ background: "white" }} aria-label="select">
-                                <option value="">sortOrder</option>
-                                <option value="ASC">ASC</option>
-                                <option value="DESC">DESC</option>
-                            </select>
-                        </aside>
-                        <aside className="col-md-4 mt-2 mt-md-0 mb-2 mb-md-0">
-                            <select className="form-control" onChange={handleSelectStatusChange} style={{ background: "white" }} aria-label="select">
-                                <option value="">STATUS</option>
-                                <option value="1">Active</option>
-                                <option value="2">Hold</option>
-                                <option value="0">Deleted</option>
-                            </select>
-                        </aside>
-                    </div>
+
                     <div className="row my-2">
                         <div className="col-md-12">
                             <div className="card shadow">
@@ -185,10 +173,13 @@ export const Services = () => {
                                                         </td>
                                                     </tr>
                                                 ) : (
-                                                    data.data.map((p) => (
+                                                    data?.services?.map((p) => (
                                                         <tr key={p.id}>
                                                             <td className="actions">
                                                                 <EditIcon onClick={handleEditClick(p.id)} />
+                                                                <NavLink to={`/MerchantServiceAppointmentBlocking/${p.id}/${userId}`}>
+                                                                    <i className="fe fe-x fe-16 icon"></i>
+                                                                </NavLink>
                                                             </td>
                                                             <td>
                                                                 <Status code={p.status} />
@@ -201,7 +192,6 @@ export const Services = () => {
                                                                 )}
                                                             </td>
                                                             <td>{p.id}</td>
-                                                            <td>{p.merchantUserId}</td>
                                                             <td>{p.merchantUserId}</td>
                                                             <td>{p.name}</td>
                                                             <td>{p.duration}</td>
@@ -217,14 +207,14 @@ export const Services = () => {
                                         </table>
                                     </div>
 
-                                    {!isLoading ? (
+                                    {/* {!isLoading ? (
                                         <CustomPagination
                                             page={page}
                                             pageSize={pageSize}
                                             data={data}
                                             setPage={setPage}
                                         />
-                                    ) : null}
+                                    ) : null} */}
                                 </div>
                             </div>
                         </div>
@@ -232,13 +222,14 @@ export const Services = () => {
                 </div>
             </div>
             {showAddModal ? (
-                <AddServicesModal
+                <AddMerchantServicesModal
                     handleSuccess={handleAddServicesSuccess}
                     handleClose={() => setShowAddModal(false)}
+                    merchantUserId={userId}
                 />
             ) : null}
             {showEditModal ? (
-                <EditServicesModal
+                <EditMerchantServicesModal
                     handleSuccess={handleUpdateServicesSuccess}
                     id={ServicesId}
                     handleClose={() => setShowEditModal(false)}

@@ -98,39 +98,14 @@ export const BusinessCategories = () => {
       });
   }, []);
 
-  const modifyImageUrl = (originalUrl) => {
+  const modifyImageUrl = (originalUrl, folderName) => {
     let parts = originalUrl.split('?');
 
     let fileName = parts[1].split('=')[1];
-    let folderName = "business_category";
-    // Construct the new URL
     let newUrl = `https://app.cikka.com.au/api/files/file-preview?fileName=${fileName}&folderName=${folderName}`;
 
     return newUrl;
   };
-
-  // const modifyImageUrl = (originalUrl) => {
-  //   if (!originalUrl) {
-  //     return ''; // or return a default image URL or handle it accordingly
-  //   }
-
-  //   // Split the original URL into parts based on '?'
-  //   let parts = originalUrl.split('?');
-
-  //   if (parts.length < 2) {
-  //     return ''; // or return a default image URL or handle it accordingly
-  //   }
-
-  //   // Extract the file name and other parameters
-  //   let fileName = parts[1].split('=')[1]; // Extract the file name from the URL
-  //   let folderName = 'merchant'; // Extract the folder name from the URL
-
-  //   // Construct the new URL
-  //   let newUrl = `http://149.28.174.167/api/files/file-preview?fileName=${fileName}&folderName=${folderName}`;
-
-  //   return newUrl;
-  // };
-
 
   return (
     <>
@@ -232,7 +207,7 @@ export const BusinessCategories = () => {
                               </td>
                               <td>
                                 {p.logo && p.logo.filePath ? (
-                                  <img src={modifyImageUrl(p.logo.filePath)} alt="logo" className="table-logo " />
+                                  <img src={modifyImageUrl(p.logo.filePath, p.logo.folderName)} alt="logo" className="table-logo " />
                                 ) : (
                                   <img src={demoLogo} alt='demoLogo' className="table-logo" />
                                 )}

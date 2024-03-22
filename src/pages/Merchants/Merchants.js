@@ -115,21 +115,17 @@ export const Merchants = () => {
   }, []);
 
 
-  const modifyImageUrl = (originalUrl) => {
+  const modifyImageUrl = (originalUrl, folderName) => {
     let parts = originalUrl.split('?');
-
     let fileName = parts[1].split('=')[1];
-    let folderName = 'merchant';
     let newUrl = `https://app.cikka.com.au/api/files/file-preview?fileName=${fileName}&folderName=${folderName}`;
 
     return newUrl;
   };
 
-  const modifyImageUrl_SquareLogo = (originalUrl) => {
+  const modifyImageUrl_SquareLogo = (originalUrl, folderName) => {
     let parts = originalUrl.split('?');
-
     let fileName = parts[1].split('=')[1];
-    let folderName = 'merchant';
     let newUrlsquareLogo = `https://app.cikka.com.au/api/files/file-preview?fileName=${fileName}&folderName=${folderName}`;
 
     return newUrlsquareLogo;
@@ -275,25 +271,31 @@ export const Merchants = () => {
                           data?.data?.map((u) => (
                             <tr key={u.id}>
                               <td>{u.id}</td>
+                              
                               <td className="actions">
                                 <EditIcon onClick={handleEditClick(u.id)} />
                                 <NavLink to={`/ViewMerchants/${u.userId}`}>
                                   <ViewIcon />
                                 </NavLink>
+
+                                <NavLink to={`/MerchantServices/${u.userId}`}>
+                                  <i className="fe fe-briefcase fe-16 icon"></i>
+                                </NavLink>
                               </td>
+
                               <td>
                                 <Status code={u.status} />
                               </td>
                               <td>
                                 {u.logo && u.logo.filePath ? (
-                                  <img src={modifyImageUrl(u.logo.filePath)} alt="logo" className="table-logo" />
+                                  <img src={modifyImageUrl(u.logo.filePath, u.logo.folderName)} alt="logo" className="table-logo" />
                                 ) : (
                                   <img src={demoLogo} alt='demoLogo' className="table-logo" />
                                 )}
                               </td>
                               <td>
                                 {u.squareLogo && u.squareLogo.filePath ? (
-                                  <img src={modifyImageUrl_SquareLogo(u.squareLogo.filePath)} alt="logo" className="table-logo" />
+                                  <img src={modifyImageUrl_SquareLogo(u.squareLogo.filePath, u.logo.folderName)} alt="logo" className="table-logo" />
                                 ) : (
                                   <img src={demoLogo} alt='demoLogo' className="table-logo" />
                                 )}

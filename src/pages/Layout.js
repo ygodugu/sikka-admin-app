@@ -68,6 +68,14 @@ const Services = lazy(() =>
   import("./Services/Services").then((module) => ({ default: module.Services }))
 );
 
+const MerchantServices = lazy(() =>
+  import("./Merchants/MerchantServices/MerchantServices").then((module) => ({ default: module.MerchantServices }))
+);
+
+const MerchantServiceAppointmentBlocking = lazy(() =>
+  import("./Merchants/MerchantServices/MerchantServiceAppointmentBlocking/MerchantServiceAppointmentBlocking").then((module) => ({ default: module.MerchantServiceAppointmentBlocking }))
+);
+
 const ViewTransaction = lazy(() =>
   import("./Transactions/ViewTransaction").then((module) => ({ default: module.ViewTransaction }))
 );
@@ -103,6 +111,8 @@ export const Layout = () => {
                   <Route path="/Vouchers" element={<Vouchers />} />
                   <Route path="/Merchants" element={<Merchants />} />
                   <Route path="/viewMerchants/:userId" element={<ViewMerchants />} />
+                  <Route path="/MerchantServices/:userId" element={<MerchantServices />} />
+                  <Route path="/MerchantServiceAppointmentBlocking/:id/:userId" element={<MerchantServiceAppointmentBlocking />} />
                   <Route path="/Purchases" element={<Purchases />} />
                   <Route path="/Transactions" element={<Transactions />} />
                   <Route path="/view-transaction/:id" element={<ViewTransaction />} />

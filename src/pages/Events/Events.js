@@ -95,11 +95,9 @@ export const Events = () => {
       });
   }, []);
 
-  const modifyImageUrl = (originalUrl) => {
+  const modifyImageUrl = (originalUrl, folderName) => {
     let parts = originalUrl.split('?');
-
     let fileName = parts[1].split('=')[1];
-    let folderName = "event";
     let newUrl = `https://app.cikka.com.au/api/files/file-preview?fileName=${fileName}&folderName=${folderName}`;
 
     return newUrl;
@@ -205,7 +203,7 @@ export const Events = () => {
                               </td>
                               <td>
                                 {u.fileUpload && u.fileUpload.filePath ? (
-                                  <img src={modifyImageUrl(u.fileUpload.filePath)} alt="logo" className="table-logo " />
+                                  <img src={modifyImageUrl(u.fileUpload.filePath, u.fileUpload.folderName)} alt="logo" className="table-logo " />
                                 ) : (
                                   <img src={demoLogo} alt='demoLogo' className="table-logo" />
                                 )}
