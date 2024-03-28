@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { axiosInstance } from "../../axiosInstance";
@@ -12,8 +12,8 @@ const getViewMerchantDetails = (userId) => {
     return axiosInstance.get(`/cikka-transactions/purchase?userId=${userId}`).then((res) => res.data);
 };
 
-const getViewMerchantDetailsappointments = (userId) => {
-    return axiosInstance.get(`/appointments?pageIndex=0&pageSize=20&&sortBy=id&sortOrder=DESC&merchantUserId=${userId}`).then((res) => res.data);
+const getViewMerchantDetailsappointments = (userId, selectedDate) => {
+    return axiosInstance.get(`/appointments?pageIndex=0&pageSize=20&sortBy=startTime&sortOrder=ASC&status=1&merchantUserId=${userId}&startTime=${selectedDate}`).then((res) => res.data);
 };
 
 
@@ -30,6 +30,34 @@ export const ViewMerchants = () => {
     };
 
 
+    const [selectedDate, setSelectedDate] = useState(getTodayDate());
+
+    function getTodayDate() {
+        const today = new Date();
+        const year = today.getFullYear();
+        let month = today.getMonth() + 1;
+        let day = today.getDate();
+
+        if (month < 10) {
+            month = '0' + month;
+        }
+        if (day < 10) {
+            day = '0' + day;
+        }
+
+        return `${year}-${month}-${day}`;
+    }
+
+    useEffect(() => {
+        // Fetch data when the component mounts for the first time
+    }, [selectedDate]); // Refetch data when selectedDate changes
+
+    const handleSelectDateChange = (event) => {
+        setSelectedDate(event.target.value);
+    };
+
+
+
     const { data: viewMerchantDetails, isLoading: viewMerchantsLoading, error } = useQuery({
         queryKey: ["transaction-details", userId],
         queryFn: () => getViewMerchantDetails(userId),
@@ -37,9 +65,124 @@ export const ViewMerchants = () => {
 
 
     const { data: appointmentsData, isLoading: appointmentsLoading, error: appointmentsError } = useQuery({
-        queryKey: ["appointments-details", userId],
-        queryFn: () => getViewMerchantDetailsappointments(userId),
+        queryKey: ["appointments-details", userId, selectedDate],
+        queryFn: () => getViewMerchantDetailsappointments(userId, selectedDate),
     });
+
+
+    // const renderAppointmentsTable = () => {
+    //     if (appointmentsLoading) {
+    //         return (
+    //             <tr>
+    //                 <td rowSpan="10" colSpan="13">
+    //                     <div className="text-center py-5">
+    //                         <Spinner animation="border" />
+    //                     </div>
+    //                 </td>
+    //             </tr>
+    //         );
+    //     } else if (appointmentsData && appointmentsData.data.length > 0) {
+    //         const groupedAppointments = groupAppointments(appointmentsData.data);
+    //         return groupedAppointments.map((appointmentGroup, index) => (
+    //             <tr key={index}>
+    //                 <td>
+    //                     <Status code={appointmentGroup.status} />
+    //                 </td>
+    //                 <td>{appointmentGroup.serviceName}</td>
+    //                 <td>{appointmentGroup.userName}</td>
+    //                 <td>{appointmentGroup.contact}</td>
+    //                 <td>{appointmentGroup.specialRequest}</td>
+    //                 <td>{appointmentGroup.peopleCount}</td>
+    //                 <td>{appointmentGroup.startTime.toLocaleString('en-GB', { timeZone: 'Europe/London' })}</td>
+    //                 <td>{appointmentGroup.endTime.toLocaleString('en-GB', { timeZone: 'Europe/London' })}</td>
+    //             </tr>
+    //         ));
+    //     } else {
+    //         return (
+    //             <tr>
+    //                 <td rowSpan="10" colSpan="13">
+    //                     <div className="text-center py-5">
+    //                         <strong>No appointments were done</strong>
+    //                     </div>
+    //                 </td>
+    //             </tr>
+    //         );
+    //     }
+    // };
+
+    const renderAppointmentsTable = () => {
+        if (appointmentsLoading) {
+            return (
+                <tr>
+                    <td colSpan="9">
+                        <div className="text-center py-5">
+                            <Spinner animation="border" />
+                        </div>
+                    </td>
+                </tr>
+            );
+        } else if (appointmentsData && appointmentsData.data.length > 0) {
+            const groupedAppointments = groupAppointments(appointmentsData.data);
+            let totalPeopleCount = 0; // Variable to store total count
+            const rows = groupedAppointments.map((appointmentGroup, index) => {
+                totalPeopleCount += appointmentGroup.peopleCount; // Increment total count
+                return (
+                    <tr key={index}>
+                        <td>
+                            <Status code={appointmentGroup.status} />
+                        </td>
+                        <td>{appointmentGroup.serviceName}</td>
+                        <td>{appointmentGroup.userName}</td>
+                        <td>{appointmentGroup.contact}</td>
+                        <td>{appointmentGroup.specialRequest}</td>
+                        <td>{appointmentGroup.peopleCount}</td>
+                        <td>{appointmentGroup.startTime}</td>
+                        <td>{appointmentGroup.endTime}</td>
+                    </tr>
+                );
+            });
+            // Add a row for total count at the end
+            rows.push(
+                <tr key="total">
+                    <td><strong>Total:</strong>&nbsp;&nbsp;{totalPeopleCount}</td>
+                    {/* <td>{totalPeopleCount}</td> */}
+                </tr>
+            );
+            return rows;
+        } else {
+            return (
+                <tr>
+                    <td colSpan="9">
+                        <div className="text-center py-5">
+                            <strong>No appointments were done</strong>
+                        </div>
+                    </td>
+                </tr>
+            );
+        }
+    };
+
+    const groupAppointments = (appointments) => {
+        const grouped = {};
+        appointments.forEach(appointment => {
+            const key = `${appointment.service.name}_${appointment.user.firstName}_${appointment.user.lastName}_${appointment.user.mobileNumber}_${appointment.startTime}_${appointment.endTime}`;
+            if (grouped[key]) {
+                // If a record with the same key already exists, increase the count
+                grouped[key].peopleCount++;
+            } else {
+                // Otherwise, initialize the count to 1 for the first occurrence
+                grouped[key] = {
+                    ...appointment,
+                    serviceName: appointment.service.name,
+                    userName: `${appointment.user.firstName} ${appointment.user.lastName}`,
+                    contact: typeof appointment.user.mobileNumber === "string" ? "--" : appointment.user.mobileNumber,
+                    peopleCount: 1 // Initialize count to 1 for the first occurrence
+                };
+            }
+        });
+        return Object.values(grouped);
+    };
+
 
     return (
         <>
@@ -289,17 +432,27 @@ export const ViewMerchants = () => {
                                                             <aside className="col-sm-10">
                                                                 <h5 className="card-title">Appointments</h5>
                                                             </aside>
+
+                                                            <div className="col-sm-4 mt-2 mr-2">
+                                                                <input
+                                                                    type="date"
+                                                                    name="date"
+                                                                    value={selectedDate} // Set the value to selectedDate
+                                                                    onChange={handleSelectDateChange}
+                                                                    className="form-control form-control-lg"
+                                                                />
+                                                            </div>
                                                         </div>
                                                         <div>
                                                             <table className="table mt-2">
                                                                 <thead>
                                                                     <tr>
                                                                         <th>Status</th>
-                                                                        <th>serviceId</th>
                                                                         <th>service Name</th>
                                                                         <th>User Name</th>
                                                                         <th>Contact</th>
                                                                         <th>SpecialRequest</th>
+                                                                        <th>People</th>
                                                                         <th>StartTime</th>
                                                                         <th>EndTime</th>
                                                                         {/* <th>createdBy</th>
@@ -309,46 +462,7 @@ export const ViewMerchants = () => {
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
-                                                                    {appointmentsLoading ? (
-                                                                        <tr>
-                                                                            <td rowSpan="10" colSpan="4">
-                                                                                <div className="text-center py-5">
-                                                                                    <Spinner animation="border" />
-                                                                                </div>
-                                                                            </td>
-                                                                        </tr>
-                                                                    ) : (
-                                                                        appointmentsData && appointmentsData.data.length > 0 ? (
-                                                                            <>
-                                                                                {appointmentsData.data.map((appointments) => (
-                                                                                    <tr key={appointments.id}>
-                                                                                        <td>
-                                                                                            <Status code={appointments.status} />
-                                                                                        </td>
-                                                                                        <td>{appointments.serviceId}</td>
-                                                                                        <td>{appointments.service.name}</td>
-                                                                                        <td>{appointments.user.firstName}  {appointments.user.lastName}</td>
-                                                                                        <td>{typeof appointments.user.mobileNumber === "string" ? "--" : appointments.user.mobileNumber}</td>
-                                                                                        <td>{appointments.specialRequest === "string" ? "--" : appointments.specialRequest}</td>
-                                                                                        <td>{appointments.startTime}</td>
-                                                                                        <td>{appointments.endTime}</td>
-                                                                                        {/* <td>{<DateFormate dateTime={appointments.createdBy} />}</td>
-                                                                                        <td>{<DateFormate dateTime={appointments.updatedBy} />}</td>
-                                                                                        <td>{<DateFormate dateTime={appointments.createdAt} />}</td>
-                                                                                        <td>{<DateFormate dateTime={appointments.updatedAt} />}</td> */}
-                                                                                    </tr>
-                                                                                ))}
-                                                                            </>
-                                                                        ) : (
-                                                                            <tr>
-                                                                                <td rowSpan="10" colSpan="13">
-                                                                                    <div className="text-center py-5">
-                                                                                        <strong>No appointments were done</strong>
-                                                                                    </div>
-                                                                                </td>
-                                                                            </tr>
-                                                                        )
-                                                                    )}
+                                                                    {renderAppointmentsTable()}
                                                                 </tbody>
                                                             </table>
                                                         </div>
