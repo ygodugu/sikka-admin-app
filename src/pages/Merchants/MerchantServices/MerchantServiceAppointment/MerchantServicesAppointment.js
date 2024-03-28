@@ -1,26 +1,22 @@
 import { useState, useEffect } from "react";
-import demoLogo from "../../../assets/images/Cikka_Logo_Dashboard.png"
+import demoLogo from "../../../../assets/images/Cikka_Logo_Dashboard.png"
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import Spinner from "react-bootstrap/Spinner";
-import { axiosInstance } from "../../../axiosInstance";
+import { axiosInstance } from "../../../../axiosInstance";
 import { NavLink } from "react-router-dom";
-import { CustomPagination } from "../../../components/CustomPagination";
-import { DateFormate } from "../../../components/DateFormate";
-import { EditIcon } from "../../../components/EditIcon";
-import { Status } from "../../../components/Status";
-import { AddMerchantServicesModal } from "./AddMerchantServices";
-import { EditMerchantServicesModal } from "./EditMerchantServices";
+import { DateFormate } from "../../../../components/DateFormate";
+import { Status } from "../../../../components/Status";
 
-const fetchServices = (userId) => {
+const fetchServicesAppointment = (id) => {
     return axiosInstance
-        .get(`/services/merchant-user-id?merchantUserId=${userId}`)
+        .get(`/appointments?pageIndex=0&pageSize=20&&sortBy=id&sortOrder=DESC&serviceId=${id}`)
         .then((res) => res.data);
 };
 
-export const MerchantServices = () => {
-    const { userId } = useParams();
-    console.log(userId);
+export const MerchantServiceAppointment = () => {
+    const { id } = useParams();
+    console.log(id);
 
     const queryClient = useQueryClient();
 
@@ -36,8 +32,8 @@ export const MerchantServices = () => {
     const pageSize = 20;
 
     const { data, refetch, isLoading } = useQuery({
-        queryKey: ["merchantServices", userId],
-        queryFn: () => fetchServices(userId),
+        queryKey: ["merchantServicesAppointment", id],
+        queryFn: () => fetchServicesAppointment(id),
         keepPreviousData: true,
     });
 
@@ -122,7 +118,7 @@ export const MerchantServices = () => {
                 <div className="col-12">
                     <div className="row heading-add">
                         <aside className="ml-2 mr-2">
-                            <h2 className="mb-0 page-title">Merchant Services</h2>
+                            <h2 className="mb-0 page-title">Merchant Services Appointment</h2>
                         </aside>
                         <form className="form-inline mr-auto searchform">
                             <input
@@ -149,17 +145,17 @@ export const MerchantServices = () => {
                                         <table className="table">
                                             <thead>
                                                 <tr>
-                                                    <th>Actions</th>
                                                     <th>Status</th>
-                                                    <th>Image</th>
-                                                    <th>ID</th>
-                                                    <th>Merchant-UserId</th>
-                                                    <th>Name</th>
-                                                    <th>duration</th>
-                                                    <th>Description</th>
-                                                    <th>CreatedBy</th>
-                                                    <th>UpdatedBy</th>
-                                                    <th>CreatedAt</th>
+                                                    <th>serviceId</th>
+                                                    <th>service Name</th>
+                                                    <th>User Name</th>
+                                                    <th>Contact</th>
+                                                    <th>SpecialRequest</th>
+                                                    <th>StartTime</th>
+                                                    <th>EndTime</th>
+                                                    <th>"createdBy</th>
+                                                    <th>updatedBy</th>
+                                                    <th>createdAt</th>
                                                     <th>UpdatedAt</th>
                                                 </tr>
                                             </thead>
@@ -173,33 +169,18 @@ export const MerchantServices = () => {
                                                         </td>
                                                     </tr>
                                                 ) : (
-                                                    data?.services?.map((p) => (
+                                                    data?.data?.map((p) => (
                                                         <tr key={p.id}>
-                                                            <td className="actions">
-                                                                <EditIcon onClick={handleEditClick(p.id)} />
-                                                                <NavLink to={`/MerchantServiceAppointmentBlocking/${p.id}/${userId}`}>
-                                                                    <i className="fe fe-x fe-16 icon"></i>
-                                                                </NavLink>
-
-                                                                <NavLink to={`/MerchantServiceAppointment/${p.id}`}>
-                                                                    <i className="fe fe-disc fe-16 icon"></i>
-                                                                </NavLink>
-                                                            </td>
                                                             <td>
                                                                 <Status code={p.status} />
                                                             </td>
-                                                            <td>
-                                                                {p.fileUpload && p.fileUpload.filePath ? (
-                                                                    <img src={modifyImageUrl(p.fileUpload.filePath, p.fileUpload.folderName)} alt="logo" className="table-logo" />
-                                                                ) : (
-                                                                    <img src={demoLogo} alt='demoLogo' className="table-logo" />
-                                                                )}
-                                                            </td>
-                                                            <td>{p.id}</td>
-                                                            <td>{p.merchantUserId}</td>
+                                                            <td>{p.serviceId}</td>
                                                             <td>{p.name}</td>
-                                                            <td>{p.duration}</td>
-                                                            <td>{p.description}</td>
+                                                            <td>{p.user.firstName}</td>
+                                                            <td>{p.user.mobileNumber}</td>
+                                                            <td>{p.specialRequest}</td>
+                                                            <td>{p.startTime}</td>
+                                                            <td>{p.endTime}</td>
                                                             <td>{usersData?.data?.find(user => user.id === p.createdBy)?.firstName || 'N/A'}</td>
                                                             <td>{usersData?.data?.find(user => user.id === p.updatedBy)?.firstName || 'N/A'}</td>
                                                             <td>{<DateFormate dateTime={p.createdAt} />}</td>
@@ -225,20 +206,6 @@ export const MerchantServices = () => {
                     </div>
                 </div>
             </div>
-            {showAddModal ? (
-                <AddMerchantServicesModal
-                    handleSuccess={handleAddServicesSuccess}
-                    handleClose={() => setShowAddModal(false)}
-                    merchantUserId={userId}
-                />
-            ) : null}
-            {showEditModal ? (
-                <EditMerchantServicesModal
-                    handleSuccess={handleUpdateServicesSuccess}
-                    id={ServicesId}
-                    handleClose={() => setShowEditModal(false)}
-                />
-            ) : null}
         </>
     );
 };

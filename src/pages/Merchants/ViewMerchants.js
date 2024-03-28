@@ -2,13 +2,21 @@ import React, { useState } from 'react';
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { axiosInstance } from "../../axiosInstance";
+import { Status } from "../../components/Status";
+import { DateFormate } from "../../components/DateFormate";
 import { NavLink } from "react-router-dom";
 import Spinner from "react-bootstrap/Spinner";
 
 
 const getViewMerchantDetails = (userId) => {
-    return axiosInstance.get(`/cikka-transactions/purchase?pageIndex=0&pageSize=20&sortBy=id&sortOrder=DESC&userId=${userId}`).then((res) => res.data);
+    return axiosInstance.get(`/cikka-transactions/purchase?userId=${userId}`).then((res) => res.data);
 };
+
+const getViewMerchantDetailsappointments = (userId) => {
+    return axiosInstance.get(`/appointments?pageIndex=0&pageSize=20&&sortBy=id&sortOrder=DESC&merchantUserId=${userId}`).then((res) => res.data);
+};
+
+
 
 
 export const ViewMerchants = () => {
@@ -27,9 +35,15 @@ export const ViewMerchants = () => {
         queryFn: () => getViewMerchantDetails(userId),
     });
 
+
+    const { data: appointmentsData, isLoading: appointmentsLoading, error: appointmentsError } = useQuery({
+        queryKey: ["appointments-details", userId],
+        queryFn: () => getViewMerchantDetailsappointments(userId),
+    });
+
     return (
         <>
-            {viewMerchantDetails && (
+            {viewMerchantDetails && appointmentsData && (
                 console.log(viewMerchantDetails),
                 <div className="row justify-content-center">
                     <div className="col-12">
@@ -98,6 +112,15 @@ export const ViewMerchants = () => {
                                                     onClick={() => handleTabChange('cikkaTransaction')}
                                                 >
                                                     Cikka Transaction
+                                                </button>
+                                            </li>
+
+                                            <li className="nav-item">
+                                                <button
+                                                    className={`nav-link ${activeTab === 'appointments' ? 'active' : ''}`}
+                                                    onClick={() => handleTabChange('appointments')}
+                                                >
+                                                    Appointments
                                                 </button>
                                             </li>
                                         </ul>
@@ -245,6 +268,82 @@ export const ViewMerchants = () => {
                                                                                 <td rowSpan="10" colSpan="13">
                                                                                     <div className="text-center py-5">
                                                                                         <strong>No transaction were done</strong>
+                                                                                    </div>
+                                                                                </td>
+                                                                            </tr>
+                                                                        )
+                                                                    )}
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                )}
+                                            </div>
+
+
+                                            <div>
+                                                {activeTab === 'appointments' && (
+
+                                                    <div className="resp-table cikka-transaction-tb">
+                                                        <div className="row">
+                                                            <aside className="col-sm-10">
+                                                                <h5 className="card-title">Appointments</h5>
+                                                            </aside>
+                                                        </div>
+                                                        <div>
+                                                            <table className="table mt-2">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Status</th>
+                                                                        <th>serviceId</th>
+                                                                        <th>service Name</th>
+                                                                        <th>User Name</th>
+                                                                        <th>Contact</th>
+                                                                        <th>SpecialRequest</th>
+                                                                        <th>StartTime</th>
+                                                                        <th>EndTime</th>
+                                                                        {/* <th>createdBy</th>
+                                                                        <th>updatedBy</th>
+                                                                        <th>createdAt</th>
+                                                                        <th>UpdatedAt</th> */}
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    {appointmentsLoading ? (
+                                                                        <tr>
+                                                                            <td rowSpan="10" colSpan="4">
+                                                                                <div className="text-center py-5">
+                                                                                    <Spinner animation="border" />
+                                                                                </div>
+                                                                            </td>
+                                                                        </tr>
+                                                                    ) : (
+                                                                        appointmentsData && appointmentsData.data.length > 0 ? (
+                                                                            <>
+                                                                                {appointmentsData.data.map((appointments) => (
+                                                                                    <tr key={appointments.id}>
+                                                                                        <td>
+                                                                                            <Status code={appointments.status} />
+                                                                                        </td>
+                                                                                        <td>{appointments.serviceId}</td>
+                                                                                        <td>{appointments.service.name}</td>
+                                                                                        <td>{appointments.user.firstName}  {appointments.user.lastName}</td>
+                                                                                        <td>{typeof appointments.user.mobileNumber === "string" ? "--" : appointments.user.mobileNumber}</td>
+                                                                                        <td>{appointments.specialRequest === "string" ? "--" : appointments.specialRequest}</td>
+                                                                                        <td>{appointments.startTime}</td>
+                                                                                        <td>{appointments.endTime}</td>
+                                                                                        {/* <td>{<DateFormate dateTime={appointments.createdBy} />}</td>
+                                                                                        <td>{<DateFormate dateTime={appointments.updatedBy} />}</td>
+                                                                                        <td>{<DateFormate dateTime={appointments.createdAt} />}</td>
+                                                                                        <td>{<DateFormate dateTime={appointments.updatedAt} />}</td> */}
+                                                                                    </tr>
+                                                                                ))}
+                                                                            </>
+                                                                        ) : (
+                                                                            <tr>
+                                                                                <td rowSpan="10" colSpan="13">
+                                                                                    <div className="text-center py-5">
+                                                                                        <strong>No appointments were done</strong>
                                                                                     </div>
                                                                                 </td>
                                                                             </tr>
