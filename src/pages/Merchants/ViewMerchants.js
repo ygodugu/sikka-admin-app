@@ -6,6 +6,8 @@ import { Status } from "../../components/Status";
 import { DateFormate } from "../../components/DateFormate";
 import { NavLink } from "react-router-dom";
 import Spinner from "react-bootstrap/Spinner";
+import * as XLSX from 'xlsx'; // Importing Excel library
+
 
 
 const getViewMerchantDetails = (userId) => {
@@ -15,8 +17,6 @@ const getViewMerchantDetails = (userId) => {
 const getViewMerchantDetailsappointments = (userId, selectedDate) => {
     return axiosInstance.get(`/appointments?pageIndex=0&pageSize=20&sortBy=startTime&sortOrder=ASC&status=1&merchantUserId=${userId}&startTime=${selectedDate}`).then((res) => res.data);
 };
-
-
 
 
 export const ViewMerchants = () => {
@@ -70,46 +70,6 @@ export const ViewMerchants = () => {
     });
 
 
-    // const renderAppointmentsTable = () => {
-    //     if (appointmentsLoading) {
-    //         return (
-    //             <tr>
-    //                 <td rowSpan="10" colSpan="13">
-    //                     <div className="text-center py-5">
-    //                         <Spinner animation="border" />
-    //                     </div>
-    //                 </td>
-    //             </tr>
-    //         );
-    //     } else if (appointmentsData && appointmentsData.data.length > 0) {
-    //         const groupedAppointments = groupAppointments(appointmentsData.data);
-    //         return groupedAppointments.map((appointmentGroup, index) => (
-    //             <tr key={index}>
-    //                 <td>
-    //                     <Status code={appointmentGroup.status} />
-    //                 </td>
-    //                 <td>{appointmentGroup.serviceName}</td>
-    //                 <td>{appointmentGroup.userName}</td>
-    //                 <td>{appointmentGroup.contact}</td>
-    //                 <td>{appointmentGroup.specialRequest}</td>
-    //                 <td>{appointmentGroup.peopleCount}</td>
-    //                 <td>{appointmentGroup.startTime.toLocaleString('en-GB', { timeZone: 'Europe/London' })}</td>
-    //                 <td>{appointmentGroup.endTime.toLocaleString('en-GB', { timeZone: 'Europe/London' })}</td>
-    //             </tr>
-    //         ));
-    //     } else {
-    //         return (
-    //             <tr>
-    //                 <td rowSpan="10" colSpan="13">
-    //                     <div className="text-center py-5">
-    //                         <strong>No appointments were done</strong>
-    //                     </div>
-    //                 </td>
-    //             </tr>
-    //         );
-    //     }
-    // };
-
     const renderAppointmentsTable = () => {
         if (appointmentsLoading) {
             return (
@@ -136,8 +96,10 @@ export const ViewMerchants = () => {
                         <td>{appointmentGroup.contact}</td>
                         <td>{appointmentGroup.specialRequest}</td>
                         <td>{appointmentGroup.peopleCount}</td>
-                        <td>{appointmentGroup.startTime}</td>
-                        <td>{appointmentGroup.endTime}</td>
+                        <td>{new Date(appointmentGroup.startTime).toLocaleString('en-GB', { timeZone: 'Europe/London' })}</td>
+                        <td>{new Date(appointmentGroup.endTime).toLocaleString('en-GB', { timeZone: 'Europe/London' })}</td>
+                        {/* <td>{appointmentGroup.startTime.toLocaleString('en-GB', { timeZone: 'Europe/London' })}</td>
+                        <td>{appointmentGroup.endTime.toLocaleString('en-GB', { timeZone: 'Europe/London' })}</td> */}
                     </tr>
                 );
             });
@@ -183,6 +145,83 @@ export const ViewMerchants = () => {
         return Object.values(grouped);
     };
 
+    const downloadExcel = () => {
+        if (appointmentsData && appointmentsData.data) {
+            const groupedAppointments = groupAppointments(appointmentsData.data);
+            let totalPeopleCount = 0;
+
+            // Prepare data for Excel sheet
+            const wsData = groupedAppointments.map(appointmentGroup => {
+                totalPeopleCount += appointmentGroup.peopleCount;
+
+                return {
+                    ServiceName: appointmentGroup.service.name,
+                    UserName: `${appointmentGroup.user.firstName} ${appointmentGroup.user.lastName}`,
+                    Contact: appointmentGroup.contact === "string" ? "--" : appointmentGroup.contact,
+                    SpecialRequest: appointmentGroup.specialRequest === "string" ? "--" : appointmentGroup.specialRequest,
+                    PeopleCount: appointmentGroup.peopleCount,
+                    StartTime: new Date(appointmentGroup.startTime).toLocaleString('en-GB', { timeZone: 'Europe/London' }),
+                    EndTime: new Date(appointmentGroup.endTime).toLocaleString('en-GB', { timeZone: 'Europe/London' })
+                };
+            });
+
+            // Add total count row
+            const totalRow = {
+                ServiceName: '', // You may leave this blank or specify as needed
+                UserName: '', // You may leave this blank or specify as needed
+                Contact: '', // You may leave this blank or specify as needed
+                SpecialRequest: 'Total:',
+                PeopleCount: totalPeopleCount,
+                StartTime: '', // You may leave this blank or specify as needed
+                EndTime: '' // You may leave this blank or specify as needed
+            };
+            wsData.push(totalRow);
+
+            const ws = XLSX.utils.json_to_sheet(wsData);
+
+            // Initialize column widths array if not already initialized
+            if (!ws['!cols']) {
+                ws['!cols'] = [];
+            }
+
+            // Adjust column widths
+            const columnWidths = [
+                { wch: 35 }, // Width of column A
+                { wch: 20 }, // Width of column B
+                { wch: 20 }, // Width of column C
+                { wch: 20 }, // Width of column D
+                { wch: 8 }, // Width of column E
+                { wch: 25 }, // Width of column F
+                { wch: 25 }, // Width of column G
+                // Add more entries for additional columns as needed
+            ];
+
+            // Apply column widths
+            columnWidths.forEach((width, index) => {
+                ws['!cols'][index] = width;
+            });
+
+
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "bookings");
+
+            const now = new Date();
+            const timestamp = `${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}${pad(now.getHours())}${pad(now.getMinutes())}`;
+
+            // Append timestamp to file name
+            const fileName = `bookings_${timestamp}.xlsx`;
+
+            XLSX.writeFile(wb, fileName);
+
+        } else {
+            console.error("No appointments data available to download.");
+        }
+    };
+
+    // Helper function to pad single-digit numbers with leading zeros
+    function pad(number) {
+        return number < 10 ? '0' + number : number;
+    }
 
     return (
         <>
@@ -432,8 +471,10 @@ export const ViewMerchants = () => {
                                                             <aside className="col-sm-10">
                                                                 <h5 className="card-title">Appointments</h5>
                                                             </aside>
+                                                        </div>
 
-                                                            <div className="col-sm-4 mt-2 mr-2">
+                                                        <div className='row'>
+                                                            <aside className="col-sm-4 mt-2 mr-2">
                                                                 <input
                                                                     type="date"
                                                                     name="date"
@@ -441,8 +482,17 @@ export const ViewMerchants = () => {
                                                                     onChange={handleSelectDateChange}
                                                                     className="form-control form-control-lg"
                                                                 />
-                                                            </div>
+                                                            </aside>
+                                                            <aside className="col-sm-2 mt-2  add-sec">
+                                                                <button className="bttn" onClick={downloadExcel}>
+                                                                    <i className="fe fe-download fe-16">
+                                                                        <span>  Download </span>
+                                                                    </i>
+                                                                </button>
+                                                            </aside>
                                                         </div>
+
+
                                                         <div>
                                                             <table className="table mt-2">
                                                                 <thead>
