@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Topbar } from "../components/Topbar";
 import { Sidebar } from "../components/Sidebar";
 import { Routes, Route, Navigate } from "react-router-dom";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { lazy, Suspense } from "react";
 
 const Dashboard = lazy(() =>
@@ -98,6 +100,7 @@ export const Layout = () => {
   return (
     <div className="wrapper">
       <Topbar toggleSidebar={toggleSidebar} />
+      <ToastContainer />
       <Sidebar isCollapsed={isSidebarCollapsed} closeSidebar={toggleSidebar} />
       <main role="main" className="main-content">
         <div className="container-fluid">

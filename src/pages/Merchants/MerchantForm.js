@@ -13,16 +13,22 @@ let MerchantSchema = object({
 
 export const MerchantForm = ({ initialValues, onSubmit, isEdit = false, isAdd = false }) => {
 
-  const [file, setFile] = useState();
+  const [file1, setFile1] = useState();
+
+  const [file2, setFile2] = useState();
 
   const handleSubmit = (values, { validateForm }) => {
     validateForm(values).then(res => {
-      onSubmit({ ...values, file });
+      onSubmit({ ...values, file1, file2 });
     });
   }
 
-  const handleFileSelect = (event) => {
-    setFile(event.target.files[0])
+  const handleFileSelectLogo = (event) => {
+    setFile1(event.target.files[0])
+  }
+
+  const handleFileSelectSquareLogo = (event) => {
+    setFile2(event.target.files[0])
   }
 
   const formik = useFormik({
@@ -830,7 +836,7 @@ export const MerchantForm = ({ initialValues, onSubmit, isEdit = false, isAdd = 
           <aside className="col-md-4">
             <div className="form-group">
               <label htmlFor="uploadImage">Upload logo Image</label>
-              <input type="file" id="uploadImage" name="uploadImage" onChange={handleFileSelect} className="form-control form-control-lg" />
+              <input type="file" id="uploadImage" name="uploadImage" onChange={handleFileSelectLogo} className="form-control form-control-lg" />
             </div>
           </aside>
           : null}
@@ -839,7 +845,7 @@ export const MerchantForm = ({ initialValues, onSubmit, isEdit = false, isAdd = 
           <aside className="col-md-4">
             <div className="form-group">
               <label htmlFor="uploadImage">Upload squareLogo Image</label>
-              <input type="file" id="uploadImage" name="uploadImage" onChange={handleFileSelect} className="form-control form-control-lg" />
+              <input type="file" id="uploadImage" name="uploadImage" onChange={handleFileSelectSquareLogo} className="form-control form-control-lg" />
             </div>
           </aside>
           : null}

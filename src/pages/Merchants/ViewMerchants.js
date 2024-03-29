@@ -7,6 +7,8 @@ import { DateFormate } from "../../components/DateFormate";
 import { NavLink } from "react-router-dom";
 import Spinner from "react-bootstrap/Spinner";
 import * as XLSX from 'xlsx'; // Importing Excel library
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 
@@ -15,7 +17,7 @@ const getViewMerchantDetails = (userId) => {
 };
 
 const getViewMerchantDetailsappointments = (userId, selectedDate) => {
-    return axiosInstance.get(`/appointments?pageIndex=0&pageSize=20&sortBy=startTime&sortOrder=ASC&status=1&merchantUserId=${userId}&startTime=${selectedDate}`).then((res) => res.data);
+    return axiosInstance.get(`/appointments?pageIndex=0&pageSize=100&sortBy=startTime&sortOrder=ASC&status=1&merchantUserId=${userId}&startTime=${selectedDate}`).then((res) => res.data);
 };
 
 
@@ -145,8 +147,86 @@ export const ViewMerchants = () => {
         return Object.values(grouped);
     };
 
+    // const downloadExcel = () => {
+    //     if (appointmentsData && appointmentsData.data) {
+    //         const groupedAppointments = groupAppointments(appointmentsData.data);
+    //         let totalPeopleCount = 0;
+
+    //         // Prepare data for Excel sheet
+    //         const wsData = groupedAppointments.map(appointmentGroup => {
+    //             totalPeopleCount += appointmentGroup.peopleCount;
+
+    //             return {
+    //                 ServiceName: appointmentGroup.service.name,
+    //                 UserName: `${appointmentGroup.user.firstName} ${appointmentGroup.user.lastName}`,
+    //                 Contact: appointmentGroup.contact === "string" ? "--" : appointmentGroup.contact,
+    //                 SpecialRequest: appointmentGroup.specialRequest === "string" ? "--" : appointmentGroup.specialRequest,
+    //                 PeopleCount: appointmentGroup.peopleCount,
+    //                 StartTime: new Date(appointmentGroup.startTime).toLocaleString('en-GB', { timeZone: 'Europe/London' }),
+    //                 EndTime: new Date(appointmentGroup.endTime).toLocaleString('en-GB', { timeZone: 'Europe/London' })
+    //             };
+    //         });
+
+    //         // Add total count row
+    //         const totalRow = {
+    //             ServiceName: '', // You may leave this blank or specify as needed
+    //             UserName: '', // You may leave this blank or specify as needed
+    //             Contact: '', // You may leave this blank or specify as needed
+    //             SpecialRequest: 'Total:',
+    //             PeopleCount: totalPeopleCount,
+    //             StartTime: '', // You may leave this blank or specify as needed
+    //             EndTime: '' // You may leave this blank or specify as needed
+    //         };
+    //         wsData.push(totalRow);
+
+    //         const ws = XLSX.utils.json_to_sheet(wsData);
+
+    //         // Initialize column widths array if not already initialized
+    //         if (!ws['!cols']) {
+    //             ws['!cols'] = [];
+    //         }
+
+    //         // Adjust column widths
+    //         const columnWidths = [
+    //             { wch: 35 }, // Width of column A
+    //             { wch: 20 }, // Width of column B
+    //             { wch: 20 }, // Width of column C
+    //             { wch: 20 }, // Width of column D
+    //             { wch: 8 }, // Width of column E
+    //             { wch: 25 }, // Width of column F
+    //             { wch: 25 }, // Width of column G
+    //             // Add more entries for additional columns as needed
+    //         ];
+
+    //         // Apply column widths
+    //         columnWidths.forEach((width, index) => {
+    //             ws['!cols'][index] = width;
+    //         });
+
+
+    //         const wb = XLSX.utils.book_new();
+    //         XLSX.utils.book_append_sheet(wb, ws, "bookings");
+
+    //         const now = new Date();
+    //         const timestamp = `${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}${pad(now.getHours())}${pad(now.getMinutes())}`;
+
+    //         // Append timestamp to file name
+    //         const fileName = `bookings_${timestamp}.xlsx`;
+
+    //         XLSX.writeFile(wb, fileName);
+
+    //     } else {
+    //         console.error("No appointments data available to download.");
+    //     }
+    // };
+
+    // // Helper function to pad single-digit numbers with leading zeros
+    // function pad(number) {
+    //     return number < 10 ? '0' + number : number;
+    // }
+
     const downloadExcel = () => {
-        if (appointmentsData && appointmentsData.data) {
+        if (appointmentsData && appointmentsData.data && appointmentsData.data.length > 0) {
             const groupedAppointments = groupAppointments(appointmentsData.data);
             let totalPeopleCount = 0;
 
@@ -215,13 +295,31 @@ export const ViewMerchants = () => {
 
         } else {
             console.error("No appointments data available to download.");
+            // Show message to the user
+            // alert("No appointments data available to download.");
+            showToast();
         }
     };
 
     // Helper function to pad single-digit numbers with leading zeros
     function pad(number) {
         return number < 10 ? '0' + number : number;
-    }
+    };
+
+    // Function to show toast message
+    const showToast = () => {
+        toast.error('There is no bookings data available to download.', {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
+    };
+
+
 
     return (
         <>
