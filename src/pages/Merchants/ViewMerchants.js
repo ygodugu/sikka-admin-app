@@ -502,7 +502,7 @@ export const ViewMerchants = () => {
                                                                         <th>User Name</th>
                                                                         <th>Contact</th>
                                                                         <th>SpecialRequest</th>
-                                                                        <th>People</th>
+                                                                        <th># People</th>
                                                                         <th>StartTime</th>
                                                                         <th>EndTime</th>
                                                                         {/* <th>createdBy</th>
