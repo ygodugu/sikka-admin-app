@@ -6,8 +6,9 @@ export const Loader = ({ isLoading  }) => {
     return (
         <div id="loader" className={`loader ${isLoading ? 'visible' : ''}`}>
         <div className="loader-content">
-            <Spinner animation="border" className='loader-spinner'/>
-            <p>Cikka Purchase are Processing. Please wait...</p>
+            {/* <Spinner animation="border" className='loader-spinner'/> */}
+            {/* <p>Cikka Purchase are Processing. Please wait...</p> */}
+            <div class="loader112"></div> 
         </div>
     </div>
     );
