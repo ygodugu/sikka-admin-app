@@ -25,7 +25,7 @@ export const ServicesForm = ({ initialValues, handleSubmit, isAdd = false }) => 
             .then((res) =>
                 res.data?.data?.map((p) => ({
                     id: p.id,
-                    label: `${p.user.firstName} + ${p.user.firstName}`,
+                    label: `${p.user.firstName} ${p.user.lastName}`,
                 }))
             )
             .then((data) => {
@@ -40,6 +40,15 @@ export const ServicesForm = ({ initialValues, handleSubmit, isAdd = false }) => 
                 }
             });
     }, []);
+
+
+    const modifyImageUrl = (originalUrl, folderName) => {
+        let parts = originalUrl.split('?');
+        let fileName = parts[1].split('=')[1];
+        let newUrl = `https://app.cikka.com.au/api/files/file-preview?fileName=${fileName}&folderName=${folderName}`;
+
+        return newUrl;
+    };
 
 
     return (
@@ -114,6 +123,21 @@ export const ServicesForm = ({ initialValues, handleSubmit, isAdd = false }) => 
 
                 <aside className="col-md-6">
                     <div className="form-group">
+                        <label htmlFor="appointmentPerSlot">Appointment-Per-Slot</label>
+                        <input
+                            type="number"
+                            id="appointmentPerSlot"
+                            value={formik.values.appointmentPerSlot}
+                            onChange={formik.handleChange}
+                            className="form-control form-control-lg"
+                            placeholder="Enter duration"
+                        />
+                    </div>
+                </aside>
+
+
+                <aside className="col-md-6">
+                    <div className="form-group">
                         <label htmlFor="status">status</label>
                         <select
                             id="status"
@@ -127,6 +151,16 @@ export const ServicesForm = ({ initialValues, handleSubmit, isAdd = false }) => 
                         </select>
                     </div>
                 </aside>
+
+                {!isAdd ?
+                    <aside className="col-md-6">
+                        {formik.values.fileUpload.filePath && formik.values.fileUpload.filePath ? (
+                            <img src={modifyImageUrl(formik.values.fileUpload.filePath, formik.values.fileUpload.folderName)} alt="logo" className="form-image-tag" />
+                        ) : (
+                            <div className="empty-placeholder">Empty Image</div>
+                        )}
+                    </aside> : null}
+
             </div>
             <div className="modal-footer d-flex justify-content-end">
                 <button type="submit" className="btn mb-2 btn-primary">

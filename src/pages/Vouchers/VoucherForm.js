@@ -18,7 +18,21 @@ export const VoucherForm = ({ initialValues, onSubmit, isEdit = false, isAdd = f
 
   const handleSubmit = (values, { validateForm }) => {
     validateForm(values).then(res => {
-      onSubmit({ ...values, file });
+
+      let validityStartTime = '';
+      let validityEndTime = '';
+
+      // Format validity start and end times only for adding data
+      if (isAdd) {
+        validityStartTime = values.validityStartTime ? `${new Date(values.validityStartDate).toISOString().split('T')[0]}T${values.validityStartTime}:00.000Z` : '';
+        validityEndTime = values.validityEndTime ? `${new Date(values.validityEndDate).toISOString().split('T')[0]}T${values.validityEndTime}:00.000Z` : '';
+      } else {
+        // For edit operation, keep the times as they are
+        validityStartTime = values.validityStartTime;
+        validityEndTime = values.validityEndTime;
+      }
+
+      onSubmit({ ...values, file, validityStartTime, validityEndTime });
     });
   }
 
@@ -111,12 +125,9 @@ export const VoucherForm = ({ initialValues, onSubmit, isEdit = false, isAdd = f
 
 
 
-  const modifyImageUrl = (originalUrl) => {
+  const modifyImageUrl = (originalUrl, folderName) => {
     let parts = originalUrl.split('?');
-
     let fileName = parts[1].split('=')[1];
-    let folderName = "merchant_offer";
-    // Construct the new URL
     let newUrl = `https://app.cikka.com.au/api/files/file-preview?fileName=${fileName}&folderName=${folderName}`;
 
     return newUrl;
@@ -310,7 +321,7 @@ export const VoucherForm = ({ initialValues, onSubmit, isEdit = false, isAdd = f
 
         {/* adding time feilds start here  */}
 
-        {!isEdit ?
+        {/* {!isEdit ?
           <aside className="col-md-4">
             <div className="form-group">
               <label htmlFor="validityStartTime">validityStartTime</label>
@@ -359,7 +370,37 @@ export const VoucherForm = ({ initialValues, onSubmit, isEdit = false, isAdd = f
               />
             </div>
           </aside>
-          : null}
+          : null} */}
+
+        <aside className="col-md-4">
+          <div className="form-group">
+            <label htmlFor="validityStartTime">validityStartTime  *</label>
+            <input
+              type="time"
+              id="validityStartTime"
+              value={formik.values.validityStartTime}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              className="form-control form-control-lg"
+              placeholder="Enter validityStartTime"
+            />
+          </div>
+        </aside>
+
+        <aside className="col-md-4">
+          <div className="form-group">
+            <label htmlFor="validityEndTime">validityEndTime  *</label>
+            <input
+              type="time"
+              id="validityEndTime"
+              value={formik.values.validityEndTime}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              className="form-control form-control-lg"
+              placeholder="Enter validityEndTime"
+            />
+          </div>
+        </aside>
 
         {/* {!isAdd ?
           <aside className="col-md-4">
@@ -459,7 +500,7 @@ export const VoucherForm = ({ initialValues, onSubmit, isEdit = false, isAdd = f
         !isAdd ?
           <aside className="col-md-4">
             {formik.values.voucherAsset.filePath && formik.values.voucherAsset.filePath ? (
-              <img src={modifyImageUrl(formik.values.voucherAsset.filePath)} alt="logo" className="form-image-tag" />
+              <img src={modifyImageUrl(formik.values.voucherAsset.filePath, formik.values.voucherAsset.folderName)} alt="logo" className="form-image-tag" />
             ) : (
               <div className="empty-placeholder">Empty Image</div>
             )}

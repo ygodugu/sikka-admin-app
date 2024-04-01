@@ -27,12 +27,9 @@ export const BusinessCategoriesForm = ({ initialValues, onSubmit, isAdd = false 
   });
 
 
-  const modifyImageUrl = (originalUrl) => {
+  const modifyImageUrl = (originalUrl, folderName) => {
     let parts = originalUrl.split('?');
-
     let fileName = parts[1].split('=')[1];
-    let folderName = "business_category";
-    // Construct the new URL
     let newUrl = `https://app.cikka.com.au/api/files/file-preview?fileName=${fileName}&folderName=${folderName}`;
 
     return newUrl;
@@ -108,7 +105,7 @@ export const BusinessCategoriesForm = ({ initialValues, onSubmit, isAdd = false 
         {!isAdd ?
           <aside className="col-md-6">
             {formik.values.logo.filePath && formik.values.logo.filePath ? (
-              <img src={modifyImageUrl(formik.values.logo.filePath)} alt="logo" className="form-image-tag" />
+              <img src={modifyImageUrl(formik.values.logo.filePath, formik.values.logo.folderName)} alt="logo" className="form-image-tag" />
             ) : (
               <div className="empty-placeholder">Empty Image</div>
             )}

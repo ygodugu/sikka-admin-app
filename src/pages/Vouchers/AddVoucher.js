@@ -60,8 +60,6 @@ export const AddVoucherModal = ({ handleSuccess, handleClose }) => {
     description: "",
     validityEndDate: "",
     validityStartDate: "",
-    validityStartTime: "",
-    validityEndTime: "",
     voucherValueType: "",
     status: ""
   };

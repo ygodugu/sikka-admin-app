@@ -213,9 +213,9 @@ export const Users = () => {
                               </td>
                               <td>
                                 {u.profileImage && u.profileImage.filePath ? (
-                                  <img src={modifyImageUrl(u.profileImage.filePath, u.profileImage.folderName)} alt="logo" className="table-logo" />
+                                  <img src={modifyImageUrl(u.profileImage.filePath, u.profileImage.folderName)} alt="logo" className="square-logo" />
                                 ) : (
-                                  <img src={demoLogo} alt='demoLogo' className="table-logo" />
+                                  <img src={demoLogo} alt='demoLogo' className="square-logo" />
                                 )}
                               </td>
                               <td>{u.categoryId}</td>

@@ -80,11 +80,12 @@ export const Events = () => {
     refetch();
   };
 
+
   const [usersData, setUsersData] = useState([]);
 
   useEffect(() => {
     axiosInstance
-      .get("/users")
+      .get("/users?pageIndex=0&pageSize=800")
       .then((res) => res.data)
       .then((data) => {
         setUsersData(data);
@@ -94,6 +95,7 @@ export const Events = () => {
         console.error("Error fetching categories:", error);
       });
   }, []);
+
 
   const modifyImageUrl = (originalUrl, folderName) => {
     let parts = originalUrl.split('?');
@@ -203,9 +205,9 @@ export const Events = () => {
                               </td>
                               <td>
                                 {u.fileUpload && u.fileUpload.filePath ? (
-                                  <img src={modifyImageUrl(u.fileUpload.filePath, u.fileUpload.folderName)} alt="logo" className="table-logo " />
+                                  <img src={modifyImageUrl(u.fileUpload.filePath, u.fileUpload.folderName)} alt="logo" className="square-logo" />
                                 ) : (
-                                  <img src={demoLogo} alt='demoLogo' className="table-logo" />
+                                  <img src={demoLogo} alt='demoLogo' className="square-logo" />
                                 )}
                               </td>
                               <td>{u.id}</td>
@@ -225,8 +227,22 @@ export const Events = () => {
                               <td>{u.url}</td>
                               <td>{u.totalPasses}</td>
                               <td>{u.utilizedPasses}</td>
-                              <td>{usersData?.data?.find(user => user.id === u.createdBy)?.firstName || 'N/A'}</td>
-                              <td>{usersData?.data?.find(user => user.id === u.updatedBy)?.firstName || 'N/A'}</td>
+                              <td>
+                                {usersData && usersData.data && usersData.data.find(user => user.id === u.createdBy) ? (
+                                  (() => {
+                                    const user = usersData.data.find(user => user.id === u.createdBy);
+                                    return `${user.firstName || 'N/A'} ${user.lastName || 'N/A'}`;
+                                  })()
+                                ) : u.createdBy}
+                              </td>
+                              <td>
+                                {usersData && usersData.data && usersData.data.find(user => user.id === u.updatedBy) ? (
+                                  (() => {
+                                    const user = usersData.data.find(user => user.id === u.updatedBy);
+                                    return `${user.firstName || 'N/A'} ${user.lastName || 'N/A'}`;
+                                  })()
+                                ) : u.updatedBy}
+                              </td>
                               <td>{<DateFormate dateTime={u.createdAt} />}</td>
                               <td>{<DateFormate dateTime={u.updatedAt} />}</td>
                             </tr>

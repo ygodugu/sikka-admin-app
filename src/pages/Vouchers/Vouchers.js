@@ -102,7 +102,6 @@ export const Vouchers = () => {
       });
   }, []);
 
-
   const [categoryData, setCategoryData] = useState([]);
 
   useEffect(() => {
@@ -119,11 +118,28 @@ export const Vouchers = () => {
   }, []);
 
 
+  // const [usersData, setUsersData] = useState([]);
+
+  // useEffect(() => {
+  //   axiosInstance
+  //     .get(`/users?pageIndex=0&pageSize=800&sortBy=id&sortOrder=DESC`)
+  //     .then((res) => res.data)
+  //     .then((data) => {
+  //       setUsersData(data);
+  //       console.log(data);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error fetching categories:", error);
+  //     });
+  // }, []);
+  // console.log("Users Data:", usersData);
+
+
   const [usersData, setUsersData] = useState([]);
 
   useEffect(() => {
     axiosInstance
-      .get("/users")
+      .get("/users?pageIndex=0&pageSize=800")
       .then((res) => res.data)
       .then((data) => {
         setUsersData(data);
@@ -133,6 +149,8 @@ export const Vouchers = () => {
         console.error("Error fetching categories:", error);
       });
   }, []);
+
+
 
   const handleTypeaheadChange = (e) => {
     const optionValue = e.target.value;
@@ -329,9 +347,9 @@ export const Vouchers = () => {
                               </td>
                               <td>
                                 {u.voucherAsset.filePath && u.voucherAsset.filePath ? (
-                                  <img src={modifyImageUrl(u.voucherAsset.filePath, u.voucherAsset.folderName)} alt="logo" className="table-logo" />
+                                  <img src={modifyImageUrl(u.voucherAsset.filePath, u.voucherAsset.folderName)} alt="logo" className="square-logo" />
                                 ) : (
-                                  <img src={demoLogo} alt='demoLogo' className="table-logo" />
+                                  <img src={demoLogo} alt='demoLogo' className="square-logo" />
                                 )}
                               </td>
                               <td>{u.rank}</td>
@@ -358,8 +376,24 @@ export const Vouchers = () => {
                               <td>{u.restrictUsageForUser}</td>
                               <td>{u.maxUsageCount}</td>
                               <td>{u.consumedCount}</td>
-                              <td>{usersData?.data?.find(user => user.id === u.createdBy)?.firstName || 'N/A'}</td>
-                              <td>{usersData?.data?.find(user => user.id === u.updatedBy)?.firstName || 'N/A'}</td>
+                              {/* <td>{usersData?.data?.find(user => user.id === u.createdBy)?.firstName || 'N/A'}</td>
+                              <td>{usersData?.data?.find(user => user.id === u.updatedBy)?.firstName || 'N/A'}</td> */}
+                              <td>
+                                {usersData && usersData.data && usersData.data.find(user => user.id === u.createdBy) ? (
+                                  (() => {
+                                    const user = usersData.data.find(user => user.id === u.createdBy);
+                                    return `${user.firstName || 'N/A'} ${user.lastName || 'N/A'}`;
+                                  })()
+                                ) : u.createdBy}
+                              </td>
+                              <td>
+                                {usersData && usersData.data && usersData.data.find(user => user.id === u.updatedBy) ? (
+                                  (() => {
+                                    const user = usersData.data.find(user => user.id === u.updatedBy);
+                                    return `${user.firstName || 'N/A'} ${user.lastName || 'N/A'}`;
+                                  })()
+                                ) : u.updatedBy}
+                              </td>
                               <td>{<DateFormate dateTime={u.createdAt} />}</td>
                               <td>{<DateFormate dateTime={u.updatedAt} />}</td>
                             </tr>

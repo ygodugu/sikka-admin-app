@@ -80,11 +80,12 @@ export const Countries = () => {
     refetch();
   };
 
+ 
   const [usersData, setUsersData] = useState([]);
 
   useEffect(() => {
     axiosInstance
-      .get("/users")
+      .get("/users?pageIndex=0&pageSize=800")
       .then((res) => res.data)
       .then((data) => {
         setUsersData(data);
@@ -94,6 +95,7 @@ export const Countries = () => {
         console.error("Error fetching categories:", error);
       });
   }, []);
+
 
   return (
     <>
@@ -203,8 +205,22 @@ export const Countries = () => {
                               </td>
                               <td> {u.countryCode}</td>
                               <td>{u.description}</td>
-                              <td>{usersData?.data?.find(user => user.id === u.createdBy)?.firstName || 'N/A'}</td>
-                              <td>{usersData?.data?.find(user => user.id === u.updatedBy)?.firstName || 'N/A'}</td>
+                              <td>
+                                {usersData && usersData.data && usersData.data.find(user => user.id === u.createdBy) ? (
+                                  (() => {
+                                    const user = usersData.data.find(user => user.id === u.createdBy);
+                                    return `${user.firstName || 'N/A'} ${user.lastName || 'N/A'}`;
+                                  })()
+                                ) : u.createdBy}
+                              </td>
+                              <td>
+                                {usersData && usersData.data && usersData.data.find(user => user.id === u.updatedBy) ? (
+                                  (() => {
+                                    const user = usersData.data.find(user => user.id === u.updatedBy);
+                                    return `${user.firstName || 'N/A'} ${user.lastName || 'N/A'}`;
+                                  })()
+                                ) : u.updatedBy}
+                              </td>
                               <td>{<DateFormate dateTime={u.createdAt} />}</td>
                               <td>{<DateFormate dateTime={u.updatedAt} />}</td>
                             </tr>

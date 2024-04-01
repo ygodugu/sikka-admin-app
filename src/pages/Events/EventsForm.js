@@ -6,7 +6,6 @@ import DatePicker from "react-datepicker";
 
 let eventsSchema = object({
     name: string().required("Name is required"),
-    eventDate: string().required("eventDate is required"),
     merchantId: string().required("merchantId is required"),
 });
 
@@ -16,7 +15,11 @@ export const EventsForm = ({ initialValues, onSubmit, isEdit = false, isAdd = fa
 
     const handleSubmit = (values, { validateForm }) => {
         validateForm(values).then(res => {
-            onSubmit({ ...values, file });
+
+            const eventStartTime = values.eventStartTime ? `${new Date(values.eventDate).toISOString().split('T')[0]}T${values.eventStartTime}:00.000Z` : '';
+            const eventEndTime = values.eventEndTime ? `${new Date(values.eventEndDate).toISOString().split('T')[0]}T${values.eventEndTime}:00.000Z` : '';
+
+            onSubmit({ ...values, file, eventStartTime, eventEndTime });
         });
     }
 
@@ -31,12 +34,9 @@ export const EventsForm = ({ initialValues, onSubmit, isEdit = false, isAdd = fa
     });
 
 
-    const modifyImageUrl = (originalUrl) => {
+    const modifyImageUrl = (originalUrl, folderName) => {
         let parts = originalUrl.split('?');
-
         let fileName = parts[1].split('=')[1];
-        let folderName = "event";
-        // Construct the new URL
         let newUrl = `https://app.cikka.com.au/api/files/file-preview?fileName=${fileName}&folderName=${folderName}`;
 
         return newUrl;
@@ -80,28 +80,9 @@ export const EventsForm = ({ initialValues, onSubmit, isEdit = false, isAdd = fa
 
                 <aside className="col-md-4">
                     <div className="form-group">
-                        <label htmlFor="eventDate">EventDate *</label>
-                        <DatePicker
-                            selected={
-                                formik.values.eventDate
-                                    ? new Date(formik.values.eventDate)
-                                    : null
-                            }
-                            onChange={(e) => {
-                                formik.setFieldValue("eventDate", e);
-                                formik.setFieldTouched("eventDate");
-                            }}
-                            className="form-control"
-                        />
-                           <div className="invalid-feedback">{formik.errors.eventDate}</div>
-                    </div>
-                </aside>
-
-                <aside className="col-md-4">
-                    <div className="form-group">
                         <label for="totalPasses">TotalPasses</label>
                         <input
-                            type="text"
+                            type="number"
                             id="totalPasses"
                             value={formik.values.totalPasses}
                             onChange={formik.handleChange}
@@ -157,6 +138,189 @@ export const EventsForm = ({ initialValues, onSubmit, isEdit = false, isAdd = fa
                     </div>
                 </aside>
 
+                {/* <aside className="col-md-6">
+                    <div className="form-group">
+                        <label htmlFor="eventDate">EventDate *</label>
+                        <DatePicker
+                            selected={
+                                formik.values.eventDate
+                                    ? new Date(formik.values.eventDate)
+                                    : null
+                            }
+                            onChange={(e) => {
+                                formik.setFieldValue("eventDate", e);
+                                formik.setFieldTouched("eventDate");
+                            }}
+                            className="form-control"
+                            showTimeSelect
+                            dateFormat="MMMM d, yyyy h:mm aa"
+                        />
+                        <div className="invalid-feedback">{formik.errors.eventDate}</div>
+                    </div>
+                </aside>
+
+                <aside className="col-md-6">
+                    <div className="form-group">
+                        <label htmlFor="eventEndDate">EventEndDate</label>
+                        <DatePicker
+                            selected={
+                                formik.values.eventEndDate
+                                    ? new Date(formik.values.eventEndDate)
+                                    : null
+                            }
+                            onChange={(e) => {
+                                formik.setFieldValue("eventEndDate", e);
+                                formik.setFieldTouched("eventEndDate");
+                            }}
+                            showTimeSelect
+                            className="form-control"
+                            dateFormat="MMMM d, yyyy h:mm aa"
+                        />
+                    </div>
+                </aside> */}
+
+                {/* 
+                <aside className="col-md-4">
+                    <div className="form-group">
+                        <label htmlFor="eventDate">EventDate *</label>
+                        <input
+                            type="datetime-local"
+                            id="eventDate"
+                            value={formik.values.eventDate ? new Date(formik.values.eventDate).toISOString().slice(0, 16) : ''}
+                            onChange={(e) => {
+                                const isoDateTime = e.target.value + ":00.000Z";
+                                formik.setFieldValue("eventDate", isoDateTime);
+                                formik.setFieldTouched("eventDate", true);
+                            }}
+                            onBlur={formik.handleBlur}
+                            className={`form-control form-control-lg ${formik.touched.eventDate && formik.errors.eventDate ? 'is-invalid' : ''}`}
+                            placeholder="Enter Date Time"
+                        />
+                        {formik.touched.eventDate && formik.errors.eventDate && (
+                            <div className="invalid-feedback">{formik.errors.eventDate}</div>
+                        )}
+                    </div>
+                </aside>
+
+                <aside className="col-md-4">
+                    <div className="form-group">
+                        <label htmlFor="eventEndDate">EventEndDate</label>
+                        <input
+                            type="datetime-local"
+                            id="eventEndDate"
+                            value={formik.values.eventEndDate ? new Date(formik.values.eventEndDate).toISOString().slice(0, 16) : ''}
+                            onChange={(e) => {
+                                const isoDateTime = e.target.value + ":00.000Z";
+                                formik.setFieldValue("eventEndDate", isoDateTime);
+                                formik.setFieldTouched("eventEndDate", true);
+                            }}
+                            onBlur={formik.handleBlur}
+                            className="form-control form-control-lg"
+                            placeholder="Enter event End Date Time"
+                        />
+                    </div>
+                </aside> */}
+
+                {/* <aside className="col-md-4">
+                    <div className="form-group">
+                        <label htmlFor="eventDate">EventDate *</label>
+                        <input
+                            type="date"
+                            id="eventDate"
+                            value={formik.values.eventDate}
+                            onBlur={formik.handleBlur}
+                            onChange={formik.handleChange}
+                            className="form-control form-control-lg"
+                            placeholder="Enter Date Time"
+                        />
+                    </div>
+                </aside> */}
+
+                <aside className="col-md-4">
+                    <div className="form-group">
+                        <label htmlFor="eventDate">EventDate *</label>
+                        <DatePicker
+                            selected={
+                                formik.values.eventDate
+                                    ? new Date(formik.values.eventDate)
+                                    : null
+                            }
+                            onChange={(e) => {
+                                formik.setFieldValue("eventDate", e);
+                                formik.setFieldTouched("eventDate");
+                            }}
+                            className="form-control"
+                        />
+                        <div className="invalid-feedback">{formik.errors.eventDate}</div>
+                    </div>
+                </aside>
+
+
+
+                <aside className="col-md-4">
+                    <div className="form-group">
+                        <label htmlFor="eventStartTime">eventStartTime  *</label>
+                        <input
+                            type="time"
+                            id="eventStartTime"
+                            value={formik.values.eventStartTime}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            className="form-control form-control-lg"
+                            placeholder="Enter eventStartTime"
+                        />
+                    </div>
+                </aside>
+
+                {/* <aside className="col-md-4">
+                    <div className="form-group">
+                        <label htmlFor="eventEndDate">eventEndDate</label>
+                        <input
+                            type="date"
+                            id="eventEndDate"
+                            value={formik.values.eventEndDate}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            className="form-control form-control-lg"
+                            placeholder="Enter Date Time"
+                        />
+                    </div>
+                </aside> */}
+
+                <aside className="col-md-4">
+                    <div className="form-group">
+                        <label htmlFor="eventEndDate">EventEndDate</label>
+                        <DatePicker
+                            selected={
+                                formik.values.eventEndDate
+                                    ? new Date(formik.values.eventEndDate)
+                                    : null
+                            }
+                            onChange={(e) => {
+                                formik.setFieldValue("eventEndDate", e);
+                                formik.setFieldTouched("eventEndDate");
+                            }}
+                            className="form-control"
+
+                        />
+                    </div>
+                </aside>
+
+                <aside className="col-md-4">
+                    <div className="form-group">
+                        <label htmlFor="eventEndTime">eventEndTime  *</label>
+                        <input
+                            type="time"
+                            id="eventEndTime"
+                            value={formik.values.eventEndTime}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            className="form-control form-control-lg"
+                            placeholder="Enter Time"
+                        />
+                    </div>
+                </aside>
+
                 {!isAdd ?
                     <aside className="col-md-4">
                         <div className="form-group">
@@ -184,7 +348,7 @@ export const EventsForm = ({ initialValues, onSubmit, isEdit = false, isAdd = fa
                 {!isAdd ?
                     <aside className="col-md-6">
                         {formik.values.fileUpload.filePath && formik.values.fileUpload.filePath ? (
-                            <img src={modifyImageUrl(formik.values.fileUpload.filePath)} alt="logo" className="form-image-tag" />
+                            <img src={modifyImageUrl(formik.values.fileUpload.filePath, formik.values.fileUpload.folderName )} alt="logo" className="form-image-tag" />
                         ) : (
                             <div className="empty-placeholder">Empty Image</div>
                         )}

@@ -2,6 +2,8 @@ import { useMutation } from "@tanstack/react-query";
 import Modal from "react-bootstrap/Modal";
 import { axiosInstance } from "../../axiosInstance";
 import { EventsForm } from "./EventsForm";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const addEvents = (payload) => {
   return axiosInstance.post(`/events`, payload);
@@ -51,6 +53,7 @@ export const AddEventsModal = ({ handleSuccess, handleClose }) => {
   const initialValues = {
     name: "",
     eventDate: "",
+    eventEndTime: "",
     merchantId: "",
     totalPasses: "",
     utilizedPasses: "",
@@ -70,9 +73,28 @@ export const AddEventsModal = ({ handleSuccess, handleClose }) => {
     );
   };
 
+  // Function to show toast message
+  const showToast = () => {
+    toast.error('Please select the Image', {
+      position: "top-right",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  };
+
+
   const handleSubmit = ({ file, ...values }) => {
     console.log("handleSubmit called");
     console.log("file:", file);
+
+    if (!file) {
+      showToast();
+      return;
+    }
 
     uploadAssetsImage(file)
       .then(result => {

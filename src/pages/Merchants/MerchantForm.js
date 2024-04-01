@@ -87,6 +87,22 @@ export const MerchantForm = ({ initialValues, onSubmit, isEdit = false, isAdd = 
       });
   }, []);
 
+  const modifyLogoImageUrl = (originalUrl, folderName) => {
+    let parts = originalUrl.split('?');
+    let fileName = parts[1].split('=')[1];
+    let newUrl = `https://app.cikka.com.au/api/files/file-preview?fileName=${fileName}&folderName=${folderName}`;
+
+    return newUrl;
+  };
+
+  const modifySquareLogoImageUrl = (originalUrl, folderName) => {
+    let parts = originalUrl.split('?');
+    let fileName = parts[1].split('=')[1];
+    let newUrl = `https://app.cikka.com.au/api/files/file-preview?fileName=${fileName}&folderName=${folderName}`;
+
+    return newUrl;
+  };
+
 
   return (
     <form onSubmit={formik.handleSubmit}>
@@ -621,7 +637,7 @@ export const MerchantForm = ({ initialValues, onSubmit, isEdit = false, isAdd = 
 
         <aside className="col-md-4">
           <div className="form-group">
-            <label for="merchantCikkaTransactionDefaultPercentage">merchantCikkaTransactionDefaultPercentage</label>
+            <label for="merchantCikkaTransactionDefaultPercentage">merchantCikkaTransaction <br />DefaultPercentage</label>
             <input
               type="number"
               id="merchantCikkaTransactionDefaultPercentage"
@@ -865,6 +881,28 @@ export const MerchantForm = ({ initialValues, onSubmit, isEdit = false, isAdd = 
             </select>
           </div>
         </aside>
+
+        {
+          !isAdd ?
+            <aside className="col-md-4">
+              {formik.values.logo.filePath && formik.values.logo.filePath ? (
+                <img src={modifyLogoImageUrl(formik.values.logo.filePath, formik.values.logo.folderName)} alt="logo" className="form-image-tag" />
+              ) : (
+                <div className="empty-placeholder">Empty Image</div>
+              )}
+            </aside> : null
+        }
+
+        {
+          !isAdd ?
+            <aside className="col-md-4">
+              {formik.values.squareLogo.filePath && formik.values.squareLogo.filePath ? (
+                <img src={modifySquareLogoImageUrl(formik.values.squareLogo.filePath, formik.values.logo.folderName)} alt="logo" className="form-image-tag" />
+              ) : (
+                <div className="empty-placeholder">Empty Image</div>
+              )}
+            </aside> : null
+        }
 
       </div>
       <div className="modal-footer d-flex justify-content-end">

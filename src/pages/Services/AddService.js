@@ -18,6 +18,7 @@ export const AddServicesModal = ({ handleSuccess, handleClose }) => {
         name: "",
         duration: "",
         description: "",
+        appointmentPerSlot: "",
         status: ""
     };
 
@@ -45,6 +46,7 @@ export const AddServicesModal = ({ handleSuccess, handleClose }) => {
                 <ServicesForm
                     initialValues={initialValues}
                     handleSubmit={saveServices}
+                    isAdd={true}
                 />
             </Modal.Body>
         </Modal>

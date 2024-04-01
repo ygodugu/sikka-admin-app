@@ -190,9 +190,9 @@ export const MerchantServices = () => {
                                                             </td>
                                                             <td>
                                                                 {p.fileUpload && p.fileUpload.filePath ? (
-                                                                    <img src={modifyImageUrl(p.fileUpload.filePath, p.fileUpload.folderName)} alt="logo" className="table-logo" />
+                                                                    <img src={modifyImageUrl(p.fileUpload.filePath, p.fileUpload.folderName)} alt="logo" className="square-logo" />
                                                                 ) : (
-                                                                    <img src={demoLogo} alt='demoLogo' className="table-logo" />
+                                                                    <img src={demoLogo} alt='demoLogo' className="square-logo" />
                                                                 )}
                                                             </td>
                                                             <td>{p.id}</td>

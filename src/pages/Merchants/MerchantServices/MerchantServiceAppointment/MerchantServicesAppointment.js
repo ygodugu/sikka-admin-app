@@ -84,11 +84,12 @@ export const MerchantServiceAppointment = () => {
         refetch();
     };
 
+
     const [usersData, setUsersData] = useState([]);
 
     useEffect(() => {
         axiosInstance
-            .get("/users")
+            .get("/users?pageIndex=0&pageSize=800")
             .then((res) => res.data)
             .then((data) => {
                 setUsersData(data);
@@ -99,13 +100,7 @@ export const MerchantServiceAppointment = () => {
             });
     }, []);
 
-    const modifyImageUrl = (originalUrl, folderName) => {
-        let parts = originalUrl.split('?');
-        let fileName = parts[1].split('=')[1];
-        let newUrl = `https://app.cikka.com.au/api/files/file-preview?fileName=${fileName}&folderName=${folderName}`;
 
-        return newUrl;
-    };
 
     return (
         <>
@@ -181,8 +176,22 @@ export const MerchantServiceAppointment = () => {
                                                             <td>{p.specialRequest}</td>
                                                             <td>{p.startTime}</td>
                                                             <td>{p.endTime}</td>
-                                                            <td>{usersData?.data?.find(user => user.id === p.createdBy)?.firstName || 'N/A'}</td>
-                                                            <td>{usersData?.data?.find(user => user.id === p.updatedBy)?.firstName || 'N/A'}</td>
+                                                            <td>
+                                                                {usersData && usersData.data && usersData.data.find(user => user.id === p.createdBy) ? (
+                                                                    (() => {
+                                                                        const user = usersData.data.find(user => user.id === p.createdBy);
+                                                                        return `${user.firstName || 'N/A'} ${user.lastName || 'N/A'}`;
+                                                                    })()
+                                                                ) : p.createdBy}
+                                                            </td>
+                                                            <td>
+                                                                {usersData && usersData.data && usersData.data.find(user => user.id === p.updatedBy) ? (
+                                                                    (() => {
+                                                                        const user = usersData.data.find(user => user.id === p.updatedBy);
+                                                                        return `${user.firstName || 'N/A'} ${user.lastName || 'N/A'}`;
+                                                                    })()
+                                                                ) : p.updatedBy}
+                                                            </td>
                                                             <td>{<DateFormate dateTime={p.createdAt} />}</td>
                                                             <td>{<DateFormate dateTime={p.updatedAt} />}</td>
                                                         </tr>
