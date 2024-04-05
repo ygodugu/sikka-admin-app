@@ -17,7 +17,7 @@ const getViewMerchantDetails = (userId) => {
 };
 
 const getViewMerchantDetailsappointments = (userId, selectedDate) => {
-    return axiosInstance.get(`/appointments?pageIndex=0&pageSize=100&sortBy=startTime&sortOrder=ASC&status=1&merchantUserId=${userId}&startTime=${selectedDate}`).then((res) => res.data);
+    return axiosInstance.get(`/appointments?pageIndex=0&pageSize=200&sortBy=startTime&sortOrder=ASC&status=1&merchantUserId=${userId}&startTime=${selectedDate}`).then((res) => res.data);
 };
 
 
