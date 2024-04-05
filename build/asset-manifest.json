@@ -1,12 +1,12 @@
 {
   "files": {
     "main.css": "/static/css/main.c4bb0c90.css",
-    "main.js": "/static/js/main.9730c1d7.js",
+    "main.js": "/static/js/main.2c09c36b.js",
     "static/js/894.e1c2f663.chunk.js": "/static/js/894.e1c2f663.chunk.js",
     "static/js/257.efe0f97d.chunk.js": "/static/js/257.efe0f97d.chunk.js",
     "static/js/794.9cb115f3.chunk.js": "/static/js/794.9cb115f3.chunk.js",
     "static/js/931.b328ea42.chunk.js": "/static/js/931.b328ea42.chunk.js",
-    "static/js/294.6a2fc1dd.chunk.js": "/static/js/294.6a2fc1dd.chunk.js",
+    "static/js/294.49ddfb20.chunk.js": "/static/js/294.49ddfb20.chunk.js",
     "static/js/461.9e6bc131.chunk.js": "/static/js/461.9e6bc131.chunk.js",
     "static/js/553.9422fe34.chunk.js": "/static/js/553.9422fe34.chunk.js",
     "static/js/508.d2b114cf.chunk.js": "/static/js/508.d2b114cf.chunk.js",
@@ -43,12 +43,12 @@
     "static/media/edit-icon.svg": "/static/media/edit-icon.99f293607452e6df8a5fe12a6b47b2b0.svg",
     "static/media/eye-icon.svg": "/static/media/eye-icon.108e244b6ee8bc0d32b857cb71cc537c.svg",
     "main.c4bb0c90.css.map": "/static/css/main.c4bb0c90.css.map",
-    "main.9730c1d7.js.map": "/static/js/main.9730c1d7.js.map",
+    "main.2c09c36b.js.map": "/static/js/main.2c09c36b.js.map",
     "894.e1c2f663.chunk.js.map": "/static/js/894.e1c2f663.chunk.js.map",
     "257.efe0f97d.chunk.js.map": "/static/js/257.efe0f97d.chunk.js.map",
     "794.9cb115f3.chunk.js.map": "/static/js/794.9cb115f3.chunk.js.map",
     "931.b328ea42.chunk.js.map": "/static/js/931.b328ea42.chunk.js.map",
-    "294.6a2fc1dd.chunk.js.map": "/static/js/294.6a2fc1dd.chunk.js.map",
+    "294.49ddfb20.chunk.js.map": "/static/js/294.49ddfb20.chunk.js.map",
     "461.9e6bc131.chunk.js.map": "/static/js/461.9e6bc131.chunk.js.map",
     "553.9422fe34.chunk.js.map": "/static/js/553.9422fe34.chunk.js.map",
     "508.d2b114cf.chunk.js.map": "/static/js/508.d2b114cf.chunk.js.map",
@@ -76,6 +76,6 @@
   },
   "entrypoints": [
     "static/css/main.c4bb0c90.css",
-    "static/js/main.9730c1d7.js"
+    "static/js/main.2c09c36b.js"
   ]
 }
