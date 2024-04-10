@@ -17,6 +17,10 @@ export const MerchantForm = ({ initialValues, onSubmit, isEdit = false, isAdd = 
 
   const [file2, setFile2] = useState();
 
+  const [showAdditionalFields, setShowAdditionalFields] = useState(false);
+
+  const [showAutoComplete, setShowAutoComplete] = useState(false);
+
   const handleSubmit = (values, { validateForm }) => {
     validateForm(values).then(res => {
       onSubmit({ ...values, file1, file2 });
@@ -87,6 +91,30 @@ export const MerchantForm = ({ initialValues, onSubmit, isEdit = false, isAdd = 
       });
   }, []);
 
+  const [userData, setUserData] = useState([]);
+
+  useEffect(() => {
+    axiosInstance
+      .get("/users?pageIndex=0&pageSize=2000")
+      .then((res) =>
+        res.data?.data?.map((p) => ({
+          id: p.id,
+          label: `${p.email}`,
+        }))
+      )
+      .then((data) => {
+        setUserData(data);
+        if (initialValues.userId) {
+          if (initialValues.userId) {
+            formik.setFieldValue(
+              "userData",
+              data.filter((x) => x.id === initialValues.userId)
+            );
+          }
+        }
+      });
+  }, []);
+
   const modifyLogoImageUrl = (originalUrl, folderName) => {
     let parts = originalUrl.split('?');
     let fileName = parts[1].split('=')[1];
@@ -108,75 +136,295 @@ export const MerchantForm = ({ initialValues, onSubmit, isEdit = false, isAdd = 
     <form onSubmit={formik.handleSubmit}>
       <div className="row">
 
-        {!isEdit ?
-          <aside className="col-md-4">
-            <div className="form-group">
-              <label for="userType">userType</label>
-              <select
-                id="userType"
-                className="form-control"
-                onChange={formik.handleChange}
-                value={formik.values.userType}
-              >
-                <option value="">userType</option>
-                <option value="AGENT">AGENT</option>
-                <option value="COMMUNITY">COMMUNITY</option>
-                <option value="EVENT">EVENT</option>
-                <option value="MEMBER">MEMBER</option>
-                <option value="Muslim">Muslim</option>
-                <option value="MERCHANT">MERCHANT</option>
-                <option value="ORGANISER">ORGANISER</option>
-                <option value="SUPERAGENT">SUPERAGENT</option>
-              </select>
-            </div>
-          </aside>
-          : null}
 
-        {!isEdit ?
-          <aside className="col-md-4">
-            <div className="form-group">
-              <label for="religion">religion</label>
-              <select
-                id="religion"
-                className="form-control select2"
-                onChange={formik.handleChange}
-                value={formik.values.religion}
-              >
-                <option value="">religion</option>
-                <option value="Buddhist">Buddhist</option>
-                <option value="Christian">Christian</option>
-                <option value="Hindu">Hindu</option>
-                <option value="Jain">Jain</option>
-                <option value="Muslim">Muslim</option>
-                <option value="Sikh">Sikh</option>
-                <option value="Zoroastrian">Zoroastrian</option>
-                <option value="Others">Others</option>
-              </select>
-            </div>
-          </aside>
-          : null}
+        {!isEdit ? (
 
-        {/* {!isEdit ?
-          <aside className="col-md-4">
-            <div className="form-group">
-              <label for="provider">Provider</label>
-              <select
-                id="provider"
-                className="form-control select2"
-                onChange={formik.handleChange}
-                value={formik.values.provider}
-              >
+          <aside className="col-md-12">
+            <button
+              type="button"
+              className="bttn merchant-buttons"
+              onClick={() => {
+                setShowAdditionalFields(true);
+                setShowAutoComplete(false);
+              }}
+            >
+              Add New User
+            </button>
 
-                <option value="">provider</option>
-                <option value="azure">azure</option>
-                <option value="facebook">facebook</option>
-                <option value="github">github</option>
-                <option value="google">google</option>
-                <option value="local">local</option>
-              </select>
-            </div>
+            <button
+              type="button"
+              className="bttn merchant-buttons"
+              onClick={() => {
+                setShowAutoComplete(true);
+                setShowAdditionalFields(false);
+              }}
+            >
+              Select Exesting user
+            </button>
+
+            <p className="merchat-note">
+              <strong>Note:</strong> Before adding the Merchant you Need to select creating a for a new user or Existing User.
+            </p>
           </aside>
-          : null} */}
+        ) : null}
+
+        <div className="line"></div>
+
+        {/* User Detailes start here..... */}
+
+        {showAdditionalFields && (
+          <>
+            <aside className="col-md-4">
+              <div className="form-group">
+                <label for="userType">userType</label>
+                <select
+                  id="userType"
+                  className="form-control"
+                  onChange={formik.handleChange}
+                  value={formik.values.userType}
+                >
+                  <option value="">userType</option>
+                  <option value="AGENT">AGENT</option>
+                  <option value="COMMUNITY">COMMUNITY</option>
+                  <option value="EVENT">EVENT</option>
+                  <option value="MEMBER">MEMBER</option>
+                  <option value="Muslim">Muslim</option>
+                  <option value="MERCHANT">MERCHANT</option>
+                  <option value="ORGANISER">ORGANISER</option>
+                  <option value="SUPERAGENT">SUPERAGENT</option>
+                </select>
+              </div>
+            </aside>
+
+
+
+            <aside className="col-md-4">
+              <div className="form-group">
+                <label for="religion">religion</label>
+                <select
+                  id="religion"
+                  className="form-control select2"
+                  onChange={formik.handleChange}
+                  value={formik.values.religion}
+                >
+                  <option value="">religion</option>
+                  <option value="Buddhist">Buddhist</option>
+                  <option value="Christian">Christian</option>
+                  <option value="Hindu">Hindu</option>
+                  <option value="Jain">Jain</option>
+                  <option value="Muslim">Muslim</option>
+                  <option value="Sikh">Sikh</option>
+                  <option value="Zoroastrian">Zoroastrian</option>
+                  <option value="Others">Others</option>
+                </select>
+              </div>
+            </aside>
+
+
+
+            <aside className="col-md-4">
+              <div className="form-group">
+                <label for="firstName">firstName</label>
+                <input
+                  type="text"
+                  id="firstName"
+                  value={formik.values.abfirstNamen}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  className="form-control form-control-lg"
+                  placeholder="Enter firstName"
+                />
+              </div>
+            </aside>
+
+
+
+            <aside className="col-md-4">
+              <div className="form-group">
+                <label for="lastName">lastName</label>
+                <input
+                  type="text"
+                  id="lastName"
+                  value={formik.values.lastName}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  className="form-control form-control-lg"
+                  placeholder="Enter lastName"
+                />
+              </div>
+            </aside>
+
+
+
+            <aside className="col-md-4">
+              <div className="form-group">
+                <label for="email">email</label>
+                <input
+                  type="email"
+                  id="email"
+                  value={formik.values.email}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  className="form-control form-control-lg"
+                  placeholder="Enter email"
+                />
+              </div>
+            </aside>
+
+
+
+            <aside className="col-md-4">
+              <div className="form-group">
+                <label for="password">password</label>
+                <input
+                  type="text"
+                  id="password"
+                  value={formik.values.password}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  className="form-control form-control-lg"
+                  placeholder="Enter password"
+                />
+              </div>
+            </aside>
+
+
+
+            <aside className="col-md-4">
+              <div className="form-group">
+                <label for="dateOfBirth">dateOfBirth</label>
+                <DatePicker
+                  selected={
+                    formik.values.dateOfBirth
+                      ? new Date(formik.values.dateOfBirth)
+                      : null
+                  }
+                  onChange={(e) => {
+                    formik.setFieldValue("dateOfBirth", e);
+                    formik.setFieldTouched("dateOfBirth");
+                  }}
+                  className="form-control"
+                />
+              </div>
+            </aside>
+
+
+
+            <aside className="col-md-4">
+              <div className="form-group">
+                <label for="anniversaryDate">anniversaryDate</label>
+                <DatePicker
+                  selected={
+                    formik.values.anniversaryDate
+                      ? new Date(formik.values.anniversaryDate)
+                      : null
+                  }
+                  onChange={(e) => {
+                    formik.setFieldValue("anniversaryDate", e);
+                    formik.setFieldTouched("anniversaryDate");
+                  }}
+                  className="form-control"
+                />
+              </div>
+            </aside>
+
+
+
+            <aside className="col-md-4">
+              <div className="form-group">
+                <label for="joiningDate">joiningDate</label>
+                <DatePicker
+                  selected={
+                    formik.values.joiningDate
+                      ? new Date(formik.values.joiningDate)
+                      : null
+                  }
+                  onChange={(e) => {
+                    formik.setFieldValue("joiningDate", e);
+                    formik.setFieldTouched("joiningDate");
+                  }}
+                  className="form-control"
+                />
+              </div>
+            </aside>
+
+
+
+            <aside className="col-md-4">
+              <div className="form-group">
+                <label for="mobileNumber">mobileNumber</label>
+                <input
+                  type="number"
+                  id="mobileNumber"
+                  value={formik.values.mobileNumber}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  className="form-control form-control-lg"
+                  placeholder="Enter mobileNumber"
+                />
+              </div>
+            </aside>
+
+
+
+            <aside className="col-md-4">
+              <div className="form-group">
+                <label for="gender">gender</label>
+                <select
+                  id="gender"
+                  className="form-control select2"
+                  onChange={formik.handleChange}
+                  value={formik.values.gender}
+                >
+                  <option value="">gender</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Other">Other </option>
+                </select>
+              </div>
+            </aside>
+            <div className="line"></div>
+          </>
+        )}
+
+
+        {/* User Detailes end here..... */}
+
+
+
+
+        {/* For Exesting user  */}
+        {showAutoComplete && (
+          <>
+            <aside className="col-md-12">
+              <div className="form-group">
+                <label htmlFor="userId">Email *</label>
+                <Typeahead
+                  selected={formik.values.userData}
+                  id="userId"
+                  options={userData}
+                  onChange={(value) => {
+                    if (value && value.length > 0) {
+                      formik.setFieldValue("userId", value[0].id);
+                      formik.setFieldValue("userId", value);
+                    } else {
+                      formik.setFieldValue("userId", "");
+                      formik.setFieldValue("userId", []);
+                    }
+                  }}
+                  placeholder="Choose a user..."
+                />
+              </div>
+            </aside>
+            <div className="line"></div>
+          </>
+        )}
+
+        {/* Move the hr tag outside of the conditional rendering */}
+
+        {/* For Exesting user  */}
+
+        {/* Merchant Detailes start here....... */}
 
         <aside className="col-md-4">
           <div className="form-group">
@@ -223,222 +471,8 @@ export const MerchantForm = ({ initialValues, onSubmit, isEdit = false, isAdd = 
           </div>
         </aside>
 
-        {!isEdit ?
-          <aside className="col-md-4">
-            <div className="form-group">
-              <label for="firstName">firstName</label>
-              <input
-                type="text"
-                id="firstName"
-                value={formik.values.abfirstNamen}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                className="form-control form-control-lg"
-                placeholder="Enter firstName"
-              />
-            </div>
-          </aside>
-          : null}
 
-        {!isEdit ?
-          <aside className="col-md-4">
-            <div className="form-group">
-              <label for="middleName">middleName</label>
-              <input
-                type="text"
-                id="middleName"
-                value={formik.values.middleName}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                className="form-control form-control-lg"
-                placeholder="Enter middleName"
-              />
-            </div>
-          </aside>
-          : null}
 
-        {!isEdit ?
-          <aside className="col-md-4">
-            <div className="form-group">
-              <label for="lastName">lastName</label>
-              <input
-                type="text"
-                id="lastName"
-                value={formik.values.lastName}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                className="form-control form-control-lg"
-                placeholder="Enter lastName"
-              />
-            </div>
-          </aside>
-          : null}
-
-        {!isEdit ?
-          <aside className="col-md-4">
-            <div className="form-group">
-              <label for="email">email</label>
-              <input
-                type="email"
-                id="email"
-                value={formik.values.email}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                className="form-control form-control-lg"
-                placeholder="Enter email"
-              />
-            </div>
-          </aside>
-          : null}
-
-        {!isEdit ?
-          <aside className="col-md-4">
-            <div className="form-group">
-              <label for="password">password</label>
-              <input
-                type="text"
-                id="password"
-                value={formik.values.password}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                className="form-control form-control-lg"
-                placeholder="Enter password"
-              />
-            </div>
-          </aside>
-          : null}
-
-        {!isEdit ?
-          <aside className="col-md-4">
-            <div className="form-group">
-              <label for="dateOfBirth">dateOfBirth</label>
-              <DatePicker
-                selected={
-                  formik.values.dateOfBirth
-                    ? new Date(formik.values.dateOfBirth)
-                    : null
-                }
-                onChange={(e) => {
-                  formik.setFieldValue("dateOfBirth", e);
-                  formik.setFieldTouched("dateOfBirth");
-                }}
-                className="form-control"
-              />
-            </div>
-          </aside>
-          : null}
-
-        {!isEdit ?
-          <aside className="col-md-4">
-            <div className="form-group">
-              <label for="anniversaryDate">anniversaryDate</label>
-              <DatePicker
-                selected={
-                  formik.values.anniversaryDate
-                    ? new Date(formik.values.anniversaryDate)
-                    : null
-                }
-                onChange={(e) => {
-                  formik.setFieldValue("anniversaryDate", e);
-                  formik.setFieldTouched("anniversaryDate");
-                }}
-                className="form-control"
-              />
-            </div>
-          </aside>
-          : null}
-
-        {!isEdit ?
-          <aside className="col-md-4">
-            <div className="form-group">
-              <label for="joiningDate">joiningDate</label>
-              <DatePicker
-                selected={
-                  formik.values.joiningDate
-                    ? new Date(formik.values.joiningDate)
-                    : null
-                }
-                onChange={(e) => {
-                  formik.setFieldValue("joiningDate", e);
-                  formik.setFieldTouched("joiningDate");
-                }}
-                className="form-control"
-              />
-            </div>
-          </aside>
-          : null}
-
-        {!isEdit ?
-          <aside className="col-md-4">
-            <div className="form-group">
-              <label for="mobileNumber">mobileNumber</label>
-              <input
-                type="number"
-                id="mobileNumber"
-                value={formik.values.mobileNumber}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                className="form-control form-control-lg"
-                placeholder="Enter mobileNumber"
-              />
-            </div>
-          </aside>
-          : null}
-
-        {!isEdit ?
-          <aside className="col-md-4">
-            <div className="form-group">
-              <label for="gender">gender</label>
-              <select
-                id="gender"
-                className="form-control select2"
-                onChange={formik.handleChange}
-                value={formik.values.gender}
-              >
-                <option value="">gender</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="Other">Other </option>
-              </select>
-            </div>
-          </aside>
-          : null}
-
-        {!isEdit ?
-          <aside className="col-md-4">
-            <div className="form-group">
-              <label for="bloodGroup">bloodGroup</label>
-              <input
-                type="text"
-                id="bloodGroup"
-                value={formik.values.bloodGroup}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                className="form-control form-control-lg"
-                placeholder="Enter bloodGroup"
-              />
-            </div>
-          </aside>
-          : null}
-
-        {!isEdit ?
-          <aside className="col-md-4">
-            <div className="form-group">
-              <label for="alternativeNumber">alternativeNumber</label>
-              <input
-                type="number"
-                id="alternativeNumber"
-                value={formik.values.alternativeNumber}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                className="form-control form-control-lg"
-                placeholder="Enter alternativeNumber"
-              />
-            </div>
-          </aside>
-          : null}
-
-        <hr />
 
         <aside className="col-md-4">
           <div className="form-group">
@@ -903,6 +937,8 @@ export const MerchantForm = ({ initialValues, onSubmit, isEdit = false, isAdd = 
               )}
             </aside> : null
         }
+
+        {/* Merchant Detailes end here....... */}
 
       </div>
       <div className="modal-footer d-flex justify-content-end">

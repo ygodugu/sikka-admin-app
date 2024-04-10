@@ -1,15 +1,18 @@
-export const DateFormate = ({dateTime}) => {
+export const DateFormate = ({ dateTime }) => {
+    const date = new Date(dateTime);
+
     const options = {
-        year: 'numeric',
+        day: '2-digit',
         month: 'short',
-        day: 'numeric',
+        year: 'numeric',
         hour: '2-digit',
         minute: '2-digit',
-        second: '2-digit',
-        hour12: false,
-        timeZone: 'UTC'
-      };
+        hour12: true
+    };
+
+    const formattedDate = date.toLocaleString('en-GB', options);
+
     return (
-        <span>{new Intl.DateTimeFormat('en-US', options).format(new Date(dateTime))}</span>
+        <span>{formattedDate}</span>
     )
 }

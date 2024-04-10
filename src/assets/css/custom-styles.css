@@ -688,3 +688,22 @@ span.avatar {
         transform: rotate(1turn)
     }
 }
+
+.merchant-buttons {
+    border: none;
+    background: #70300D;
+    color: #fff;
+    padding: 6px 20px;
+    text-transform: uppercase;
+    margin-right: 20px;
+}
+
+.line {
+    border-bottom: 1px solid black;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.merchat-note {
+    margin: 15px;
+}

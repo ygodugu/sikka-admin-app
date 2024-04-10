@@ -9,6 +9,8 @@ import Spinner from "react-bootstrap/Spinner";
 import * as XLSX from 'xlsx'; // Importing Excel library
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import "react-datepicker/dist/react-datepicker.css";
+import DatePicker from "react-datepicker";
 
 
 
@@ -32,6 +34,30 @@ export const ViewMerchants = () => {
     };
 
 
+    // const [selectedDate, setSelectedDate] = useState(new Date(getTodayDate()));
+
+    // function getTodayDate() {
+    //     const today = new Date();
+    //     const year = today.getFullYear();
+    //     let month = today.getMonth() + 1;
+    //     let day = today.getDate();
+
+    //     if (month < 10) {
+    //         month = '0' + month;
+    //     }
+    //     if (day < 10) {
+    //         day = '0' + day;
+    //     }
+
+    //     return `${year}-${month}-${day}`;
+    // }
+
+    // const handleSelectDateChange = (date) => {
+    //     const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+    //     const formattedDate = date.toLocaleDateString('en-US', options);
+    //     setSelectedDate(formattedDate);
+    // };
+
     const [selectedDate, setSelectedDate] = useState(getTodayDate());
 
     function getTodayDate() {
@@ -50,14 +76,21 @@ export const ViewMerchants = () => {
         return `${year}-${month}-${day}`;
     }
 
-    useEffect(() => {
-        // Fetch data when the component mounts for the first time
-    }, [selectedDate]); // Refetch data when selectedDate changes
+    const handleSelectDateChange = (date) => {
+        const year = date.getFullYear();
+        let month = date.getMonth() + 1;
+        let day = date.getDate();
 
-    const handleSelectDateChange = (event) => {
-        setSelectedDate(event.target.value);
+        if (month < 10) {
+            month = '0' + month;
+        }
+        if (day < 10) {
+            day = '0' + day;
+        }
+
+        const formattedDate = `${year}-${month}-${day}`;
+        setSelectedDate(formattedDate);
     };
-
 
 
     const { data: viewMerchantDetails, isLoading: viewMerchantsLoading, error } = useQuery({
@@ -319,8 +352,6 @@ export const ViewMerchants = () => {
         });
     };
 
-
-
     return (
         <>
             {viewMerchantDetails && appointmentsData && (
@@ -365,7 +396,7 @@ export const ViewMerchants = () => {
                                                 <label>Cikka Balance</label>
                                             </div>
                                             <div className="col-md-7 mt-1">
-                                                <label>{viewMerchantDetails.cikkaBalance}</label>
+                                                <label>{viewMerchantDetails.cikkaBalance.toFixed(2)}</label>
                                             </div>
                                         </div>
                                     </div>
@@ -573,12 +604,43 @@ export const ViewMerchants = () => {
 
                                                         <div className='row'>
                                                             <aside className="col-sm-4 mt-2 mr-2">
-                                                                <input
+                                                                {/* <input
                                                                     type="date"
                                                                     name="date"
+                                                                    // data-date-format="DD MM YYYY"
                                                                     value={selectedDate} // Set the value to selectedDate
+                                                                    data-date-format="DD MM YYYY"
                                                                     onChange={handleSelectDateChange}
                                                                     className="form-control form-control-lg"
+                                                                /> */}
+                                                                <DatePicker
+                                                                    selected={new Date(selectedDate)}
+                                                                    onChange={handleSelectDateChange}
+                                                                    className="form-control"
+                                                                    dateFormat="dd-MM-yyyy" // Set the display format of the date picker
+                                                                    icon={
+                                                                        <svg
+                                                                            xmlns="http://www.w3.org/2000/svg"
+                                                                            width="1em"
+                                                                            height="1em"
+                                                                            viewBox="0 0 48 48"
+                                                                        >
+                                                                            <mask id="ipSApplication0">
+                                                                                <g fill="none" stroke="#fff" strokeLinejoin="round" strokeWidth="4">
+                                                                                    <path strokeLinecap="round" d="M40.04 22v20h-32V22"></path>
+                                                                                    <path
+                                                                                        fill="#fff"
+                                                                                        d="M5.842 13.777C4.312 17.737 7.263 22 11.51 22c3.314 0 6.019-2.686 6.019-6a6 6 0 0 0 6 6h1.018a6 6 0 0 0 6-6c0 3.314 2.706 6 6.02 6c4.248 0 7.201-4.265 5.67-8.228L39.234 6H8.845l-3.003 7.777Z"
+                                                                                    ></path>
+                                                                                </g>
+                                                                            </mask>
+                                                                            <path
+                                                                                fill="currentColor"
+                                                                                d="M0 0h48v48H0z"
+                                                                                mask="url(#ipSApplication0)"
+                                                                            ></path>
+                                                                        </svg>
+                                                                    }
                                                                 />
                                                             </aside>
                                                             <aside className="col-sm-2 mt-2  add-sec">
