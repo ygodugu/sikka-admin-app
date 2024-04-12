@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react'
 import { useFormik } from "formik";
 import { object, string } from "yup";
+import { axiosInstance } from "../../axiosInstance";
 import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from "react-datepicker";
+import { Typeahead } from "react-bootstrap-typeahead";
+
 
 let eventsSchema = object({
     name: string().required("Name is required"),
@@ -16,10 +19,10 @@ export const EventsForm = ({ initialValues, onSubmit, isEdit = false, isAdd = fa
     const handleSubmit = (values, { validateForm }) => {
         validateForm(values).then(res => {
 
-            const eventStartTime = values.eventStartTime ? `${new Date(values.eventDate).toISOString().split('T')[0]}T${values.eventStartTime}:00.000Z` : '';
-            const eventEndTime = values.eventEndTime ? `${new Date(values.eventEndDate).toISOString().split('T')[0]}T${values.eventEndTime}:00.000Z` : '';
+            // const eventStartTime = values.eventStartTime ? `${new Date(values.eventDate).toISOString().split('T')[0]}T${values.eventStartTime}:00.000Z` : '';
+            // const eventEndTime = values.eventEndTime ? `${new Date(values.eventEndDate).toISOString().split('T')[0]}T${values.eventEndTime}:00.000Z` : '';
 
-            onSubmit({ ...values, file, eventStartTime, eventEndTime });
+            onSubmit({ ...values, file });
         });
     }
 
@@ -32,6 +35,31 @@ export const EventsForm = ({ initialValues, onSubmit, isEdit = false, isAdd = fa
         onSubmit: handleSubmit,
         validationSchema: eventsSchema,
     });
+
+
+    const [MerchantID, setMerchantID] = useState([]);
+
+    useEffect(() => {
+        axiosInstance
+            .get("/merchants?pageIndex=0&pageSize=200")
+            .then((res) =>
+                res.data?.data?.map((p) => ({
+                    id: p.id,
+                    label: `${p.tradeName}`,
+                }))
+            )
+            .then((data) => {
+                setMerchantID(data);
+                if (initialValues.merchantId) {
+                    if (initialValues.merchantId) {
+                        formik.setFieldValue(
+                            "MerchantID",
+                            data.filter((x) => x.id === initialValues.merchantId)
+                        );
+                    }
+                }
+            });
+    }, []);
 
 
     const modifyImageUrl = (originalUrl, folderName) => {
@@ -62,21 +90,30 @@ export const EventsForm = ({ initialValues, onSubmit, isEdit = false, isAdd = fa
                     </div>
                 </aside>
 
-                <aside className="col-md-4">
-                    <div className="form-group">
-                        <label htmlFor="merchantId">merchantId *</label>
-                        <input
-                            type="text"
-                            id="merchantId"
-                            value={formik.values.merchantId}
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            className="form-control form-control-lg"
-                            placeholder="Enter merchantId"
-                        />
-                        <div className="invalid-feedback">{formik.errors.merchantId}</div>
-                    </div>
-                </aside>
+                {!isEdit ? (
+                    <aside className="col-md-4">
+                        <div className="form-group">
+                            <label for="merchantUserId">MerchantId *</label>
+                            <Typeahead
+                                selected={formik.values.MerchantID}
+                                id="merchantUserId"
+                                options={MerchantID}
+                                onChange={(value) => {
+                                    if (value && value.length > 0) {
+                                        formik.setFieldValue("merchantId", value[0].id);
+                                        // formik.setFieldValue("merchantUserId", value);
+
+                                    } else {
+                                        formik.setFieldValue("merchantId", "");
+                                        // formik.setFieldValue("merchantUserId", []);
+                                    }
+                                }}
+                                placeholder="Choose a Merchant..."
+                            />
+                            <div className="invalid-feedback">{formik.errors.merchantUserId}</div>
+                        </div>
+                    </aside>
+                ) : null}
 
                 <aside className="col-md-4">
                     <div className="form-group">
@@ -257,7 +294,7 @@ export const EventsForm = ({ initialValues, onSubmit, isEdit = false, isAdd = fa
 
 
 
-                <aside className="col-md-4">
+                {/* <aside className="col-md-4">
                     <div className="form-group">
                         <label htmlFor="eventStartTime">eventStartTime  *</label>
                         <input
@@ -270,7 +307,7 @@ export const EventsForm = ({ initialValues, onSubmit, isEdit = false, isAdd = fa
                             placeholder="Enter eventStartTime"
                         />
                     </div>
-                </aside>
+                </aside> */}
 
                 {/* <aside className="col-md-4">
                     <div className="form-group">
@@ -306,7 +343,7 @@ export const EventsForm = ({ initialValues, onSubmit, isEdit = false, isAdd = fa
                     </div>
                 </aside>
 
-                <aside className="col-md-4">
+                {/* <aside className="col-md-4">
                     <div className="form-group">
                         <label htmlFor="eventEndTime">eventEndTime  *</label>
                         <input
@@ -319,7 +356,7 @@ export const EventsForm = ({ initialValues, onSubmit, isEdit = false, isAdd = fa
                             placeholder="Enter Time"
                         />
                     </div>
-                </aside>
+                </aside> */}
 
                 {!isAdd ?
                     <aside className="col-md-4">
@@ -348,7 +385,7 @@ export const EventsForm = ({ initialValues, onSubmit, isEdit = false, isAdd = fa
                 {!isAdd ?
                     <aside className="col-md-6">
                         {formik.values.fileUpload.filePath && formik.values.fileUpload.filePath ? (
-                            <img src={modifyImageUrl(formik.values.fileUpload.filePath, formik.values.fileUpload.folderName )} alt="logo" className="form-image-tag" />
+                            <img src={modifyImageUrl(formik.values.fileUpload.filePath, formik.values.fileUpload.folderName)} alt="logo" className="form-image-tag" />
                         ) : (
                             <div className="empty-placeholder">Empty Image</div>
                         )}

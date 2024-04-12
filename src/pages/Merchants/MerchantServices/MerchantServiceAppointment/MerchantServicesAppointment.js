@@ -126,9 +126,9 @@ export const MerchantServiceAppointment = () => {
                             />
                         </form>
                         <aside className="col-sm-2 add-sec">
-                            <button className="bttn" onClick={() => setShowAddModal(true)}>
+                            {/* <button className="bttn" onClick={() => setShowAddModal(true)}>
                                 Add
-                            </button>
+                            </button> */}
                         </aside>
                     </div>
 

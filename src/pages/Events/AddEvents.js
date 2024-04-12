@@ -59,13 +59,13 @@ export const AddEventsModal = ({ handleSuccess, handleClose }) => {
     utilizedPasses: "",
     merchantId: "",
     url: "",
+    merchantId: "",
     description: ""
   };
 
   const saveEvents = (values) => {
     addEventsMutation.mutate({
       ...values,
-      merchantId: "ac875cbe-c8bd-4bf0-8561-6bb2db23372c",
     },
       {
         onSuccess: handleSuccess,
