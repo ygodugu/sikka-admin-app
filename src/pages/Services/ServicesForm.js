@@ -55,22 +55,12 @@ export const ServicesForm = ({ initialValues, onSubmit, isEdit = false, isAdd = 
             });
     }, []);
 
-
-    const modifyImageUrl = (originalUrl, folderName) => {
-        let parts = originalUrl.split('?');
-        let fileName = parts[1].split('=')[1];
-        let newUrl = `https://app.cikka.com.au/api/files/file-preview?fileName=${fileName}&folderName=${folderName}`;
-
-        return newUrl;
-    };
-
-
     return (
         <form onSubmit={formik.handleSubmit}>
             <div className="row">
 
                 {!isEdit ? (
-                    <aside className="col-md-6">
+                    <aside className="col-md-4">
                         <div className="form-group">
                             <label for="merchantUserId">MerchantUserId *</label>
                             <Typeahead
@@ -94,7 +84,7 @@ export const ServicesForm = ({ initialValues, onSubmit, isEdit = false, isAdd = 
                     </aside>
                 ) : null}
 
-                <aside className="col-md-6">
+                <aside className="col-md-4">
                     <div className="form-group">
                         <label htmlFor="name">Name *</label>
                         <input
@@ -110,7 +100,7 @@ export const ServicesForm = ({ initialValues, onSubmit, isEdit = false, isAdd = 
                 </aside>
 
 
-                <aside className="col-md-6">
+                <aside className="col-md-4">
                     <div className="form-group">
                         <label htmlFor="rank">Rank</label>
                         <input
@@ -124,7 +114,7 @@ export const ServicesForm = ({ initialValues, onSubmit, isEdit = false, isAdd = 
                     </div>
                 </aside>
 
-                <aside className="col-md-6">
+                <aside className="col-md-4">
                     <div className="form-group">
                         <label htmlFor="duration">Duration</label>
                         <input
@@ -138,7 +128,7 @@ export const ServicesForm = ({ initialValues, onSubmit, isEdit = false, isAdd = 
                     </div>
                 </aside>
 
-                <aside className="col-md-6">
+                <aside className="col-md-4">
                     <div className="form-group">
                         <label htmlFor="appointmentPerSlot">Appointment-Per-Slot</label>
                         <input
@@ -152,7 +142,7 @@ export const ServicesForm = ({ initialValues, onSubmit, isEdit = false, isAdd = 
                     </div>
                 </aside>
 
-                <aside className="col-md-6">
+                <aside className="col-md-4">
                     <div className="form-group">
                         <label htmlFor="startDate">StartDate *</label>
                         <DatePicker
@@ -172,7 +162,7 @@ export const ServicesForm = ({ initialValues, onSubmit, isEdit = false, isAdd = 
                     </div>
                 </aside>
 
-                <aside className="col-md-6">
+                <aside className="col-md-4">
                     <div className="form-group">
                         <label htmlFor="startTime">StartTime  *</label>
                         <input
@@ -187,7 +177,7 @@ export const ServicesForm = ({ initialValues, onSubmit, isEdit = false, isAdd = 
                     </div>
                 </aside>
 
-                <aside className="col-md-6">
+                <aside className="col-md-4">
                     <div className="form-group">
                         <label htmlFor="endDate">EndDate</label>
                         <DatePicker
@@ -206,7 +196,7 @@ export const ServicesForm = ({ initialValues, onSubmit, isEdit = false, isAdd = 
                     </div>
                 </aside>
 
-                <aside className="col-md-6">
+                <aside className="col-md-4">
                     <div className="form-group">
                         <label htmlFor="endTime">EndTime  *</label>
                         <input
@@ -221,7 +211,7 @@ export const ServicesForm = ({ initialValues, onSubmit, isEdit = false, isAdd = 
                     </div>
                 </aside>
 
-                <aside className="col-md-6">
+                <aside className="col-md-4">
                     <div className="form-group">
                         <label htmlFor="status">status</label>
                         <select
@@ -250,15 +240,6 @@ export const ServicesForm = ({ initialValues, onSubmit, isEdit = false, isAdd = 
                         />
                     </div>
                 </aside>
-
-                {!isAdd ?
-                    <aside className="col-md-6">
-                        {formik.values.fileUpload.filePath && formik.values.fileUpload.filePath ? (
-                            <img src={modifyImageUrl(formik.values.fileUpload.filePath, formik.values.fileUpload.folderName)} alt="logo" className="form-image-tag" />
-                        ) : (
-                            <div className="empty-placeholder">Empty Image</div>
-                        )}
-                    </aside> : null}
 
             </div>
             <div className="modal-footer d-flex justify-content-end">
