@@ -139,7 +139,7 @@ export const Vouchers = () => {
 
   useEffect(() => {
     axiosInstance
-      .get("/users?pageIndex=0&pageSize=800")
+      .get("/users?pageIndex=0&pageSize=1400")
       .then((res) => res.data)
       .then((data) => {
         setUsersData(data);

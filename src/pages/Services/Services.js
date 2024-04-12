@@ -88,10 +88,26 @@ export const Services = () => {
 
     useEffect(() => {
         axiosInstance
-            .get("/users?pageIndex=0&pageSize=800")
+            .get("/users?pageIndex=0&pageSize=1400")
             .then((res) => res.data)
             .then((data) => {
                 setUsersData(data);
+                console.log(data);
+            })
+            .catch((error) => {
+                console.error("Error fetching categories:", error);
+            });
+    }, []);
+
+
+    const [merchatData, setMerchatData] = useState([]);
+
+    useEffect(() => {
+        axiosInstance
+            .get("/merchants?pageIndex=0&pageSize=200")
+            .then((res) => res.data)
+            .then((data) => {
+                setMerchatData(data);
                 console.log(data);
             })
             .catch((error) => {
@@ -203,7 +219,15 @@ export const Services = () => {
                                                                 )}
                                                             </td>
                                                             <td>{p.id}</td>
-                                                            <td>{p.merchantUserId}</td>
+                                                            {/* <td>{p.merchantUserId}</td> */}
+                                                            <td>
+                                                                {merchatData && merchatData.data && merchatData.data.find(merchant => merchant.userId === p.merchantUserId) ? (
+                                                                    (() => {
+                                                                        const merchant = merchatData.data.find(merchant => merchant.userId === p.merchantUserId);
+                                                                        return `${merchant.tradeName || 'N/A'}`;
+                                                                    })()
+                                                                ) : p.createdBy}
+                                                            </td>
                                                             <td>{p.name}</td>
                                                             <td>{p.duration}</td>
                                                             <td>{p.description}</td>

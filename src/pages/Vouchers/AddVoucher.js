@@ -50,6 +50,8 @@ export const AddVoucherModal = ({ handleSuccess, handleClose }) => {
   });
 
   const initialValues = {
+    merchantId:"",
+    categoryId: "",
     voucherCode: "",
     voucherValue: "",
     rank: "",
@@ -68,8 +70,6 @@ export const AddVoucherModal = ({ handleSuccess, handleClose }) => {
     addUserMutation.mutate(
       {
         ...values,
-        categoryId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-        merchantId: "ac875cbe-c8bd-4bf0-8561-6bb2db23372c",
       },
       {
         onSuccess: handleSuccess,

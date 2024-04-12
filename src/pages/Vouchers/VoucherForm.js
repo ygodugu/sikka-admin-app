@@ -52,6 +52,30 @@ export const VoucherForm = ({ initialValues, onSubmit, isEdit = false, isAdd = f
     validationSchema: voucherSchema,
   });
 
+  const [MerchantID, setMerchantID] = useState([]);
+
+  useEffect(() => {
+    axiosInstance
+      .get("/merchants?pageIndex=0&pageSize=200")
+      .then((res) =>
+        res.data?.data?.map((p) => ({
+          id: p.id,
+          label: `${p.tradeName}`,
+        }))
+      )
+      .then((data) => {
+        setMerchantID(data);
+        if (initialValues.merchantId) {
+          if (initialValues.merchantId) {
+            formik.setFieldValue(
+              "MerchantID",
+              data.filter((x) => x.id === initialValues.merchantId)
+            );
+          }
+        }
+      });
+  }, []);
+
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
@@ -136,6 +160,32 @@ export const VoucherForm = ({ initialValues, onSubmit, isEdit = false, isAdd = f
   return (
     <form onSubmit={formik.handleSubmit}>
       <div className="row">
+
+        {!isEdit ? (
+          <aside className="col-md-4">
+            <div className="form-group">
+              <label for="merchantUserId">MerchantId *</label>
+              <Typeahead
+                selected={formik.values.MerchantID}
+                id="merchantUserId"
+                options={MerchantID}
+                onChange={(value) => {
+                  if (value && value.length > 0) {
+                    formik.setFieldValue("merchantId", value[0].id);
+                    // formik.setFieldValue("merchantUserId", value);
+
+                  } else {
+                    formik.setFieldValue("merchantId", "");
+                    // formik.setFieldValue("merchantUserId", []);
+                  }
+                }}
+                placeholder="Choose a Merchant..."
+              />
+              <div className="invalid-feedback">{formik.errors.merchantUserId}</div>
+            </div>
+          </aside>
+        ) : null}
+
         <aside className="col-md-4">
           <div className="form-group">
             <label for="categoryId">categoryId *</label>

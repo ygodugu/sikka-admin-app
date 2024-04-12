@@ -3,12 +3,26 @@ import { useFormik } from "formik";
 import { object, string } from "yup";
 import { axiosInstance } from "../../axiosInstance";
 import { Typeahead } from "react-bootstrap-typeahead";
+import "react-datepicker/dist/react-datepicker.css";
+import DatePicker from "react-datepicker";
 
 
 let ServicesSchema = object({
     name: string().required("Name is required")
 });
-export const ServicesForm = ({ initialValues, handleSubmit, isAdd = false }) => {
+export const ServicesForm = ({ initialValues, onSubmit, isEdit = false, isAdd = false }) => {
+
+    const handleSubmit = (values, { validateForm }) => {
+        validateForm(values).then(res => {
+
+             const startTime = values.startTime ? `${new Date(values.startDate).toISOString().split('T')[0]}T${values.startTime}` : '';
+             const endTime = values.endTime ? `${new Date(values.endDate).toISOString().split('T')[0]}T${values.endTime}` : '';
+
+            onSubmit({ ...values, startTime, endTime });
+        });
+    }
+
+
     const formik = useFormik({
         initialValues: initialValues,
         onSubmit: handleSubmit,
@@ -21,11 +35,11 @@ export const ServicesForm = ({ initialValues, handleSubmit, isAdd = false }) => 
 
     useEffect(() => {
         axiosInstance
-            .get("/merchants")
+            .get("/merchants?pageIndex=0&pageSize=200")
             .then((res) =>
                 res.data?.data?.map((p) => ({
-                    id: p.id,
-                    label: `${p.user.firstName} ${p.user.lastName}`,
+                    id: p.userId,
+                    label: `${p.tradeName}`,
                 }))
             )
             .then((data) => {
@@ -55,27 +69,30 @@ export const ServicesForm = ({ initialValues, handleSubmit, isAdd = false }) => 
         <form onSubmit={formik.handleSubmit}>
             <div className="row">
 
-                <aside className="col-md-6">
-                    <div className="form-group">
-                        <label for="merchantUserId">MerchantUserId *</label>
-                        <Typeahead
-                            selected={formik.values.MerchantID}
-                            id="merchantUserId"
-                            options={MerchantID}
-                            onChange={(value) => {
-                                if (value && value.length > 0) {
-                                    formik.setFieldValue("merchantUserId", value[0].id);
-                                    formik.setFieldValue("MerchantID", value);
-                                } else {
-                                    formik.setFieldValue("merchantUserId", "");
-                                    formik.setFieldValue("MerchantID", []);
-                                }
-                            }}
-                            placeholder="Choose a MerchantUser..."
-                        />
-                        <div className="invalid-feedback">{formik.errors.businessCategoryId}</div>
-                    </div>
-                </aside>
+                {!isEdit ? (
+                    <aside className="col-md-6">
+                        <div className="form-group">
+                            <label for="merchantUserId">MerchantUserId *</label>
+                            <Typeahead
+                                selected={formik.values.MerchantID}
+                                id="merchantUserId"
+                                options={MerchantID}
+                                onChange={(value) => {
+                                    if (value && value.length > 0) {
+                                        formik.setFieldValue("merchantUserId", value[0].id);
+                                        // formik.setFieldValue("merchantUserId", value);
+
+                                    } else {
+                                        formik.setFieldValue("merchantUserId", "");
+                                        // formik.setFieldValue("merchantUserId", []);
+                                    }
+                                }}
+                                placeholder="Choose a MerchantUser..."
+                            />
+                            <div className="invalid-feedback">{formik.errors.merchantUserId}</div>
+                        </div>
+                    </aside>
+                ) : null}
 
                 <aside className="col-md-6">
                     <div className="form-group">
@@ -92,16 +109,17 @@ export const ServicesForm = ({ initialValues, handleSubmit, isAdd = false }) => 
                     </div>
                 </aside>
 
+
                 <aside className="col-md-6">
                     <div className="form-group">
-                        <label htmlFor="description">Description</label>
+                        <label htmlFor="rank">Rank</label>
                         <input
-                            type="text"
-                            id="description"
-                            value={formik.values.description}
+                            type="number"
+                            id="rank"
+                            value={formik.values.rank}
                             onChange={formik.handleChange}
                             className="form-control form-control-lg"
-                            placeholder="Enter description"
+                            placeholder="Enter duration"
                         />
                     </div>
                 </aside>
@@ -120,7 +138,6 @@ export const ServicesForm = ({ initialValues, handleSubmit, isAdd = false }) => 
                     </div>
                 </aside>
 
-
                 <aside className="col-md-6">
                     <div className="form-group">
                         <label htmlFor="appointmentPerSlot">Appointment-Per-Slot</label>
@@ -135,6 +152,74 @@ export const ServicesForm = ({ initialValues, handleSubmit, isAdd = false }) => 
                     </div>
                 </aside>
 
+                <aside className="col-md-6">
+                    <div className="form-group">
+                        <label htmlFor="startDate">StartDate *</label>
+                        <DatePicker
+                            selected={
+                                formik.values.startDate
+                                    ? new Date(formik.values.startDate)
+                                    : null
+                            }
+                            onChange={(e) => {
+                                formik.setFieldValue("startDate", e);
+                                formik.setFieldTouched("startDate");
+                            }}
+                            className="form-control"
+
+                        />
+                        <div className="invalid-feedback">{formik.errors.startDate}</div>
+                    </div>
+                </aside>
+
+                <aside className="col-md-6">
+                    <div className="form-group">
+                        <label htmlFor="startTime">StartTime  *</label>
+                        <input
+                            type="time"
+                            id="startTime"
+                            value={formik.values.startTime}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            className="form-control form-control-lg"
+                            placeholder="Enter startTime"
+                        />
+                    </div>
+                </aside>
+
+                <aside className="col-md-6">
+                    <div className="form-group">
+                        <label htmlFor="endDate">EndDate</label>
+                        <DatePicker
+                            selected={
+                                formik.values.endDate
+                                    ? new Date(formik.values.endDate)
+                                    : null
+                            }
+                            onChange={(e) => {
+                                formik.setFieldValue("endDate", e);
+                                formik.setFieldTouched("endDate");
+                            }}
+                            className="form-control"
+
+                        />
+                    </div>
+                </aside>
+
+                <aside className="col-md-6">
+                    <div className="form-group">
+                        <label htmlFor="endTime">EndTime  *</label>
+                        <input
+                            type="time"
+                            id="endTime"
+                            value={formik.values.endTime}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            className="form-control form-control-lg"
+                            placeholder="Enter Time"
+                        />
+                    </div>
+                </aside>
 
                 <aside className="col-md-6">
                     <div className="form-group">
@@ -149,6 +234,20 @@ export const ServicesForm = ({ initialValues, handleSubmit, isAdd = false }) => 
                             <option value="2">Hold</option>
                             <option value="0">Deleted</option>
                         </select>
+                    </div>
+                </aside>
+
+                <aside className="col-md-12">
+                    <div className="form-group">
+                        <label htmlFor="description">Description</label>
+                        <textarea
+                            type="text"
+                            id="description"
+                            value={formik.values.description}
+                            onChange={formik.handleChange}
+                            className="form-control form-control-lg"
+                            placeholder="Enter description"
+                        />
                     </div>
                 </aside>
 

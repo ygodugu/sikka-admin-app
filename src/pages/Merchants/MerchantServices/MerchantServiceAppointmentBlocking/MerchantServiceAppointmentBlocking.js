@@ -92,7 +92,7 @@ export const MerchantServiceAppointmentBlocking = () => {
 
     useEffect(() => {
         axiosInstance
-            .get("/users")
+            .get('/users?pageIndex=0&pageSize=1400')
             .then((res) => res.data)
             .then((data) => {
                 setUsersData(data);

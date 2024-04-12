@@ -13,12 +13,16 @@ export const AddServicesModal = ({ handleSuccess, handleClose }) => {
     });
     const initialValues = {
         fileId: "b2a68eb4-70ea-4b3e-8404-6f003a0dcf17",
-        id: "",
         merchantUserId: "",
         name: "",
         duration: "",
         description: "",
         appointmentPerSlot: "",
+        startDate: "",
+        startTime: "",
+        endDate: "",
+        endTime: "",
+        rank: "",
         status: ""
     };
 
@@ -45,7 +49,7 @@ export const AddServicesModal = ({ handleSuccess, handleClose }) => {
             <Modal.Body>
                 <ServicesForm
                     initialValues={initialValues}
-                    handleSubmit={saveServices}
+                    onSubmit={saveServices}
                     isAdd={true}
                 />
             </Modal.Body>

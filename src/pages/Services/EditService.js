@@ -21,7 +21,7 @@ export const EditServicesModal = ({ handleSuccess, handleClose, id }) => {
     mutationFn: updateServices,
   });
 
-  const handleUpdateIndustries = (values) => {
+  const handleUpdateService = (values) => {
     updateServicesMutation.mutate(
       { ...values, id },
       {
@@ -49,7 +49,8 @@ export const EditServicesModal = ({ handleSuccess, handleClose, id }) => {
           <Modal.Body>
             <ServicesForm
               initialValues={ServicesDetails}
-              handleSubmit={handleUpdateIndustries}
+              onSubmit={handleUpdateService}
+              isEdit={true}
             />
           </Modal.Body>
         </Modal>
