@@ -86,6 +86,60 @@ const ViewTransaction = lazy(() =>
   import("./Transactions/ViewTransaction").then((module) => ({ default: module.ViewTransaction }))
 );
 
+// for graph view page
+
+const ViewUsersLineChart = lazy(() =>
+  import("./Chart/ViewUsersLineChart").then((module) => ({ default: module.ViewUsersLineChart }))
+);
+
+const ViewVouchersLineChart = lazy(() =>
+  import("./Chart/ViewVouchersLineChart").then((module) => ({ default: module.ViewVouchersLineChart }))
+);
+
+const ViewMerchantsLineChart = lazy(() =>
+  import("./Chart/ViewMerchantsLineChart").then((module) => ({ default: module.ViewMerchantsLineChart }))
+);
+
+const ViewPurchasesLineChart = lazy(() =>
+  import("./Chart/ViewPurchasesLineChart").then((module) => ({ default: module.ViewPurchasesLineChart }))
+);
+
+const ViewTransactionsLineChart = lazy(() =>
+  import("./Chart/ViewTransactionsLineChart").then((module) => ({ default: module.ViewTransactionsLineChart }))
+);
+
+const ViewBusinessCategoriesLineChart = lazy(() =>
+  import("./Chart/ViewBusinessCategoriesLineChart").then((module) => ({ default: module.ViewBusinessCategoriesLineChart }))
+);
+
+const ViewCategoriesLineChart = lazy(() =>
+  import("./Chart/ViewCategoriesLineChart").then((module) => ({ default: module.ViewCategoriesLineChart }))
+);
+
+const ViewIndustriesLineChart = lazy(() =>
+  import("./Chart/ViewIndustriesLineChart").then((module) => ({ default: module.ViewIndustriesLineChart }))
+);
+
+const ViewCountriesLineChart = lazy(() =>
+  import("./Chart/ViewCountriesLineChart").then((module) => ({ default: module.ViewCountriesLineChart }))
+);
+
+const ViewStatesLineChart = lazy(() =>
+  import("./Chart/ViewStatesLineChart").then((module) => ({ default: module.ViewStatesLineChart }))
+);
+
+const ViewCitiesLineChart = lazy(() =>
+  import("./Chart/ViewCitiesLineChart").then((module) => ({ default: module.ViewCitiesLineChart }))
+);
+
+const ViewDocumentsLineChart = lazy(() =>
+  import("./Chart/ViewDocumentsLineChart").then((module) => ({ default: module.ViewDocumentsLineChart }))
+);
+
+const ViewEventsLineChart = lazy(() =>
+  import("./Chart/ViewEventsLineChart").then((module) => ({ default: module.ViewEventsLineChart }))
+);
+
 
 export const Layout = () => {
 
@@ -133,6 +187,19 @@ export const Layout = () => {
                   <Route path="/Documents" element={<Documents />} />
                   <Route path="/Events" element={<Events />} />
                   <Route path="/Services" element={<Services />} />
+                  <Route path="/ViewUsersLineChart" element={<ViewUsersLineChart />} />
+                  <Route path="/ViewVouchersLineChart" element={<ViewVouchersLineChart />} />
+                  <Route path="/ViewMerchantsLineChart" element={<ViewMerchantsLineChart />} />
+                  <Route path="/ViewPurchasesLineChart" element={<ViewPurchasesLineChart />} />
+                  <Route path="/ViewTransactionsLineChart" element={<ViewTransactionsLineChart />} />
+                  <Route path="/ViewBusinessCategoriesLineChart" element={<ViewBusinessCategoriesLineChart />} />
+                  <Route path="/ViewCategoriesLineChart" element={<ViewCategoriesLineChart />} />
+                  <Route path="/ViewIndustriesLineChart" element={<ViewIndustriesLineChart />} />
+                  <Route path="/ViewCountriesLineChart" element={<ViewCountriesLineChart />} />
+                  <Route path="/ViewStatesLineChart" element={<ViewStatesLineChart />} />
+                  <Route path="/ViewCitiesLineChart" element={<ViewCitiesLineChart />} />
+                  <Route path="/ViewDocumentsLineChart" element={<ViewDocumentsLineChart />} />
+                  <Route path="/ViewEventsLineChart" element={<ViewEventsLineChart />} />
                   <Route
                     path="*"
                     element={<Navigate to="/dashboard" replace />}

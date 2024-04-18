@@ -1,23 +1,32 @@
 import React, { useEffect, useRef } from 'react';
 import Chart from 'chart.js/auto';
 
-const LineChart = ({ count }) => {
+const LineChart = ({ data }) => {
     const chartContainer = useRef(null);
     const chartRef = useRef(null);
 
-    const hasDecreased = count < (0);
-
-    const dailyCounts = hasDecreased
-        ? Array(7)
-            .fill(0)
-            .map((_, index) => (7 - index) * (count / 7))
-        : Array(7)
-            .fill(0)
-            .map((_, index) => (index + 1) * (count / 7));
-
     useEffect(() => {
-        if (chartContainer && chartContainer.current) {
+        if (chartContainer && chartContainer.current && data) {
             const ctx = chartContainer.current.getContext('2d');
+            const today = new Date();
+            const dates = [];
+            const dailyCounts = [];
+
+            // Generate labels and counts for the last 5 days
+            for (let i = 4; i >= 0; i--) {
+                const date = new Date(today);
+                date.setDate(date.getDate() - i);
+                const formattedDate = date.toLocaleDateString('en-US', { weekday: 'long' });
+                dates.push(formattedDate);
+
+                // Filter data for the current date
+                const filteredData = data.data.filter(item => {
+                    const createdAtDate = new Date(item.createdAt.split('T')[0]);
+                    return createdAtDate.toDateString() === date.toDateString();
+                });
+
+                dailyCounts.push(filteredData.length);
+            }
 
             if (chartRef.current) {
                 chartRef.current.destroy();
@@ -26,9 +35,7 @@ const LineChart = ({ count }) => {
             chartRef.current = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: [
-                        'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
-                    ],
+                    labels: dates,
                     datasets: [
                         {
                             label: 'Line Chart',
@@ -89,7 +96,8 @@ const LineChart = ({ count }) => {
 
             });
         }
-    }, [count]);
+    }, [data]);
+
 
     return (
         <div>

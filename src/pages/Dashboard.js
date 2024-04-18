@@ -1,17 +1,18 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect } from 'react';
 import "chart.js/auto";
 import { Line } from 'react-chartjs-2';
 import { useQuery } from "@tanstack/react-query";
 import { axiosInstance } from "../axiosInstance";
 import LineChart from '../components/LineChart';
 import { ShimmerThumbnail } from "react-shimmer-effects";
+import { NavLink } from "react-router-dom";
 
 
-const fetchUsersCounts = () => axiosInstance.get(`/users`).then(res => res.data)
+const fetchUsersCounts = () => axiosInstance.get(`/users?pageIndex=0&pageSize=2000`).then(res => res.data)
 
 const fetchVouchersCounts = () => axiosInstance.get(`/vouchers`).then(res => res.data)
 
-const fetchMerchantsCounts = () => axiosInstance.get(`/merchants`).then(res => res.data)
+const fetchMerchantsCounts = () => axiosInstance.get(`/merchants?pageIndex=0&pageSize=200`).then(res => res.data)
 
 const fetchPurchasesCounts = () => axiosInstance.get(`/cikka-purchases`).then(res => res.data)
 
@@ -67,7 +68,7 @@ export const Dashboard = () => {
         datasets: [
             {
                 label: 'Red Dataset',
-                data: [860, 1140, 1060, 1060, 1070, 1110, 1330, 2210, 7830, 2478],
+                data: [860, 1140, 60, 1060, 1070, 1110, 1330, 2210, 7830, 2478],
                 backgroundColor: 'rgba(247, 42, 45, 0.5)',
                 borderColor: 'red',
                 lineTension: 0.4,
@@ -121,6 +122,64 @@ export const Dashboard = () => {
         },
     };
 
+
+
+    const [UsersCurrentDate, setUsersCurrentDate] = useState('');
+
+    useEffect(() => {
+        // Get the current date
+        const getCurrentDate = () => {
+            const date = new Date();
+            const day = date.getDate();
+            const month = date.getMonth() + 1;
+            const year = date.getFullYear().toString().slice(-2); // Get the last two digits of the year
+            // Ensure day and month are always two digits
+            const formattedDay = day < 10 ? '0' + day : day;
+            const formattedMonth = month < 10 ? '0' + month : month;
+            return formattedDay + '/' + formattedMonth + '/' + year;
+        };
+        setUsersCurrentDate(getCurrentDate());
+    }, []); // Run this effect only once on component mount
+
+
+    const [todayRegisterUserCount, setTodayRegisterUserCount] = useState(0);
+    const [todayRegisterMerchantCount, setTodayRegisterMerchantCount] = useState(0);
+
+    useEffect(() => {
+        if (!isLoading && data) {
+            const currentDate = new Date().toISOString().slice(0, 10); // Get today's date in ISO format (YYYY-MM-DD)
+            console.log("Current Date:", currentDate);
+
+            // Log data structure
+            console.log("Data:", data);
+
+            // Check if data[0] contains the user data
+            console.log("User Data:", data[0]);
+
+            // Count today's registered users
+            const usersData = data[0].data;
+            console.log("Users Data:", usersData);
+            const usersCount = usersData.filter(user => {
+                const userCreatedAtDate = user.createdAt?.slice(0, 10);
+                console.log("User Created At Date:", userCreatedAtDate);
+                return userCreatedAtDate === currentDate;
+            }).length;
+            console.log("Today's Registered Users Count:", usersCount);
+            setTodayRegisterUserCount(usersCount);
+
+            // Count today's registered merchants
+            const merchantsData = data[2].data;
+            console.log("Merchants Data:", merchantsData);
+            const merchantsCount = merchantsData.filter(merchant => {
+                const merchantCreatedAtDate = merchant.createdAt?.slice(0, 10);
+                console.log("Merchant Created At Date:", merchantCreatedAtDate);
+                return merchantCreatedAtDate === currentDate;
+            }).length;
+            console.log("Today's Registered Merchants Count:", merchantsCount);
+            setTodayRegisterMerchantCount(merchantsCount);
+        }
+    }, [isLoading, data]);
+
     return (
         <>
 
@@ -135,11 +194,17 @@ export const Dashboard = () => {
                     <div className="row db-cards items-align-baseline">
                         <div className="col-md-12 col-lg-4">
                             <div className="card eq-card mb-4">
+
                                 <div className="card-body">
                                     <div className="row">
                                         <div className="col-4">
                                             <p className="mb-1"><strong>Users</strong></p>
-                                            <h4 className="mb-0">{data?.[0]?.count}</h4>
+                                            {/* the count variable -60 is the test user data count */}
+                                            {/* <h4 className="mb-0">{data?.[0]?.count - 60}</h4> */}
+                                            <h4 className="mb-0">{!isNaN(data?.[0]?.count) ? data[0].count - 60 : ''}</h4>
+                                            <div className='mt-3'>
+                                                <div>{UsersCurrentDate}</div>
+                                            </div>
                                         </div>
                                         {isLoading ? (
                                             <div className='col-8'>
@@ -147,13 +212,19 @@ export const Dashboard = () => {
                                             </div>
                                         ) : (
                                             <div className="col-8">
-                                                <LineChart count={data?.[0]?.count} />
+                                                <NavLink to="/ViewUsersLineChart">
+                                                    <div>
+                                                        <LineChart data={data?.[0]} />
+                                                    </div>
+                                                </NavLink>
                                             </div>
                                         )}
                                     </div>
                                 </div>
                             </div>
                         </div>
+
+
                         <div className="col-md-12 col-lg-4">
                             <div className="card eq-card mb-4">
                                 <div className="card-body">
@@ -168,7 +239,11 @@ export const Dashboard = () => {
                                             </div>
                                         ) : (
                                             <div className="col-7">
-                                                <LineChart count={data?.[1]?.count} />
+                                                <NavLink to="/ViewVouchersLineChart">
+                                                    <div>
+                                                        <LineChart data={data?.[1]} />
+                                                    </div>
+                                                </NavLink>
                                             </div>
                                         )}
                                     </div>
@@ -189,7 +264,11 @@ export const Dashboard = () => {
                                             </div>
                                         ) : (
                                             <div className="col-7">
-                                                <LineChart count={data?.[2]?.count} />
+                                                <NavLink to="/ViewMerchantsLineChart">
+                                                    <div>
+                                                        <LineChart data={data?.[2]} />
+                                                    </div>
+                                                </NavLink>
                                             </div>
                                         )}
                                     </div>
@@ -210,7 +289,11 @@ export const Dashboard = () => {
                                             </div>
                                         ) : (
                                             <div className="col-7 mb-0">
-                                                <LineChart count={data?.[3]?.count} />
+                                                <NavLink to="/ViewPurchasesLineChart">
+                                                    <div>
+                                                        <LineChart data={data?.[3]} />
+                                                    </div>
+                                                </NavLink>
                                             </div>
                                         )}
                                     </div>
@@ -231,7 +314,11 @@ export const Dashboard = () => {
                                             </div>
                                         ) : (
                                             <div className="col-7 mb-0">
-                                                <LineChart count={data?.[4]?.count} />
+                                                <NavLink to="/ViewTransactionsLineChart">
+                                                    <div>
+                                                        <LineChart data={data?.[4]} />
+                                                    </div>
+                                                </NavLink>
                                             </div>
                                         )}
                                     </div>
@@ -252,7 +339,11 @@ export const Dashboard = () => {
                                             </div>
                                         ) : (
                                             <div className="col-7 mb-0">
-                                                <LineChart count={data?.[5]?.count} />
+                                                <NavLink to="/ViewBusinessCategoriesLineChart">
+                                                    <div>
+                                                        <LineChart data={data?.[5]} />
+                                                    </div>
+                                                </NavLink>
                                             </div>
                                         )}
                                     </div>
@@ -273,7 +364,11 @@ export const Dashboard = () => {
                                             </div>
                                         ) : (
                                             <div className="col-7 mb-0">
-                                                <LineChart count={data?.[6]?.count} />
+                                                <NavLink to="/ViewCategoriesLineChart">
+                                                    <div>
+                                                        <LineChart data={data?.[6]} />
+                                                    </div>
+                                                </NavLink>
                                             </div>
                                         )}
                                     </div>
@@ -294,7 +389,11 @@ export const Dashboard = () => {
                                             </div>
                                         ) : (
                                             <div className="col-8 mb-0">
-                                                <LineChart count={data?.[7]?.count} />
+                                                <NavLink to="/ViewIndustriesLineChart">
+                                                    <div>
+                                                        <LineChart data={data?.[7]} />
+                                                    </div>
+                                                </NavLink>
                                             </div>
                                         )}
                                     </div>
@@ -315,7 +414,11 @@ export const Dashboard = () => {
                                             </div>
                                         ) : (
                                             <div className="col-7 mb-0">
-                                                <LineChart count={data?.[8]?.count} />
+                                                <NavLink to="/ViewCountriesLineChart">
+                                                    <div>
+                                                        <LineChart data={data?.[8]} />
+                                                    </div>
+                                                </NavLink>
                                             </div>
                                         )}
                                     </div>
@@ -336,7 +439,11 @@ export const Dashboard = () => {
                                             </div>
                                         ) : (
                                             <div className="col-8 mb-0">
-                                                <LineChart count={data?.[9]?.count} />
+                                                <NavLink to="/ViewStatesLineChart">
+                                                    <div>
+                                                        <LineChart data={data?.[9]} />
+                                                    </div>
+                                                </NavLink>
                                             </div>
                                         )}
                                     </div>
@@ -357,7 +464,11 @@ export const Dashboard = () => {
                                             </div>
                                         ) : (
                                             <div className="col-8 mb-0">
-                                                <LineChart count={data?.[10]?.count} />
+                                                <NavLink to="/ViewCitiesLineChart">
+                                                    <div>
+                                                        <LineChart data={data?.[10]} />
+                                                    </div>
+                                                </NavLink>
                                             </div>
                                         )}
                                     </div>
@@ -378,7 +489,11 @@ export const Dashboard = () => {
                                             </div>
                                         ) : (
                                             <div className="col-7 mb-0">
-                                                <LineChart count={data?.[11]?.count} />
+                                                <NavLink to="/ViewDocumentsLineChart">
+                                                    <div>
+                                                        <LineChart data={data?.[11]} />
+                                                    </div>
+                                                </NavLink>
                                             </div>
                                         )}
                                     </div>
@@ -399,9 +514,41 @@ export const Dashboard = () => {
                                             </div>
                                         ) : (
                                             <div className="col-8 mb-0">
-                                                <LineChart count={data?.[12]?.count} />
+                                                <NavLink to="/ViewEventsLineChart">
+                                                    <div>
+                                                        <LineChart data={data?.[12]} />
+                                                    </div>
+                                                </NavLink>
                                             </div>
                                         )}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="col-md-12 col-lg-4">
+                            <div className="card eq-card mb-4">
+                                <div className="card-body">
+                                    <div className="row">
+                                        <div className="col-8">
+                                            <p className="mb-1"><strong>Today Register User's </strong></p>
+                                            <h4 className="mb-3">{todayRegisterUserCount}</h4>
+                                            <div>{UsersCurrentDate}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="col-md-12 col-lg-4">
+                            <div className="card eq-card mb-4">
+                                <div className="card-body">
+                                    <div className="row">
+                                        <div className="col-10">
+                                            <p className="mb-1"><strong>Today Register Merchant's </strong></p>
+                                            <h4 className="mb-3">{todayRegisterMerchantCount} </h4>
+                                            <div>{UsersCurrentDate}</div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

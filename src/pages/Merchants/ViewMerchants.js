@@ -15,7 +15,7 @@ import DatePicker from "react-datepicker";
 
 
 const getViewMerchantDetails = (userId) => {
-    return axiosInstance.get(`/cikka-transactions/purchase?userId=${userId}`).then((res) => res.data);
+    return axiosInstance.get(`/cikka-transactions/purchase?pageIndex=0&pageSize=200&userId=${userId}`).then((res) => res.data);
 };
 
 const getViewMerchantDetailsappointments = (userId, selectedDate) => {
