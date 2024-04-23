@@ -180,6 +180,33 @@ export const Dashboard = () => {
         }
     }, [isLoading, data]);
 
+    let memberCount = 0; // Declare global variable to store member count
+
+    // Assuming this code block is within a function where `data` is accessible
+    const UserCount = data && data.length > 0 && data[0]; // Assuming `data` is an array and you're accessing the first element
+    console.log(UserCount);
+
+    if (UserCount) {
+        const memberData = UserCount.data.filter(item => item.userType === "MEMBER");
+
+        // Update global memberCount variable
+        memberCount = memberData.length;
+    }
+
+    console.log(memberCount); // Print member count
+
+    // Calculate `member` with minimum value of 0
+    let member = Math.max(memberCount - 60, 0); // This ensures `member` is at least 0
+
+    // If you want to show empty instead of 0 when `member` is 0, you can use a conditional check
+    if (member === 0) {
+        member = ""; // Set to empty if `member` is 0
+    }
+
+    console.log(member);
+    // Now you can use `memberCount` in other functions
+
+
     return (
         <>
 
@@ -201,7 +228,7 @@ export const Dashboard = () => {
                                             <p className="mb-1"><strong>Users</strong></p>
                                             {/* the count variable -60 is the test user data count */}
                                             {/* <h4 className="mb-0">{data?.[0]?.count - 60}</h4> */}
-                                            <h4 className="mb-0">{!isNaN(data?.[0]?.count) ? data[0].count - 60 : ''}</h4>
+                                            <h4 className="mb-0">{member}</h4>
                                             <div className='mt-3'>
                                                 <div>{UsersCurrentDate}</div>
                                             </div>
