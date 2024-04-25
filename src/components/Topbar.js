@@ -1,22 +1,53 @@
+import React, { useEffect } from 'react';
 import { NavDropdown } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
 export const Topbar = ({ toggleSidebar }) => {
   const user = JSON.parse(localStorage.getItem("user"));
   const navigate = useNavigate();
+
+  useEffect(() => {
+    let logoutTimer;
+    const handleLogout = () => {
+      localStorage.clear();
+      navigate("/auth/login");
+    };
+
+    const resetLogoutTimer = () => {
+      clearTimeout(logoutTimer);
+      logoutTimer = setTimeout(handleLogout, 2 * 60 * 1000); // 2 minutes in milliseconds
+    };
+
+    const handleUserActivity = () => {
+      resetLogoutTimer();
+    };
+
+    // Initial setup of the logout timer and event listeners
+    resetLogoutTimer();
+    window.addEventListener("mousemove", handleUserActivity);
+    window.addEventListener("keydown", handleUserActivity);
+
+    // Cleanup function to remove event listeners
+    return () => {
+      clearTimeout(logoutTimer);
+      window.removeEventListener("mousemove", handleUserActivity);
+      window.removeEventListener("keydown", handleUserActivity);
+    };
+  }, [navigate]);
+
   if (!user) return null;
 
   const handleLogout = () => {
     localStorage.clear();
     navigate("/auth/login");
   };
+
   return (
     <nav className="topnav navbar navbar-light">
       <button
         type="button"
-        className={`navbar-toggler mt-2 p-0 mr-3 collapseSidebar ${
-          window.innerWidth > 992 ? 'disable-button' : ''
-        }`}
+        className={`navbar-toggler mt-2 p-0 mr-3 collapseSidebar ${window.innerWidth > 992 ? 'disable-button' : ''
+          }`}
         onClick={toggleSidebar}
       >
         <i className="fe fe-menu navbar-toggler-icon"></i>
